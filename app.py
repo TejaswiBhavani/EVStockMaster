@@ -4,6 +4,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime, timedelta
 import os
+import hashlib
 
 # Import custom modules
 from modules.data_generator import generate_inventory_data, generate_all_parts_data
@@ -28,6 +29,326 @@ if 'show_ai_chat' not in st.session_state:
     st.session_state.show_ai_chat = False
 if 'chat_history' not in st.session_state:
     st.session_state.chat_history = []
+if 'user_logged_in' not in st.session_state:
+    st.session_state.user_logged_in = False
+if 'current_user' not in st.session_state:
+    st.session_state.current_user = None
+if 'show_login' not in st.session_state:
+    st.session_state.show_login = False
+if 'show_signup' not in st.session_state:
+    st.session_state.show_signup = False
+if 'show_settings' not in st.session_state:
+    st.session_state.show_settings = False
+if 'users_db' not in st.session_state:
+    st.session_state.users_db = {}
+if 'user_settings' not in st.session_state:
+    st.session_state.user_settings = {
+        'theme': 'Light',
+        'notifications': True,
+        'auto_refresh': True,
+        'chart_type': 'Standard',
+        'language': 'English'
+    }
+
+
+def create_innovative_logo():
+    """Create an innovative SVG logo for the application"""
+    logo_svg = """
+    <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
+                <stop offset="50%" style="stop-color:#0066ff;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#6600ff;stop-opacity:1" />
+            </linearGradient>
+            <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#ff6b35;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#ffca28;stop-opacity:1" />
+            </linearGradient>
+        </defs>
+        
+        <!-- Outer circle -->
+        <circle cx="30" cy="30" r="28" fill="url(#grad1)" stroke="#ffffff" stroke-width="2"/>
+        
+        <!-- Electric bolt -->
+        <path d="M20 15 L35 15 L28 30 L40 30 L25 45 L32 30 L20 30 Z" fill="url(#grad2)" stroke="#ffffff" stroke-width="1"/>
+        
+        <!-- Circuit pattern -->
+        <circle cx="18" cy="18" r="2" fill="#ffffff" opacity="0.8"/>
+        <circle cx="42" cy="18" r="2" fill="#ffffff" opacity="0.8"/>
+        <circle cx="18" cy="42" r="2" fill="#ffffff" opacity="0.8"/>
+        <circle cx="42" cy="42" r="2" fill="#ffffff" opacity="0.8"/>
+        
+        <!-- Connecting lines -->
+        <line x1="18" y1="18" x2="25" y2="25" stroke="#ffffff" stroke-width="1" opacity="0.6"/>
+        <line x1="42" y1="18" x2="35" y2="25" stroke="#ffffff" stroke-width="1" opacity="0.6"/>
+        <line x1="18" y1="42" x2="25" y2="35" stroke="#ffffff" stroke-width="1" opacity="0.6"/>
+        <line x1="42" y1="42" x2="35" y2="35" stroke="#ffffff" stroke-width="1" opacity="0.6"/>
+    </svg>
+    """
+    return logo_svg
+
+
+def hash_password(password):
+    """Hash password for secure storage"""
+    return hashlib.sha256(password.encode()).hexdigest()
+
+
+def authenticate_user(username, password):
+    """Authenticate user credentials"""
+    if username in st.session_state.users_db:
+        stored_hash = st.session_state.users_db[username]['password']
+        return stored_hash == hash_password(password)
+    return False
+
+
+def register_user(username, email, password):
+    """Register a new user"""
+    if username in st.session_state.users_db:
+        return False, "Username already exists"
+    
+    st.session_state.users_db[username] = {
+        'email': email,
+        'password': hash_password(password),
+        'created_at': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    }
+    return True, "User registered successfully"
+
+
+def render_login_modal():
+    """Render login modal"""
+    with st.container():
+        st.markdown("""
+        <style>
+        .login-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .login-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 400px;
+            max-width: 90%;
+        }
+        .login-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .login-title {
+            color: #1f77b4;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+        </style>
+        <div class="login-modal">
+            <div class="login-box">
+                <button class="close-btn" onclick="window.parent.postMessage({type: 'close_login'}, '*')">×</button>
+                <div class="login-header">
+                    <div class="login-title">Welcome Back</div>
+                    <p style="color: #666; margin: 0;">Sign in to your account</p>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            st.markdown("### 🔐 Login")
+            
+            if st.button("× Close", key="close_login_btn"):
+                st.session_state.show_login = False
+                st.rerun()
+            
+            with st.form("login_form"):
+                username = st.text_input("Username", placeholder="Enter your username")
+                password = st.text_input("Password", type="password", placeholder="Enter your password")
+                
+                col_login, col_signup = st.columns(2)
+                with col_login:
+                    login_btn = st.form_submit_button("Login", use_container_width=True)
+                with col_signup:
+                    if st.form_submit_button("Need Account?", use_container_width=True):
+                        st.session_state.show_login = False
+                        st.session_state.show_signup = True
+                        st.rerun()
+                
+                if login_btn and username and password:
+                    if authenticate_user(username, password):
+                        st.session_state.user_logged_in = True
+                        st.session_state.current_user = username
+                        st.session_state.show_login = False
+                        st.success("Login successful!")
+                        st.rerun()
+                    else:
+                        st.error("Invalid username or password")
+
+
+def render_signup_modal():
+    """Render signup modal"""
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        st.markdown("### 👤 Create Account")
+        
+        if st.button("× Close", key="close_signup_btn"):
+            st.session_state.show_signup = False
+            st.rerun()
+        
+        with st.form("signup_form"):
+            username = st.text_input("Username", placeholder="Choose a username")
+            email = st.text_input("Email", placeholder="Enter your email")
+            password = st.text_input("Password", type="password", placeholder="Create a password")
+            confirm_password = st.text_input("Confirm Password", type="password", placeholder="Confirm your password")
+            
+            col_signup, col_login = st.columns(2)
+            with col_signup:
+                signup_btn = st.form_submit_button("Sign Up", use_container_width=True)
+            with col_login:
+                if st.form_submit_button("Have Account?", use_container_width=True):
+                    st.session_state.show_signup = False
+                    st.session_state.show_login = True
+                    st.rerun()
+            
+            if signup_btn and username and email and password and confirm_password:
+                if password != confirm_password:
+                    st.error("Passwords don't match")
+                elif len(password) < 6:
+                    st.error("Password must be at least 6 characters")
+                else:
+                    success, message = register_user(username, email, password)
+                    if success:
+                        st.success(message)
+                        st.session_state.show_signup = False
+                        st.session_state.show_login = True
+                        st.rerun()
+                    else:
+                        st.error(message)
+
+
+def render_settings_sidebar():
+    """Render settings sidebar"""
+    with st.sidebar:
+        st.markdown("---")
+        st.markdown("### ⚙️ Settings")
+        
+        # Theme Settings
+        st.session_state.user_settings['theme'] = st.selectbox(
+            "Theme",
+            ["Light", "Dark", "Auto"],
+            index=["Light", "Dark", "Auto"].index(st.session_state.user_settings['theme'])
+        )
+        
+        # Notifications
+        st.session_state.user_settings['notifications'] = st.toggle(
+            "Enable Notifications",
+            value=st.session_state.user_settings['notifications']
+        )
+        
+        # Auto Refresh
+        st.session_state.user_settings['auto_refresh'] = st.toggle(
+            "Auto Refresh Data",
+            value=st.session_state.user_settings['auto_refresh']
+        )
+        
+        # Chart Type
+        st.session_state.user_settings['chart_type'] = st.selectbox(
+            "Chart Style",
+            ["Standard", "Modern", "Classic"],
+            index=["Standard", "Modern", "Classic"].index(st.session_state.user_settings['chart_type'])
+        )
+        
+        # Language
+        st.session_state.user_settings['language'] = st.selectbox(
+            "Language",
+            ["English", "Spanish", "French", "German"],
+            index=["English", "Spanish", "French", "German"].index(st.session_state.user_settings['language'])
+        )
+        
+        st.markdown("---")
+        
+        # User Profile (if logged in)
+        if st.session_state.user_logged_in:
+            st.markdown("### 👤 Profile")
+            st.info(f"Logged in as: **{st.session_state.current_user}**")
+            
+            if st.button("🚪 Logout", use_container_width=True):
+                st.session_state.user_logged_in = False
+                st.session_state.current_user = None
+                st.success("Logged out successfully!")
+                st.rerun()
+
+
+def render_header():
+    """Render the main header with logo and auth buttons"""
+    col1, col2, col3 = st.columns([1, 4, 1])
+    
+    with col1:
+        # Innovative Logo
+        logo_html = f"""
+        <div style="display: flex; align-items: center; gap: 10px;">
+            {create_innovative_logo()}
+            <div style="font-size: 1.2rem; font-weight: bold; color: #1f77b4;">
+                InvenAI
+            </div>
+        </div>
+        """
+        st.markdown(logo_html, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("""
+        <h1 style="text-align: center; color: #1f77b4; margin: 0;">
+            GenAI Smart Inventory Optimizer
+        </h1>
+        <p style="text-align: center; color: #666; margin: 0;">
+            Intelligent EV Manufacturing Inventory Management
+        </p>
+        """, unsafe_allow_html=True)
+    
+    with col3:
+        if st.session_state.user_logged_in:
+            # User is logged in - show user menu
+            st.markdown(f"""
+            <div style="text-align: right; color: #1f77b4; font-weight: bold;">
+                Welcome, {st.session_state.current_user}!
+            </div>
+            """, unsafe_allow_html=True)
+            
+            col_ai, col_settings = st.columns(2)
+            with col_ai:
+                if st.button("🤖", help="AI Assistant", key="ai_button"):
+                    st.session_state.show_ai_chat = True
+            with col_settings:
+                if st.button("⚙️", help="Settings", key="settings_button"):
+                    st.session_state.show_settings = not st.session_state.show_settings
+        else:
+            # User not logged in - show auth buttons
+            col_login, col_signup = st.columns(2)
+            with col_login:
+                if st.button("🔐 Login", key="login_button", use_container_width=True):
+                    st.session_state.show_login = True
+            with col_signup:
+                if st.button("👤 Sign Up", key="signup_button", use_container_width=True):
+                    st.session_state.show_signup = True
 
 
 def load_or_generate_data():
@@ -245,20 +566,118 @@ def create_multi_part_3d_plot(inventory_data, selected_parts):
 
 
 def main():
-    # Header with AI Assistant
-    col1, col2 = st.columns([6, 1])
-    with col1:
-        st.title("🚗 GenAI Smart Inventory Optimizer")
-        st.markdown("### Intelligent EV Manufacturing Inventory Management")
+    # Custom CSS for beautiful UI
+    st.markdown("""
+    <style>
+    .main-header {
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        padding: 1rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
     
-    with col2:
-        # AI Assistant Button
-        if st.button("🤖", help="AI Assistant", key="ai_button"):
-            st.session_state.show_ai_chat = True
+    .metric-card {
+        background: white;
+        padding: 1rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        border-left: 4px solid #1f77b4;
+        margin: 0.5rem 0;
+    }
+    
+    .settings-panel {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-radius: 10px;
+        border: 1px solid #e9ecef;
+        margin: 1rem 0;
+    }
+    
+    .auth-button {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .auth-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .sidebar .sidebar-content {
+        background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+    }
+    
+    .status-critical {
+        background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+        color: white;
+        padding: 1rem;
+        border-radius: 10px;
+        margin: 1rem 0;
+    }
+    
+    .status-warning {
+        background: linear-gradient(45deg, #feca57, #ff9ff3);
+        color: white;
+        padding: 1rem;
+        border-radius: 10px;
+        margin: 1rem 0;
+    }
+    
+    .status-healthy {
+        background: linear-gradient(45deg, #48dbfb, #0abde3);
+        color: white;
+        padding: 1rem;
+        border-radius: 10px;
+        margin: 1rem 0;
+    }
+    
+    .tabs-container {
+        margin-top: 2rem;
+    }
+    
+    /* Animation for loading */
+    @keyframes pulse {
+        0% { opacity: 0.6; }
+        50% { opacity: 1; }
+        100% { opacity: 0.6; }
+    }
+    
+    .loading-animation {
+        animation: pulse 2s infinite;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    # Render custom header with logo and auth
+    render_header()
+    
+    # Handle modals
+    if st.session_state.get('show_login', False):
+        render_login_modal()
+        return
+        
+    if st.session_state.get('show_signup', False):
+        render_signup_modal()
+        return
     
     # AI Chat Popup
     if st.session_state.get('show_ai_chat', False):
         ai_chat_popup()
+    
+    # Welcome message for new users
+    if not st.session_state.user_logged_in:
+        st.markdown("""
+        <div style="background: linear-gradient(45deg, #667eea, #764ba2); color: white; padding: 1rem; border-radius: 10px; text-align: center; margin: 1rem 0;">
+            <h3 style="margin: 0;">Welcome to InvenAI Smart Inventory Optimizer</h3>
+            <p style="margin: 0.5rem 0;">Please log in to access personalized features and save your settings!</p>
+        </div>
+        """, unsafe_allow_html=True)
     
     # Load data
     with st.spinner("Loading inventory data..."):
@@ -312,6 +731,17 @@ def main():
         value=14,
         help="Days of stock to maintain before reordering"
     )
+    
+    # Render settings sidebar if logged in
+    if st.session_state.user_logged_in and st.session_state.get('show_settings', False):
+        render_settings_sidebar()
+    elif st.session_state.user_logged_in:
+        # Show condensed settings in sidebar
+        with st.sidebar:
+            st.markdown("---")
+            if st.button("⚙️ Settings", use_container_width=True):
+                st.session_state.show_settings = True
+                st.rerun()
     
     # Main content area
     tab1, tab2, tab3 = st.tabs(["📈 Dashboard", "🏆 Leaderboard", "📊 Analytics"])
