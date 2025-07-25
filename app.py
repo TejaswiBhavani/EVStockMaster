@@ -51,42 +51,7 @@ if 'user_settings' not in st.session_state:
     }
 
 
-def create_innovative_logo():
-    """Create an innovative SVG logo for the application"""
-    logo_svg = """
-    <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
-                <stop offset="50%" style="stop-color:#0066ff;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#6600ff;stop-opacity:1" />
-            </linearGradient>
-            <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#ff6b35;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#ffca28;stop-opacity:1" />
-            </linearGradient>
-        </defs>
-        
-        <!-- Outer circle -->
-        <circle cx="30" cy="30" r="28" fill="url(#grad1)" stroke="#ffffff" stroke-width="2"/>
-        
-        <!-- Electric bolt -->
-        <path d="M20 15 L35 15 L28 30 L40 30 L25 45 L32 30 L20 30 Z" fill="url(#grad2)" stroke="#ffffff" stroke-width="1"/>
-        
-        <!-- Circuit pattern -->
-        <circle cx="18" cy="18" r="2" fill="#ffffff" opacity="0.8"/>
-        <circle cx="42" cy="18" r="2" fill="#ffffff" opacity="0.8"/>
-        <circle cx="18" cy="42" r="2" fill="#ffffff" opacity="0.8"/>
-        <circle cx="42" cy="42" r="2" fill="#ffffff" opacity="0.8"/>
-        
-        <!-- Connecting lines -->
-        <line x1="18" y1="18" x2="25" y2="25" stroke="#ffffff" stroke-width="1" opacity="0.6"/>
-        <line x1="42" y1="18" x2="35" y2="25" stroke="#ffffff" stroke-width="1" opacity="0.6"/>
-        <line x1="18" y1="42" x2="25" y2="35" stroke="#ffffff" stroke-width="1" opacity="0.6"/>
-        <line x1="42" y1="42" x2="35" y2="35" stroke="#ffffff" stroke-width="1" opacity="0.6"/>
-    </svg>
-    """
-    return logo_svg
+
 
 
 def hash_password(password):
@@ -300,35 +265,111 @@ def render_settings_sidebar():
 
 def render_header():
     """Render the main header with logo and auth buttons"""
+    # Add custom CSS for the header
+    st.markdown("""
+    <style>
+    .header-container {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 1rem;
+        border-radius: 15px;
+        margin-bottom: 2rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+    .logo-container {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    .logo-text {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    .main-title {
+        text-align: center;
+        color: white;
+        margin: 0;
+        font-size: 2.2rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    .subtitle {
+        text-align: center;
+        color: rgba(255,255,255,0.9);
+        margin: 0;
+        font-size: 1.1rem;
+    }
+    .user-welcome {
+        text-align: right;
+        color: white;
+        font-weight: bold;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    }
+    .auth-btn {
+        background: rgba(255,255,255,0.2);
+        border: 2px solid rgba(255,255,255,0.3);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 25px;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+    }
+    .auth-btn:hover {
+        background: rgba(255,255,255,0.3);
+        border-color: rgba(255,255,255,0.5);
+        transform: translateY(-2px);
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    # Main header container
+    st.markdown('<div class="header-container">', unsafe_allow_html=True)
+    
     col1, col2, col3 = st.columns([1, 4, 1])
     
     with col1:
-        # Innovative Logo
+        # Innovative Logo with proper HTML rendering
         logo_html = f"""
-        <div style="display: flex; align-items: center; gap: 10px;">
-            {create_innovative_logo()}
-            <div style="font-size: 1.2rem; font-weight: bold; color: #1f77b4;">
-                InvenAI
-            </div>
+        <div class="logo-container">
+            <svg width="50" height="50" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#0066ff;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#6600ff;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#ff6b35;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#ffca28;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <circle cx="30" cy="30" r="28" fill="url(#grad1)" stroke="#ffffff" stroke-width="2"/>
+                <path d="M20 15 L35 15 L28 30 L40 30 L25 45 L32 30 L20 30 Z" fill="url(#grad2)" stroke="#ffffff" stroke-width="1"/>
+                <circle cx="18" cy="18" r="2" fill="#ffffff" opacity="0.8"/>
+                <circle cx="42" cy="18" r="2" fill="#ffffff" opacity="0.8"/>
+                <circle cx="18" cy="42" r="2" fill="#ffffff" opacity="0.8"/>
+                <circle cx="42" cy="42" r="2" fill="#ffffff" opacity="0.8"/>
+                <line x1="18" y1="18" x2="25" y2="25" stroke="#ffffff" stroke-width="1" opacity="0.6"/>
+                <line x1="42" y1="18" x2="35" y2="25" stroke="#ffffff" stroke-width="1" opacity="0.6"/>
+                <line x1="18" y1="42" x2="25" y2="35" stroke="#ffffff" stroke-width="1" opacity="0.6"/>
+                <line x1="42" y1="42" x2="35" y2="35" stroke="#ffffff" stroke-width="1" opacity="0.6"/>
+            </svg>
+            <div class="logo-text">InvenAI</div>
         </div>
         """
         st.markdown(logo_html, unsafe_allow_html=True)
     
     with col2:
         st.markdown("""
-        <h1 style="text-align: center; color: #1f77b4; margin: 0;">
-            GenAI Smart Inventory Optimizer
-        </h1>
-        <p style="text-align: center; color: #666; margin: 0;">
-            Intelligent EV Manufacturing Inventory Management
-        </p>
+        <h1 class="main-title">Smart Inventory Optimizer</h1>
+        <p class="subtitle">Intelligent EV Manufacturing Management</p>
         """, unsafe_allow_html=True)
     
     with col3:
         if st.session_state.user_logged_in:
             # User is logged in - show user menu
             st.markdown(f"""
-            <div style="text-align: right; color: #1f77b4; font-weight: bold;">
+            <div class="user-welcome">
                 Welcome, {st.session_state.current_user}!
             </div>
             """, unsafe_allow_html=True)
@@ -349,6 +390,8 @@ def render_header():
             with col_signup:
                 if st.button("👤 Sign Up", key="signup_button", use_container_width=True):
                     st.session_state.show_signup = True
+    
+    st.markdown('</div>', unsafe_allow_html=True)
 
 
 def load_or_generate_data():
@@ -796,18 +839,30 @@ def main():
                 help="Current inventory level"
             )
         
-        # Display insights
+        # Display insights with custom styling
         st.subheader("🤖 AI-Powered Insights")
         
         if insights['status'] == 'Critical':
-            st.error(f"🚨 **{insights['status']}**: {insights['recommendation']}")
-            st.error(insights['details'])
+            st.markdown(f"""
+            <div class="status-critical">
+                <strong>🚨 {insights['status']}</strong>: {insights['recommendation']}<br>
+                <small>{insights['details']}</small>
+            </div>
+            """, unsafe_allow_html=True)
         elif insights['status'] == 'Warning':
-            st.warning(f"⚠️ **{insights['status']}**: {insights['recommendation']}")
-            st.warning(insights['details'])
+            st.markdown(f"""
+            <div class="status-warning">
+                <strong>⚠️ {insights['status']}</strong>: {insights['recommendation']}<br>
+                <small>{insights['details']}</small>
+            </div>
+            """, unsafe_allow_html=True)
         else:
-            st.success(f"✅ **{insights['status']}**: {insights['recommendation']}")
-            st.success(insights['details'])
+            st.markdown(f"""
+            <div class="status-healthy">
+                <strong>✅ {insights['status']}</strong>: {insights['recommendation']}<br>
+                <small>{insights['details']}</small>
+            </div>
+            """, unsafe_allow_html=True)
         
         # Visualization
         st.subheader("📈 Demand Forecast Visualization")
