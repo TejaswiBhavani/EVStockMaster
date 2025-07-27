@@ -81,133 +81,331 @@ def register_user(username, email, password):
 
 
 def render_login_modal():
-    """Render login modal"""
-    with st.container():
+    """Render professional login modal"""
+    # Professional modal styling
+    st.markdown("""
+    <style>
+    .professional-backdrop {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100vw; height: 100vh;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(12px);
+        z-index: 10000;
+        animation: fadeIn 0.3s ease;
+    }
+    
+    .professional-modal {
+        background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+        border-radius: 24px;
+        padding: 3rem 2.5rem;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        width: 100%;
+        max-width: 450px;
+        margin: auto;
+        position: relative;
+        animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    
+    .modal-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+    }
+    
+    .modal-title {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.5px;
+    }
+    
+    .modal-subtitle {
+        color: #6c757d;
+        font-size: 1rem;
+        margin: 0;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(50px) scale(0.9);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+    
+    /* Enhanced input styling */
+    .stTextInput input {
+        border: 2px solid #e9ecef !important;
+        border-radius: 12px !important;
+        padding: 1rem !important;
+        font-size: 1rem !important;
+        transition: all 0.3s ease !important;
+        background: #ffffff !important;
+    }
+    
+    .stTextInput input:focus {
+        border-color: #667eea !important;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1) !important;
+    }
+    
+    /* Professional button styling */
+    .stButton button {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 12px !important;
+        padding: 0.8rem 1.5rem !important;
+        font-weight: 600 !important;
+        transition: all 0.3s ease !important;
+        letter-spacing: 0.5px !important;
+    }
+    
+    .stButton button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3) !important;
+    }
+    
+    .close-modal {
+        position: absolute;
+        top: 1rem; right: 1rem;
+        background: #f8f9fa;
+        border: none;
+        border-radius: 50%;
+        width: 36px; height: 36px;
+        cursor: pointer;
+        color: #6c757d;
+        font-size: 1.2rem;
+        transition: all 0.2s ease;
+    }
+    
+    .close-modal:hover {
+        background: #e9ecef;
+        color: #495057;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    # Create centered modal
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        # Modal header
         st.markdown("""
-        <style>
-        .login-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-        .login-box {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            width: 400px;
-            max-width: 90%;
-        }
-        .login-header {
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-        .login-title {
-            color: #1f77b4;
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #666;
-        }
-        </style>
-        <div class="login-modal">
-            <div class="login-box">
-                <button class="close-btn" onclick="window.parent.postMessage({type: 'close_login'}, '*')">×</button>
-                <div class="login-header">
-                    <div class="login-title">Welcome Back</div>
-                    <p style="color: #666; margin: 0;">Sign in to your account</p>
-                </div>
+        <div class="professional-backdrop"></div>
+        <div class="professional-modal">
+            <div class="modal-header">
+                <h1 class="modal-title">Welcome Back</h1>
+                <p class="modal-subtitle">Sign in to your InvenAI account</p>
             </div>
         </div>
         """, unsafe_allow_html=True)
-
-        col1, col2, col3 = st.columns([1, 2, 1])
-        with col2:
-            st.markdown("### 🔐 Login")
+        
+        # Close button
+        if st.button("✕", key="close_login", help="Close"):
+            st.session_state.show_login = False
+            st.rerun()
+        
+        # Professional login form
+        with st.form("professional_login_form", clear_on_submit=False):
+            username = st.text_input("Username", placeholder="Enter your username")
+            password = st.text_input("Password", type="password", placeholder="Enter your password")
             
-            if st.button("× Close", key="close_login_btn"):
-                st.session_state.show_login = False
-                st.rerun()
+            col_login, col_switch = st.columns([1, 1])
             
-            with st.form("login_form"):
-                username = st.text_input("Username", placeholder="Enter your username")
-                password = st.text_input("Password", type="password", placeholder="Enter your password")
-                
-                col_login, col_signup = st.columns(2)
-                with col_login:
-                    login_btn = st.form_submit_button("Login", use_container_width=True)
-                with col_signup:
-                    if st.form_submit_button("Need Account?", use_container_width=True):
-                        st.session_state.show_login = False
-                        st.session_state.show_signup = True
-                        st.rerun()
-                
-                if login_btn and username and password:
+            with col_login:
+                login_btn = st.form_submit_button("Sign In", use_container_width=True)
+            
+            with col_switch:
+                switch_btn = st.form_submit_button("Create Account", use_container_width=True)
+            
+            # Handle form actions
+            if login_btn:
+                if username and password:
                     if authenticate_user(username, password):
                         st.session_state.user_logged_in = True
                         st.session_state.current_user = username
                         st.session_state.show_login = False
-                        st.success("Login successful!")
+                        st.success("Welcome back! Login successful.")
                         st.rerun()
                     else:
-                        st.error("Invalid username or password")
+                        st.error("Invalid credentials. Please check your username and password.")
+                else:
+                    st.warning("Please enter both username and password.")
+            
+            if switch_btn:
+                st.session_state.show_login = False
+                st.session_state.show_signup = True
+                st.rerun()
 
 
 def render_signup_modal():
-    """Render signup modal"""
+    """Render professional signup modal"""
+    # Professional signup modal styling
+    st.markdown("""
+    <style>
+    .signup-backdrop {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100vw; height: 100vh;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(12px);
+        z-index: 10000;
+        animation: fadeIn 0.3s ease;
+    }
+    
+    .signup-modal {
+        background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+        border-radius: 24px;
+        padding: 3rem 2.5rem;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        width: 100%;
+        max-width: 480px;
+        margin: auto;
+        position: relative;
+        animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    
+    .signup-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+    }
+    
+    .signup-title {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.5px;
+    }
+    
+    .signup-subtitle {
+        color: #6c757d;
+        font-size: 1rem;
+        margin: 0;
+    }
+    
+    /* Form styling specific to signup */
+    .stForm {
+        border: none !important;
+    }
+    
+    .form-section {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-section label {
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+    
+    /* Enhanced validation styling */
+    .password-requirements {
+        background: #f8f9fa;
+        border-left: 4px solid #667eea;
+        padding: 1rem;
+        border-radius: 8px;
+        margin: 1rem 0;
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+    
+    .validation-success {
+        color: #28a745;
+        font-weight: 500;
+    }
+    
+    .validation-error {
+        color: #dc3545;
+        font-weight: 500;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    # Create centered modal
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        st.markdown("### 👤 Create Account")
+        # Modal header
+        st.markdown("""
+        <div class="signup-backdrop"></div>
+        <div class="signup-modal">
+            <div class="signup-header">
+                <h1 class="signup-title">Join InvenAI</h1>
+                <p class="signup-subtitle">Create your account to get started</p>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
         
-        if st.button("× Close", key="close_signup_btn"):
+        # Close button
+        if st.button("✕", key="close_signup", help="Close"):
             st.session_state.show_signup = False
             st.rerun()
         
-        with st.form("signup_form"):
-            username = st.text_input("Username", placeholder="Choose a username")
-            email = st.text_input("Email", placeholder="Enter your email")
-            password = st.text_input("Password", type="password", placeholder="Create a password")
+        # Professional signup form
+        with st.form("professional_signup_form", clear_on_submit=False):
+            # Form fields with enhanced styling
+            username = st.text_input("Username", placeholder="Choose a unique username")
+            email = st.text_input("Email Address", placeholder="Enter your email address")
+            password = st.text_input("Password", type="password", placeholder="Create a secure password")
             confirm_password = st.text_input("Confirm Password", type="password", placeholder="Confirm your password")
             
-            col_signup, col_login = st.columns(2)
-            with col_signup:
-                signup_btn = st.form_submit_button("Sign Up", use_container_width=True)
-            with col_login:
-                if st.form_submit_button("Have Account?", use_container_width=True):
-                    st.session_state.show_signup = False
-                    st.session_state.show_login = True
-                    st.rerun()
+            # Password requirements info
+            st.markdown("""
+            <div class="password-requirements">
+                <strong>Password Requirements:</strong><br>
+                • At least 6 characters long<br>
+                • Passwords must match
+            </div>
+            """, unsafe_allow_html=True)
             
-            if signup_btn and username and email and password and confirm_password:
-                if password != confirm_password:
-                    st.error("Passwords don't match")
-                elif len(password) < 6:
-                    st.error("Password must be at least 6 characters")
-                else:
-                    success, message = register_user(username, email, password)
-                    if success:
-                        st.success(message)
-                        st.session_state.show_signup = False
-                        st.session_state.show_login = True
-                        st.rerun()
+            col_signup, col_switch = st.columns([1, 1])
+            
+            with col_signup:
+                signup_btn = st.form_submit_button("Create Account", use_container_width=True)
+            
+            with col_switch:
+                switch_btn = st.form_submit_button("Already Have Account?", use_container_width=True)
+            
+            # Handle form actions
+            if signup_btn:
+                if username and email and password and confirm_password:
+                    if password != confirm_password:
+                        st.error("Passwords don't match. Please try again.")
+                    elif len(password) < 6:
+                        st.error("Password must be at least 6 characters long.")
+                    elif "@" not in email:
+                        st.error("Please enter a valid email address.")
                     else:
-                        st.error(message)
+                        success, message = register_user(username, email, password)
+                        if success:
+                            st.success("Account created successfully! Please sign in.")
+                            st.session_state.show_signup = False
+                            st.session_state.show_login = True
+                            st.rerun()
+                        else:
+                            st.error(message)
+                else:
+                    st.warning("Please fill in all fields.")
+            
+            if switch_btn:
+                st.session_state.show_signup = False
+                st.session_state.show_login = True
+                st.rerun()
 
 
 def render_settings_sidebar():
@@ -609,82 +807,165 @@ def create_multi_part_3d_plot(inventory_data, selected_parts):
 
 
 def main():
-    # Custom CSS for beautiful UI
+    # Professional UI Styling
     st.markdown("""
     <style>
-    .main-header {
-        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-        padding: 1rem;
-        border-radius: 10px;
-        margin-bottom: 2rem;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    /* Global Styles */
+    .main {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
     }
     
-    .metric-card {
-        background: white;
-        padding: 1rem;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        border-left: 4px solid #1f77b4;
+    /* Enhanced Metrics Cards */
+    .stMetric {
+        background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         margin: 0.5rem 0;
+        transition: transform 0.3s ease;
     }
     
-    .settings-panel {
-        background: #f8f9fa;
-        padding: 1rem;
-        border-radius: 10px;
-        border: 1px solid #e9ecef;
-        margin: 1rem 0;
+    .stMetric:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
     }
     
-    .auth-button {
-        background: linear-gradient(45deg, #667eea, #764ba2);
+    /* Professional Tabs */
+    .stTabs [data-baseweb="tab-list"] {
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        border-radius: 16px;
+        padding: 0.5rem;
+        gap: 0.5rem;
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        background: rgba(255, 255, 255, 0.2);
         color: white;
+        border-radius: 12px;
+        padding: 0.8rem 1.5rem;
+        font-weight: 600;
         border: none;
-        padding: 0.5rem 1rem;
-        border-radius: 25px;
-        cursor: pointer;
         transition: all 0.3s ease;
     }
     
-    .auth-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    .stTabs [aria-selected="true"] {
+        background: rgba(255, 255, 255, 0.9);
+        color: #667eea;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Enhanced Sidebar */
+    .css-1d391kg {
+        background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+        color: white;
     }
     
     .sidebar .sidebar-content {
-        background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+        background: transparent;
     }
     
+    .stSelectbox label, .stSlider label, .stNumberInput label {
+        color: white !important;
+        font-weight: 600;
+    }
+    
+    /* Professional Status Cards */
     .status-critical {
-        background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
         color: white;
-        padding: 1rem;
-        border-radius: 10px;
+        padding: 1.5rem;
+        border-radius: 16px;
         margin: 1rem 0;
+        box-shadow: 0 8px 32px rgba(238, 90, 82, 0.3);
+        border-left: 5px solid #ffffff;
     }
     
     .status-warning {
-        background: linear-gradient(45deg, #feca57, #ff9ff3);
+        background: linear-gradient(135deg, #feca57 0%, #ff9ff3 100%);
         color: white;
-        padding: 1rem;
-        border-radius: 10px;
+        padding: 1.5rem;
+        border-radius: 16px;
         margin: 1rem 0;
+        box-shadow: 0 8px 32px rgba(254, 202, 87, 0.3);
+        border-left: 5px solid #ffffff;
     }
     
     .status-healthy {
-        background: linear-gradient(45deg, #48dbfb, #0abde3);
+        background: linear-gradient(135deg, #48dbfb 0%, #0abde3 100%);
         color: white;
-        padding: 1rem;
-        border-radius: 10px;
+        padding: 1.5rem;
+        border-radius: 16px;
         margin: 1rem 0;
+        box-shadow: 0 8px 32px rgba(72, 219, 251, 0.3);
+        border-left: 5px solid #ffffff;
     }
     
-    .tabs-container {
-        margin-top: 2rem;
+    /* Welcome Message Enhancement */
+    .welcome-gradient {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 20px;
+        text-align: center;
+        margin: 2rem 0;
+        box-shadow: 0 15px 50px rgba(102, 126, 234, 0.2);
+        animation: welcomeSlide 0.6s ease-out;
     }
     
-    /* Animation for loading */
+    .welcome-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .welcome-text {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        margin: 0;
+    }
+    
+    /* Subheader Enhancement */
+    .stSubheader {
+        color: #495057;
+        font-weight: 700;
+        font-size: 1.4rem;
+        margin: 2rem 0 1rem 0;
+        position: relative;
+    }
+    
+    .stSubheader:after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 50px;
+        height: 3px;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        border-radius: 2px;
+    }
+    
+    /* Chart Container Enhancement */
+    .js-plotly-plot {
+        border-radius: 16px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+    
+    /* Loading Animation */
+    @keyframes welcomeSlide {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
     @keyframes pulse {
         0% { opacity: 0.6; }
         50% { opacity: 1; }
@@ -693,6 +974,21 @@ def main():
     
     .loading-animation {
         animation: pulse 2s infinite;
+    }
+    
+    /* Button Enhancements */
+    .stButton > button {
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+    
+    .stButton > button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
     }
     </style>
     """, unsafe_allow_html=True)
@@ -713,12 +1009,12 @@ def main():
     if st.session_state.get('show_ai_chat', False):
         ai_chat_popup()
     
-    # Welcome message for new users
+    # Professional welcome message for new users
     if not st.session_state.user_logged_in:
         st.markdown("""
-        <div style="background: linear-gradient(45deg, #667eea, #764ba2); color: white; padding: 1rem; border-radius: 10px; text-align: center; margin: 1rem 0;">
-            <h3 style="margin: 0;">Welcome to InvenAI Smart Inventory Optimizer</h3>
-            <p style="margin: 0.5rem 0;">Please log in to access personalized features and save your settings!</p>
+        <div class="welcome-gradient">
+            <h3 class="welcome-title">Welcome to InvenAI Smart Inventory Optimizer</h3>
+            <p class="welcome-text">Sign in to unlock personalized features and advanced analytics</p>
         </div>
         """, unsafe_allow_html=True)
     
