@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import { motion, AnimatePresence } from 'framer-motion';
+import { auth } from './config/firebase';
+import Homepage from './components/Homepage/Homepage';
+import ChatBot from './components/Chat/ChatBot';
 import Sidebar from './components/Layout/Sidebar';
 import Header from './components/Layout/Header';
 import EVModel from './components/3D/EVModel';
@@ -11,11 +15,35 @@ import InfoPanel from './components/InfoPanel/InfoPanel';
 import useResponsive from './hooks/useResponsive';
 
 function App() {
+  const [user, loading] = useAuthState(auth);
+  const [showApp, setShowApp] = useState(false);
   const [activeTab, setActiveTab] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [selectedPart, setSelectedPart] = useState(null);
   const [infoPanelOpen, setInfoPanelOpen] = useState(false);
   const { isMobile } = useResponsive();
+
+  // Show loading while checking auth state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-primary-50 to-electric-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600 font-medium">Loading InvenAI...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show homepage if user is not authenticated or hasn't entered the app
+  if (!user || !showApp) {
+    return (
+      <>
+        <Homepage onEnterApp={() => setShowApp(true)} />
+        <ChatBot />
+      </>
+    );
+  }
 
   // Handle part selection from 3D model or inventory table
   const handlePartSelect = (partId) => {
@@ -204,6 +232,9 @@ function App() {
         selectedPart={selectedPart}
         isMobile={isMobile}
       />
+      
+      {/* ChatBot */}
+      <ChatBot />
     </div>
   );
 }
