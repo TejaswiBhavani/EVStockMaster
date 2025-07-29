@@ -4,7 +4,13 @@
 
 ## 🚀 Overview
 
-**InvenAI** is an AI-powered inventory management platform specifically designed for Electric Vehicle (EV) manufacturing operations. Built with modern React technologies, it provides real-time inventory tracking, intelligent forecasting, and interactive 3D visualization of EV components.
+**EVStockMaster** is a comprehensive AI-powered inventory management platform specifically designed for Electric Vehicle (EV) manufacturing operations. The application features a dual architecture with both modern React frontend and Streamlit backend components, providing multiple interfaces for different use cases.
+
+### 🏗️ Architecture
+
+- **React Frontend**: Modern, responsive UI with 3D visualization and interactive dashboards
+- **Streamlit Backend**: Python-based analytics engine with AI-powered insights and forecasting
+- **Dual Interface**: Choose between web-first React app or data-science focused Streamlit app
 
 ### ✨ Key Features
 
@@ -47,27 +53,40 @@
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/invenai.git
-   cd invenai
+   git clone https://github.com/TejaswiBhavani/EVStockMaster.git
+   cd EVStockMaster
    ```
 
-2. **Install dependencies**
+2. **Install Frontend Dependencies**
    ```bash
-   npm install
+   npm install --legacy-peer-deps
    ```
 
-3. **Set up Firebase**
+3. **Install Python Dependencies**
+   ```bash
+   pip install -r requirements.txt
+   # OR manually:
+   # pip install streamlit pandas numpy plotly scipy
+   ```
+
+4. **Set up Firebase (Optional)**
    - Create a new Firebase project at [Firebase Console](https://console.firebase.google.com)
    - Enable Firestore Database and Authentication
-   - Copy your Firebase config to `src/config/firebase.js`
+   - Update your Firebase config in `src/config/firebase.js`
 
-4. **Start development server**
+5. **Run the Development Servers**
+   
+   **Frontend (React):**
    ```bash
    npm run dev
    ```
-
-5. **Open your browser**
    Navigate to `http://localhost:5173`
+
+   **Backend (Streamlit):**
+   ```bash
+   streamlit run app.py
+   ```
+   Navigate to `http://localhost:8501`
 
 ## 📁 Project Structure
 
