@@ -112,37 +112,46 @@ const StatsCards = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
-            whileHover={{ y: -4, scale: 1.02 }}
-            className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-lg transition-all duration-300"
+            whileHover={{ y: -4, scale: 1.02, boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)" }}
+            className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-xl transition-all duration-300 relative overflow-hidden group"
           >
-            <div className="flex items-center justify-between mb-4">
-              <div className={`w-12 h-12 rounded-lg bg-gradient-to-r ${colorClasses.split(' ')[0]} ${colorClasses.split(' ')[1]} flex items-center justify-center shadow-lg`}>
+            {/* Background decoration */}
+            <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-blue-100/30 to-purple-100/30 rounded-full blur-xl"></div>
+            
+            <div className="relative z-10 flex items-center justify-between mb-4">
+              <div className={`w-12 h-12 rounded-lg bg-gradient-to-r ${colorClasses.split(' ')[0]} ${colorClasses.split(' ')[1]} flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-300`}>
                 <Icon className="w-6 h-6 text-white" />
               </div>
-              <div className={`px-2 py-1 rounded-full text-xs font-medium ${changeColorClasses}`}>
+              <div className={`px-3 py-1 rounded-full text-xs font-semibold ${changeColorClasses} shadow-sm`}>
                 {stat.change}
               </div>
             </div>
             
-            <div className="space-y-2">
-              <h3 className="text-2xl font-bold text-gray-900">{stat.value}</h3>
-              <p className="text-sm font-medium text-gray-700">{stat.title}</p>
+            <div className="relative z-10 space-y-2">
+              <h3 className="text-2xl font-bold text-gray-900 group-hover:text-gray-800 transition-colors">{stat.value}</h3>
+              <p className="text-sm font-semibold text-gray-700">{stat.title}</p>
               <p className="text-xs text-gray-500">{stat.description}</p>
             </div>
 
-            {/* Progress bar for efficiency */}
+            {/* Enhanced progress bar for efficiency */}
             {stat.id === 5 && (
-              <div className="mt-4">
-                <div className="w-full bg-gray-200 rounded-full h-2">
+              <div className="relative z-10 mt-4">
+                <div className="w-full bg-gray-200 rounded-full h-2.5 shadow-inner">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${dashboardStats.efficiency}%` }}
-                    transition={{ delay: 0.5, duration: 1 }}
-                    className="bg-gradient-to-r from-purple-500 to-purple-600 h-2 rounded-full"
-                  />
+                    transition={{ delay: 0.5, duration: 1.5, ease: "easeOut" }}
+                    className="bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 h-2.5 rounded-full shadow-sm relative overflow-hidden"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse"></div>
+                  </motion.div>
                 </div>
               </div>
             )}
+
+            {/* Subtle glow effect on hover */}
+            <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-400/0 via-purple-400/0 to-pink-400/0 group-hover:from-blue-400/5 group-hover:via-purple-400/5 group-hover:to-pink-400/5 transition-all duration-500"></div>
           </motion.div>
         );
       })}
