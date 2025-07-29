@@ -4,7 +4,7 @@
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-gray-200;
   }
   body {
     @apply bg-gray-50 text-gray-900 antialiased;
@@ -30,7 +30,7 @@
   }
   
   .sidebar-item {
-    @apply flex items-center px-4 py-3 text-gray-700 rounded-lg transition-all duration-200 hover:bg-primary-50 hover:text-primary-600 group;
+    @apply flex items-center px-4 py-3 text-gray-700 rounded-lg transition-all duration-200 hover:bg-primary-50 hover:text-primary-600;
   }
   
   .sidebar-item.active {
