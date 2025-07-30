@@ -14,27 +14,72 @@
 
 @layer components {
   .glass-effect {
-    @apply bg-white/80 backdrop-blur-sm border border-white/20;
+    @apply bg-white/80 backdrop-blur-sm border border-white/20 shadow-xl;
   }
   
   .gradient-primary {
-    @apply bg-gradient-to-r from-primary-500 to-electric-500;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   }
   
   .gradient-electric {
-    @apply bg-gradient-to-r from-electric-400 via-electric-500 to-electric-600;
+    background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+  }
+  
+  .gradient-dark {
+    background: linear-gradient(145deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
   }
   
   .card-hover {
-    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+    @apply transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 hover:scale-105;
   }
   
   .sidebar-item {
-    @apply flex items-center px-4 py-3 text-gray-700 rounded-lg transition-all duration-200 hover:bg-primary-50 hover:text-primary-600;
+    @apply flex items-center px-4 py-3 text-gray-700 rounded-lg transition-all duration-200 hover:bg-primary-50 hover:text-primary-600 hover:shadow-md;
   }
   
   .sidebar-item.active {
-    @apply bg-primary-100 text-primary-700 font-medium;
+    @apply bg-primary-100 text-primary-700 font-medium shadow-lg;
+  }
+  
+  .inven-ai-btn {
+    @apply bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-2 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1;
+  }
+  
+  .inven-ai-card {
+    @apply bg-white rounded-xl shadow-lg border border-gray-100 p-6 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1;
+  }
+  
+  .inven-ai-metric {
+    @apply bg-gradient-to-br from-white to-gray-50 rounded-lg p-4 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200;
+  }
+  
+  .inven-ai-badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
+  }
+  
+  .inven-ai-badge.success {
+    @apply bg-green-100 text-green-800;
+  }
+  
+  .inven-ai-badge.warning {
+    @apply bg-yellow-100 text-yellow-800;
+  }
+  
+  .inven-ai-badge.error {
+    @apply bg-red-100 text-red-800;
+  }
+  
+  .inven-ai-badge.info {
+    @apply bg-blue-100 text-blue-800;
+  }
+  
+  .neon-glow {
+    box-shadow: 0 0 20px rgba(0, 242, 254, 0.5);
+    border: 1px solid rgba(0, 242, 254, 0.3);
+  }
+  
+  .hero-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #00f2fe 100%);
   }
 }
 
@@ -65,8 +110,77 @@
   }
 }
 
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(0, 242, 254, 0.8);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
 .loading-shimmer {
   background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
   background-size: 200px 100%;
   animation: shimmer 1.5s infinite;
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Enhanced typography */
+.inven-ai-title {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.inven-ai-subtitle {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* Enhanced focus states */
+.focus-inven-ai:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #667eea;
+}
+
+/* Improved button animations */
+.btn-inven-ai {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.btn-inven-ai::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-inven-ai:hover::before {
+  left: 100%;
 }
