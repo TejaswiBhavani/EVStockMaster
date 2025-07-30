@@ -4,6 +4,7 @@ import { getAnalytics } from "firebase/analytics";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import { getCurrentDomainInfo, isDomainLikelyUnauthorized, getFirebaseConsoleAuthURL } from './domains';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -25,5 +26,26 @@ export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+
+// Domain debugging utilities
+export const domainUtils = {
+  getCurrentDomainInfo,
+  isDomainLikelyUnauthorized,
+  getFirebaseConsoleAuthURL: () => getFirebaseConsoleAuthURL(firebaseConfig.projectId),
+  getRequiredDomainsMessage: () => {
+    const { origin } = getCurrentDomainInfo();
+    return `
+To fix authentication issues, add these domains to Firebase Console:
+
+1. Go to: ${getFirebaseConsoleAuthURL(firebaseConfig.projectId)}
+2. Add your current domain: ${origin}
+3. Also add common domains like: localhost, 127.0.0.1, vercel.app, etc.
+
+Current domain info:
+- Origin: ${origin}
+- Likely needs authorization: ${isDomainLikelyUnauthorized() ? 'YES' : 'NO'}
+    `;
+  }
+};
 
 export default app;
