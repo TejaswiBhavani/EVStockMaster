@@ -40,7 +40,24 @@ const ChatBot = () => {
     setIsTyping(true);
 
     try {
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyAhCGv0s074UHkU9BexhLm37Fgl2QxcVlk`, {
+      // Enhanced prompt for better EV inventory management responses
+      const enhancedPrompt = `You are InvenAI, an advanced AI assistant specialized in Electric Vehicle (EV) manufacturing inventory management and supply chain optimization. You have expertise in:
+
+- EV battery technology and thermal management systems
+- Electric motor specifications and performance optimization
+- Charging infrastructure and port configurations
+- Supply chain logistics for automotive components
+- Inventory optimization strategies and demand forecasting
+- Quality control and compliance in EV manufacturing
+- Cost analysis and procurement strategies
+
+Context: You're helping manage inventory for an EV manufacturing facility that produces electric vehicles with components like lithium-ion battery packs, electric motors, charging ports, control units, and cooling systems.
+
+Please provide detailed, actionable insights for this query: "${inputMessage}"
+
+Format your response to be practical and specific to EV manufacturing operations.`;
+
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${process.env.REACT_APP_GEMINI_API_KEY || 'demo-key'}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -48,12 +65,14 @@ const ChatBot = () => {
         body: JSON.stringify({
           contents: [{
             parts: [{
-              text: `You are InvenAI, an intelligent assistant for EV manufacturing inventory management. You help with inventory optimization, parts management, supply chain insights, and manufacturing analytics. Please respond to this query in a helpful, professional manner: ${inputMessage}`
+              text: enhancedPrompt
             }]
           }],
           generationConfig: {
             temperature: 0.7,
             maxOutputTokens: 1000,
+            topP: 0.8,
+            topK: 40
           }
         })
       });
@@ -68,12 +87,35 @@ const ChatBot = () => {
         };
         setMessages(prev => [...prev, botResponse]);
       } else {
-        throw new Error('Failed to get response');
+        throw new Error(`API Error: ${response.status}`);
       }
     } catch (error) {
+      console.warn('Gemini API unavailable:', error.message);
+      
+      // Enhanced fallback responses for EV inventory management
+      const fallbackResponses = {
+        'battery': "Based on current industry standards, lithium-ion battery packs typically have a 5-8 year lifespan and should be monitored for thermal management. Recommend maintaining stock levels at 2-3 months of production demand with proper storage at 15-25°C.",
+        'motor': "Electric motors require minimal maintenance but proper inventory tracking is crucial. Stock electric motors in climate-controlled environments and maintain a 1-2 month buffer stock. Consider motor efficiency ratings (>90%) when procuring.",
+        'charging': "Fast charging infrastructure is critical for EV adoption. Maintain adequate stock of CCS Type 2 ports and ensure compatibility with 150kW+ charging standards. Monitor connector wear and replace every 10,000 charge cycles.",
+        'inventory': "For optimal EV manufacturing inventory management: 1) Implement just-in-time delivery for high-value components like batteries, 2) Maintain 2-week safety stock for critical parts, 3) Use demand forecasting based on production schedules, 4) Monitor supplier lead times closely.",
+        'forecast': "EV market demand is growing 20-30% annually. Plan inventory levels accordingly with focus on battery capacity increases and charging speed improvements. Consider seasonal variations in EV sales (higher in Q4, lower in Q1).",
+        'cost': "Cost optimization strategies: 1) Negotiate volume discounts for battery packs (typically 40-50% of vehicle cost), 2) Consider local sourcing to reduce logistics costs, 3) Implement vendor-managed inventory for non-critical components, 4) Track total cost of ownership, not just unit price.",
+        'default': "I'm currently operating in offline mode with limited capabilities. For comprehensive EV inventory insights, I can help with: stock level optimization, demand forecasting, supplier management, cost analysis, and quality control strategies. Please specify your particular area of interest."
+      };
+      
+      const query = inputMessage.toLowerCase();
+      let responseText = fallbackResponses.default;
+      
+      if (query.includes('battery') || query.includes('lithium')) responseText = fallbackResponses.battery;
+      else if (query.includes('motor') || query.includes('electric')) responseText = fallbackResponses.motor;
+      else if (query.includes('charg') || query.includes('port')) responseText = fallbackResponses.charging;
+      else if (query.includes('inventory') || query.includes('stock')) responseText = fallbackResponses.inventory;
+      else if (query.includes('forecast') || query.includes('demand')) responseText = fallbackResponses.forecast;
+      else if (query.includes('cost') || query.includes('price') || query.includes('budget')) responseText = fallbackResponses.cost;
+
       const errorMessage = {
         id: Date.now() + 1,
-        text: "I apologize, but I'm having trouble connecting right now. Please try again later or contact support for assistance.",
+        text: responseText,
         sender: 'bot',
         timestamp: new Date()
       };
