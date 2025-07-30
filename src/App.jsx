@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Box, Package, Brain } from 'lucide-react';
 import { auth } from './config/firebase';
 import Homepage from './components/Homepage/Homepage';
 import ChatBot from './components/Chat/ChatBot';
@@ -77,35 +78,58 @@ function App() {
               <div className="xl:col-span-2">
                 <ProductionSchedule />
               </div>
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
-                <div className="space-y-3">
+              <div className="modern-card p-6">
+                <h3 className="text-xl font-bold heading-gradient mb-6">Quick Actions</h3>
+                <div className="space-y-4">
                   <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
+                    whileHover={{ scale: 1.03, x: 5 }}
+                    whileTap={{ scale: 0.97 }}
                     onClick={() => setActiveTab('3d-model')}
-                    className="w-full p-3 text-left border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                    className="w-full p-4 text-left modern-card border-0 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 group"
                   >
-                    <div className="font-medium text-gray-900">View 3D Model</div>
-                    <div className="text-sm text-gray-500">Interactive EV visualization</div>
+                    <div className="flex items-center space-x-4">
+                      <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <Box className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <div className="font-bold text-gray-900 group-hover:text-primary-700">View 3D Model</div>
+                        <div className="text-sm text-gray-500">Interactive EV visualization</div>
+                      </div>
+                    </div>
                   </motion.button>
+                  
                   <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
+                    whileHover={{ scale: 1.03, x: 5 }}
+                    whileTap={{ scale: 0.97 }}
                     onClick={() => setActiveTab('inventory')}
-                    className="w-full p-3 text-left border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                    className="w-full p-4 text-left modern-card border-0 hover:bg-gradient-to-r hover:from-electric-50 hover:to-neon-50 group"
                   >
-                    <div className="font-medium text-gray-900">Manage Inventory</div>
-                    <div className="text-sm text-gray-500">Stock levels & orders</div>
+                    <div className="flex items-center space-x-4">
+                      <div className="w-12 h-12 bg-gradient-to-br from-electric-500 to-neon-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <Package className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <div className="font-bold text-gray-900 group-hover:text-electric-700">Manage Inventory</div>
+                        <div className="text-sm text-gray-500">Stock levels & orders</div>
+                      </div>
+                    </div>
                   </motion.button>
+                  
                   <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
+                    whileHover={{ scale: 1.03, x: 5 }}
+                    whileTap={{ scale: 0.97 }}
                     onClick={() => setActiveTab('ai-summary')}
-                    className="w-full p-3 text-left border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                    className="w-full p-4 text-left modern-card border-0 hover:bg-gradient-to-r hover:from-accent-50 hover:to-secondary-50 group"
                   >
-                    <div className="font-medium text-gray-900">AI Insights</div>
-                    <div className="text-sm text-gray-500">Smart recommendations</div>
+                    <div className="flex items-center space-x-4">
+                      <div className="w-12 h-12 bg-gradient-to-br from-accent-500 to-secondary-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <Brain className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <div className="font-bold text-gray-900 group-hover:text-accent-700">AI Insights</div>
+                        <div className="text-sm text-gray-500">Smart recommendations</div>
+                      </div>
+                    </div>
                   </motion.button>
                 </div>
               </div>
@@ -120,7 +144,7 @@ function App() {
             animate={{ opacity: 1, scale: 1 }}
             className="h-full"
           >
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 h-full min-h-[600px]">
+            <div className="modern-card border-0 h-full min-h-[700px] overflow-hidden">
               <EVModel 
                 onPartSelect={handlePartSelect} 
                 selectedPart={selectedPart}
@@ -192,7 +216,13 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 flex relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-primary-200/30 to-secondary-200/30 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-electric-200/30 to-neon-200/30 rounded-full blur-3xl animate-pulse-slow" style={{animationDelay: '1s'}}></div>
+      </div>
+
       {/* Sidebar */}
       <Sidebar
         isOpen={sidebarOpen}
@@ -203,8 +233,8 @@ function App() {
       />
 
       {/* Main Content Area */}
-      <div className={`flex-1 flex flex-col transition-all duration-300 ${
-        sidebarOpen && !isMobile ? 'ml-64' : 'ml-0'
+      <div className={`flex-1 flex flex-col transition-all duration-300 relative z-10 ${
+        sidebarOpen && !isMobile ? 'ml-72' : 'ml-0'
       }`}>
         {/* Header */}
         <Header
