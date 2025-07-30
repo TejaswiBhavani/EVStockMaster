@@ -9,8 +9,7 @@ import {
   Users,
   ArrowRight,
   Play,
-  CheckCircle,
-  Star
+  CheckCircle
 } from 'lucide-react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../config/firebase';
@@ -56,26 +55,7 @@ const Homepage = ({ onEnterApp }) => {
     }
   ];
 
-  const testimonials = [
-    {
-      name: 'Rajesh Kumar',
-      role: 'Production Manager, TATA Motors',
-      content: 'InvenAI has revolutionized our inventory management. We\'ve reduced stockouts by 40% and improved efficiency significantly.',
-      rating: 5
-    },
-    {
-      name: 'Priya Sharma',
-      role: 'Supply Chain Director, Mahindra',
-      content: 'The AI insights are incredibly accurate. We can now predict demand patterns weeks in advance.',
-      rating: 5
-    },
-    {
-      name: 'Amit Patel',
-      role: 'Operations Head, Bajaj Auto',
-      content: 'The 3D visualization feature helps our team understand inventory layouts better than ever before.',
-      rating: 5
-    }
-  ];
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-dark-900 via-dark-800 to-dark-700">
@@ -252,42 +232,7 @@ const Homepage = ({ onEnterApp }) => {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-20 bg-gradient-to-r from-dark-800 to-dark-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-4">
-              Trusted by Industry Leaders
-            </h2>
-            <p className="text-xl text-gray-300">
-              See what our customers say about InvenAI
-            </p>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="bg-dark-900/50 border border-electric-400/20 p-6 rounded-2xl hover:bg-dark-900/70 hover:border-electric-400/30 transition-all duration-300"
-              >
-                <div className="flex items-center mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
-                  ))}
-                </div>
-                <p className="text-gray-300 mb-4">"{testimonial.content}"</p>
-                <div>
-                  <div className="font-semibold text-white">{testimonial.name}</div>
-                  <div className="text-sm text-gray-400">{testimonial.role}</div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-electric-400 to-electric-500">
