@@ -1,5 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../config/firebase';
 import { 
   Menu, 
   Search, 
@@ -11,6 +13,8 @@ import {
 } from 'lucide-react';
 
 const Header = ({ onMenuClick, activeTab, isMobile }) => {
+  const [user] = useAuthState(auth);
+  
   const getPageTitle = (tab) => {
     const titles = {
       'dashboard': 'Dashboard Overview',
@@ -20,6 +24,34 @@ const Header = ({ onMenuClick, activeTab, isMobile }) => {
       'settings': 'System Settings'
     };
     return titles[tab] || 'InvenAI';
+  };
+
+  // Helper function to get user display name with fallback
+  const getUserDisplayName = () => {
+    if (!user) return 'Guest User';
+    
+    // First try displayName (set during signup)
+    if (user.displayName) {
+      return user.displayName;
+    }
+    
+    // If no displayName, try to extract from email
+    if (user.email) {
+      const emailName = user.email.split('@')[0];
+      // Capitalize first letter and handle dots/underscores
+      return emailName.split(/[._]/).map(part => 
+        part.charAt(0).toUpperCase() + part.slice(1)
+      ).join(' ');
+    }
+    
+    // Final fallback
+    return 'User';
+  };
+
+  // Helper function to get user role/title
+  const getUserRole = () => {
+    if (!user) return 'Please sign in';
+    return 'Inventory Manager'; // Could be enhanced to read from user profile
   };
 
   return (
@@ -124,8 +156,8 @@ const Header = ({ onMenuClick, activeTab, isMobile }) => {
             </div>
           </div>
           <div className="hidden sm:block text-left">
-            <p className="text-sm font-bold text-gray-900">Rajesh Kumar</p>
-            <p className="text-xs text-gray-600 font-medium">Inventory Manager</p>
+            <p className="text-sm font-bold text-gray-900">{getUserDisplayName()}</p>
+            <p className="text-xs text-gray-600 font-medium">{getUserRole()}</p>
           </div>
           <ChevronDown className="w-4 h-4 text-gray-500 transition-transform group-hover:rotate-180" />
         </motion.div>
