@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Box, Package, Brain } from 'lucide-react';
 import { auth } from './config/firebase';
+import { getUserProfile } from './utils/userService';
 import Homepage from './components/Homepage/Homepage';
 import ChatBot from './components/Chat/ChatBot';
 import Sidebar from './components/Layout/Sidebar';
@@ -13,6 +14,7 @@ import ProductionSchedule from './components/Dashboard/ProductionSchedule';
 import InventoryTable from './components/Inventory/InventoryTable';
 import AISummary from './components/InfoPanel/AISummary';
 import InfoPanel from './components/InfoPanel/InfoPanel';
+import UserProfileSetup from './components/Auth/UserProfileSetup';
 import useResponsive from './hooks/useResponsive';
 
 function App() {
@@ -22,10 +24,40 @@ function App() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [selectedPart, setSelectedPart] = useState(null);
   const [infoPanelOpen, setInfoPanelOpen] = useState(false);
+  const [userProfile, setUserProfile] = useState(null);
+  const [profileLoading, setProfileLoading] = useState(false);
+  const [showProfileSetup, setShowProfileSetup] = useState(false);
   const { isMobile } = useResponsive();
 
-  // Show loading while checking auth state
-  if (loading) {
+  // Fetch user profile when user changes
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (user) {
+        setProfileLoading(true);
+        try {
+          const profile = await getUserProfile(user.uid);
+          setUserProfile(profile);
+          
+          // Show profile setup if user is new or profile is incomplete
+          if (!profile || !profile.isProfileComplete) {
+            setShowProfileSetup(true);
+          }
+        } catch (error) {
+          console.error('Error fetching user profile:', error);
+        } finally {
+          setProfileLoading(false);
+        }
+      } else {
+        setUserProfile(null);
+        setShowProfileSetup(false);
+      }
+    };
+
+    fetchUserProfile();
+  }, [user]);
+
+  // Show loading while checking auth state or profile
+  if (loading || profileLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-primary-50 to-electric-50 flex items-center justify-center">
         <div className="text-center">
@@ -45,6 +77,17 @@ function App() {
       </>
     );
   }
+
+  // Handle profile setup completion
+  const handleProfileSetupComplete = (profileData) => {
+    setUserProfile({ ...userProfile, ...profileData, isProfileComplete: true });
+    setShowProfileSetup(false);
+  };
+
+  // Handle profile setup skip
+  const handleProfileSetupSkip = () => {
+    setShowProfileSetup(false);
+  };
 
   // Handle part selection from 3D model or inventory table
   const handlePartSelect = (partId) => {
@@ -241,6 +284,8 @@ function App() {
           onMenuClick={handleSidebarToggle}
           activeTab={activeTab}
           isMobile={isMobile}
+          userProfile={userProfile}
+          onProfileUpdate={setUserProfile}
         />
 
         {/* Main Content */}
@@ -265,6 +310,15 @@ function App() {
       
       {/* ChatBot */}
       <ChatBot />
+
+      {/* User Profile Setup Modal */}
+      {showProfileSetup && user && (
+        <UserProfileSetup
+          user={user}
+          onComplete={handleProfileSetupComplete}
+          onSkip={handleProfileSetupSkip}
+        />
+      )}
     </div>
   );
 }

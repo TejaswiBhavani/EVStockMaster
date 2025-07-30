@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Mail, Lock, User, Eye, EyeOff, AlertCircle, ExternalLink } from 'lucide-react';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { auth, googleProvider, domainUtils } from '../../config/firebase';
+import { createUserProfile, extractGoogleUserInfo } from '../../utils/userService';
 
 const AuthModal = ({ isOpen, onClose, mode, setMode }) => {
   const [formData, setFormData] = useState({
@@ -88,7 +89,15 @@ const AuthModal = ({ isOpen, onClose, mode, setMode }) => {
     setShowDomainHelp(false);
 
     try {
-      await signInWithPopup(auth, googleProvider);
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      
+      // Extract user info from Google
+      const googleUserInfo = extractGoogleUserInfo(user);
+      
+      // Create or update user profile in Firestore
+      await createUserProfile(user, googleUserInfo);
+      
       onClose();
     } catch (error) {
       console.error('Google authentication error:', error);
