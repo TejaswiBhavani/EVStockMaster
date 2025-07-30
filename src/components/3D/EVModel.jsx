@@ -1,39 +1,10 @@
-import React, { useRef, useMemo, useState, Suspense } from 'react';
+import React, { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Text, Box, Sphere, Cylinder, PresentationControls, Float, Html } from '@react-three/drei';
+import { OrbitControls, Text, Box, Sphere, Cylinder, PresentationControls, Float } from '@react-three/drei';
 import { motion } from 'framer-motion';
-import { AlertTriangle, RotateCcw } from 'lucide-react';
 import * as THREE from 'three';
 
-// Loading component for 3D scene
-const SceneLoader = () => (
-  <Html center>
-    <div className="text-center">
-      <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto mb-4"></div>
-      <p className="text-white font-medium">Loading 3D Model...</p>
-    </div>
-  </Html>
-);
-
-// Error Boundary Component
-const ModelErrorBoundary = ({ onRetry }) => (
-  <Html center>
-    <div className="text-center bg-red-900/80 backdrop-blur-sm rounded-lg p-6 border border-red-500/50">
-      <AlertTriangle className="w-12 h-12 text-red-400 mx-auto mb-4" />
-      <h3 className="text-lg font-bold text-white mb-2">Model Loading Failed</h3>
-      <p className="text-red-200 mb-4">The 3D model could not be loaded</p>
-      <button
-        onClick={onRetry}
-        className="flex items-center space-x-2 mx-auto px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
-      >
-        <RotateCcw className="w-4 h-4" />
-        <span>Retry</span>
-      </button>
-    </div>
-  </Html>
-);
-
-const ModernEVModel = ({ onPartClick, modelError }) => {
+const ModernEVModel = ({ onPartClick }) => {
   const groupRef = useRef();
 
   useFrame((state) => {
@@ -211,14 +182,6 @@ const ModernEVModel = ({ onPartClick, modelError }) => {
 };
 
 const EVModel = ({ onPartSelect }) => {
-  const [modelError, setModelError] = useState(false);
-
-  const handleRetry = () => {
-    setModelError(false);
-    // Force re-render of the scene
-    window.location.reload();
-  };
-
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
@@ -238,58 +201,52 @@ const EVModel = ({ onPartSelect }) => {
           powerPreference: "high-performance"
         }}
         shadows
-        onError={() => setModelError(true)}
+        dpr={[1, 2]}
       >
-        {modelError ? (
-          <ModelErrorBoundary onRetry={handleRetry} />
-        ) : (
-          <Suspense fallback={<SceneLoader />}>
-            {/* Enhanced Lighting */}
-            <ambientLight intensity={0.6} color="#f0f9ff" />
-            <pointLight 
-              position={[10, 10, 10]} 
-              intensity={1.2} 
-              color="#3b82f6"
-              castShadow
-              shadow-mapSize-width={1024}
-              shadow-mapSize-height={1024}
-            />
-            <pointLight 
-              position={[-10, 5, -10]} 
-              intensity={0.8} 
-              color="#8b5cf6"
-            />
-            <spotLight
-              position={[0, 15, 0]}
-              angle={0.3}
-              penumbra={1}
-              intensity={1}
-              color="#06b6d4"
-              castShadow
-            />
-            
-            {/* 3D Model */}
-            <PresentationControls
-              global
-              config={{ mass: 2, tension: 500 }}
-              snap={{ mass: 4, tension: 1500 }}
-            >
-              <ModernEVModel onPartClick={onPartSelect} modelError={modelError} />
-            </PresentationControls>
+        {/* Enhanced Lighting */}
+        <ambientLight intensity={0.6} color="#f0f9ff" />
+        <pointLight 
+          position={[10, 10, 10]} 
+          intensity={1.2} 
+          color="#3b82f6"
+          castShadow
+          shadow-mapSize-width={1024}
+          shadow-mapSize-height={1024}
+        />
+        <pointLight 
+          position={[-10, 5, -10]} 
+          intensity={0.8} 
+          color="#8b5cf6"
+        />
+        <spotLight
+          position={[0, 15, 0]}
+          angle={0.3}
+          penumbra={1}
+          intensity={1}
+          color="#06b6d4"
+          castShadow
+        />
+        
+        {/* 3D Model */}
+        <PresentationControls
+          global
+          config={{ mass: 2, tension: 500 }}
+          snap={{ mass: 4, tension: 1500 }}
+        >
+          <ModernEVModel onPartClick={onPartSelect} />
+        </PresentationControls>
 
-            {/* Enhanced Controls */}
-            <OrbitControls
-              enablePan={true}
-              enableZoom={true}
-              enableRotate={true}
-              maxDistance={25}
-              minDistance={5}
-              maxPolarAngle={Math.PI / 2}
-              autoRotate={false}
-              autoRotateSpeed={0.5}
-            />
-          </Suspense>
-        )}
+        {/* Enhanced Controls */}
+        <OrbitControls
+          enablePan={true}
+          enableZoom={true}
+          enableRotate={true}
+          maxDistance={25}
+          minDistance={5}
+          maxPolarAngle={Math.PI / 2}
+          autoRotate={false}
+          autoRotateSpeed={0.5}
+        />
       </Canvas>
 
       {/* UI Overlay */}
