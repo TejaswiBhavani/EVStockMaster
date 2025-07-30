@@ -203,7 +203,7 @@ function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 flex relative overflow-hidden">
       {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-background">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-primary-200/30 to-secondary-200/30 rounded-full blur-3xl animate-pulse-slow"></div>
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-electric-200/30 to-neon-200/30 rounded-full blur-3xl animate-pulse-slow" style={{animationDelay: '1s'}}></div>
       </div>
@@ -218,7 +218,7 @@ function App() {
       />
 
       {/* Main Content Area */}
-      <div className={`flex-1 flex flex-col transition-all duration-300 relative z-10 ${
+      <div className={`flex-1 flex flex-col transition-all duration-300 relative z-content ${
         sidebarOpen && !isMobile ? 'ml-72' : 'ml-0'
       }`}>
         {/* Header */}
@@ -229,7 +229,7 @@ function App() {
         />
 
         {/* Main Content */}
-        <main className="flex-1 p-6 overflow-auto">
+        <main className="flex-1 p-4 sm:p-6 overflow-auto">
           <div className={`transition-all duration-300 ${
             infoPanelOpen && !isMobile ? 'mr-96' : 'mr-0'
           }`}>

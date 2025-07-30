@@ -46,7 +46,8 @@ const Sidebar = ({ isOpen, onClose, activeTab, setActiveTab, isMobile }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-sidebar lg:hidden"
+          style={{ zIndex: 25 }}
           onClick={onClose}
         />
       )}
@@ -57,9 +58,10 @@ const Sidebar = ({ isOpen, onClose, activeTab, setActiveTab, isMobile }) => {
         initial={isMobile ? "closed" : "open"}
         animate={isOpen ? "open" : "closed"}
         className={`
-          fixed left-0 top-0 h-full w-72 glass-card border-r border-white/20 shadow-2xl z-50 backdrop-blur-xl
+          fixed left-0 top-0 h-full w-72 glass-card border-r border-white/20 shadow-2xl z-sidebar backdrop-blur-xl
           ${isMobile ? 'lg:relative lg:translate-x-0' : ''}
         `}
+        style={{ zIndex: 30 }}
       >
         <div className="flex flex-col h-full">
           {/* Logo Section */}

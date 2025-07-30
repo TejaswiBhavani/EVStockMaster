@@ -117,7 +117,7 @@ const NotificationCenter = ({ isOpen, onClose }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black bg-opacity-50 z-50"
+        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-notification"
         onClick={onClose}
       />
 
@@ -126,18 +126,24 @@ const NotificationCenter = ({ isOpen, onClose }) => {
         initial={{ opacity: 0, x: 300 }}
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: 300 }}
-        className="fixed right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl z-50 flex flex-col"
+        className="fixed right-0 top-0 h-full w-full max-w-sm sm:max-w-md bg-white shadow-2xl z-notification flex flex-col"
+        style={{ zIndex: 60 }}
       >
         {/* Header */}
-        <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-primary-50 to-secondary-50">
+        <div className="p-4 sm:p-6 border-b border-gray-200 bg-gradient-to-r from-primary-50 to-secondary-50">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
               <div className="relative">
                 <Bell className="w-6 h-6 text-primary-600" />
                 {unreadCount > 0 && (
-                  <div className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold">
-                    {unreadCount}
-                  </div>
+                  <motion.div 
+                    className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring" }}
+                  >
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </motion.div>
                 )}
               </div>
               <h2 className="text-xl font-bold text-gray-900">Notifications</h2>
@@ -158,7 +164,7 @@ const NotificationCenter = ({ isOpen, onClose }) => {
               placeholder="Search notifications..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors"
             />
           </div>
 
@@ -172,25 +178,27 @@ const NotificationCenter = ({ isOpen, onClose }) => {
               { key: 'ai', label: 'AI' },
               { key: 'production', label: 'Production' }
             ].map(({ key, label }) => (
-              <button
+              <motion.button
                 key={key}
                 onClick={() => setFilter(key)}
-                className={`px-3 py-1 text-xs rounded-full transition-colors ${
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors ${
                   filter === key
-                    ? 'bg-primary-500 text-white'
+                    ? 'bg-primary-500 text-white shadow-md'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
                 {label}
-              </button>
+              </motion.button>
             ))}
           </div>
 
           {/* Actions */}
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center justify-between">
             <button
               onClick={handleMarkAllAsRead}
-              className="flex items-center space-x-1 text-sm text-primary-600 hover:text-primary-700 font-medium"
+              className="flex items-center space-x-1 text-sm text-primary-600 hover:text-primary-700 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={unreadCount === 0}
             >
               <CheckCircle className="w-4 h-4" />
@@ -198,7 +206,7 @@ const NotificationCenter = ({ isOpen, onClose }) => {
             </button>
             <button
               onClick={handleClearAll}
-              className="flex items-center space-x-1 text-sm text-red-600 hover:text-red-700 font-medium"
+              className="flex items-center space-x-1 text-sm text-red-600 hover:text-red-700 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={notifications.length === 0}
             >
               <Trash2 className="w-4 h-4" />
@@ -208,7 +216,7 @@ const NotificationCenter = ({ isOpen, onClose }) => {
         </div>
 
         {/* Notifications List */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-3">
+        <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3">
           <AnimatePresence>
             {filteredNotifications.length > 0 ? (
               filteredNotifications.map((notification) => (
@@ -226,7 +234,7 @@ const NotificationCenter = ({ isOpen, onClose }) => {
                 className="text-center py-12"
               >
                 <Bell className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500 font-medium">
+                <p className="text-gray-500 font-medium mb-2">
                   {searchTerm || filter !== 'all' 
                     ? 'No notifications match your filters' 
                     : 'No notifications'
@@ -238,7 +246,7 @@ const NotificationCenter = ({ isOpen, onClose }) => {
                       setSearchTerm('');
                       setFilter('all');
                     }}
-                    className="text-primary-600 hover:text-primary-700 text-sm mt-2"
+                    className="text-primary-600 hover:text-primary-700 text-sm font-medium"
                   >
                     Clear filters
                   </button>
