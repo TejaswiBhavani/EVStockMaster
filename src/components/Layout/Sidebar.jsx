@@ -57,31 +57,33 @@ const Sidebar = ({ isOpen, onClose, activeTab, setActiveTab, isMobile }) => {
         initial={isMobile ? "closed" : "open"}
         animate={isOpen ? "open" : "closed"}
         className={`
-          fixed left-0 top-0 h-full w-64 bg-white shadow-xl z-50
+          fixed left-0 top-0 h-full w-72 glass-card border-r border-white/20 shadow-2xl z-50 backdrop-blur-xl
           ${isMobile ? 'lg:relative lg:translate-x-0' : ''}
         `}
       >
         <div className="flex flex-col h-full">
           {/* Logo Section */}
-          <div className="flex items-center justify-between p-6 border-b border-gray-200">
+          <div className="flex items-center justify-between p-6">
             <div className="flex items-center space-x-3">
               <div className="relative">
-                <div className="w-10 h-10 gradient-electric rounded-xl flex items-center justify-center shadow-lg">
-                  <Zap className="w-6 h-6 text-white" />
+                <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-2xl flex items-center justify-center shadow-xl glow-effect">
+                  <Zap className="w-7 h-7 text-white" />
                 </div>
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-white animate-pulse"></div>
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-neon-400 rounded-full border-2 border-white animate-bounce shadow-lg">
+                  <div className="w-2 h-2 bg-white rounded-full m-0.5"></div>
+                </div>
               </div>
               <div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-primary-600 to-electric-600 bg-clip-text text-transparent">
+                <h1 className="text-2xl font-bold heading-gradient">
                   InvenAI
                 </h1>
-                <p className="text-xs text-gray-500">Smart Inventory</p>
+                <p className="text-sm text-gray-500 font-medium">Smart Inventory</p>
               </div>
             </div>
             {isMobile && (
               <button
                 onClick={onClose}
-                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                className="p-2 rounded-xl hover:bg-gray-100 transition-all duration-200 hover:scale-110"
               >
                 <X className="w-5 h-5 text-gray-500" />
               </button>
@@ -89,8 +91,8 @@ const Sidebar = ({ isOpen, onClose, activeTab, setActiveTab, isMobile }) => {
           </div>
 
           {/* Navigation Menu */}
-          <nav className="flex-1 px-4 py-6 space-y-2">
-            {menuItems.map((item) => {
+          <nav className="flex-1 px-6 py-4 space-y-3">
+            {menuItems.map((item, index) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
               
@@ -102,20 +104,35 @@ const Sidebar = ({ isOpen, onClose, activeTab, setActiveTab, isMobile }) => {
                     if (isMobile) onClose();
                   }}
                   className={`
-                    sidebar-item w-full text-left
+                    sidebar-item w-full text-left relative group
                     ${isActive ? 'active' : ''}
                   `}
-                  whileHover={{ x: 4 }}
+                  whileHover={{ x: 6, scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
                 >
-                  <Icon className={`w-5 h-5 mr-3 transition-colors ${
-                    isActive ? 'text-primary-600' : 'text-gray-500 group-hover:text-primary-600'
-                  }`} />
-                  <span className="font-medium">{item.label}</span>
+                  <div className="flex items-center">
+                    <div className={`p-2 rounded-xl mr-3 transition-all duration-200 ${
+                      isActive 
+                        ? 'bg-white/20 shadow-lg' 
+                        : 'bg-transparent group-hover:bg-white/10'
+                    }`}>
+                      <Icon className={`w-5 h-5 transition-colors ${
+                        isActive ? 'text-white' : 'text-gray-600 group-hover:text-primary-600'
+                      }`} />
+                    </div>
+                    <span className={`font-semibold transition-colors ${
+                      isActive ? 'text-white' : 'text-gray-700 group-hover:text-primary-700'
+                    }`}>
+                      {item.label}
+                    </span>
+                  </div>
                   {isActive && (
                     <motion.div
-                      layoutId="activeTab"
-                      className="absolute right-2 w-2 h-2 bg-primary-500 rounded-full"
+                      layoutId="activeIndicator"
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-white rounded-full shadow-lg"
                     />
                   )}
                 </motion.button>
@@ -123,24 +140,39 @@ const Sidebar = ({ isOpen, onClose, activeTab, setActiveTab, isMobile }) => {
             })}
           </nav>
 
-          {/* Status Card */}
-          <div className="p-4 m-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border border-green-200">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+          {/* Enhanced Status Card */}
+          <motion.div 
+            className="mx-6 mb-4 p-5 bg-gradient-to-br from-neon-50 to-emerald-50 rounded-2xl border border-neon-200/50 shadow-lg"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            <div className="flex items-center space-x-4">
+              <div className="relative">
+                <div className="w-10 h-10 bg-gradient-to-br from-neon-400 to-neon-500 rounded-xl flex items-center justify-center shadow-lg">
+                  <div className="w-4 h-4 bg-white rounded-full animate-pulse"></div>
+                </div>
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-neon-400 rounded-full animate-ping"></div>
               </div>
               <div>
-                <p className="text-sm font-medium text-green-800">System Status</p>
-                <p className="text-xs text-green-600">All systems operational</p>
+                <p className="text-sm font-bold text-neon-800">System Status</p>
+                <p className="text-xs text-neon-600 font-medium">All systems operational</p>
               </div>
             </div>
-          </div>
+          </motion.div>
 
-          {/* Footer */}
-          <div className="p-4 border-t border-gray-200">
-            <div className="text-center">
-              <p className="text-xs text-gray-500">InvenAI v2.1.0</p>
-              <p className="text-xs text-gray-400">© 2025 TATA Motors</p>
+          {/* Enhanced Footer */}
+          <div className="p-6 border-t border-gray-200/50">
+            <div className="text-center space-y-1">
+              <p className="text-sm font-semibold text-gray-600">InvenAI v2.1.0</p>
+              <p className="text-xs text-gray-500">© 2025 TATA Motors</p>
+              <div className="flex justify-center mt-3">
+                <div className="flex space-x-1">
+                  <div className="w-2 h-2 bg-primary-400 rounded-full animate-pulse"></div>
+                  <div className="w-2 h-2 bg-secondary-400 rounded-full animate-pulse" style={{animationDelay: '0.2s'}}></div>
+                  <div className="w-2 h-2 bg-electric-400 rounded-full animate-pulse" style={{animationDelay: '0.4s'}}></div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
