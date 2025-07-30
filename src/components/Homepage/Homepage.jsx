@@ -78,30 +78,30 @@ const Homepage = ({ onEnterApp }) => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-dark-900 via-dark-800 to-dark-700">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-md border-b border-gray-200 z-40">
+      <nav className="fixed top-0 w-full bg-dark-900/80 backdrop-blur-md border-b border-electric-400/20 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-primary-500 to-electric-500 rounded-xl flex items-center justify-center shadow-lg">
-                <Zap className="w-6 h-6 text-white" />
+              <div className="w-10 h-10 bg-gradient-to-r from-electric-400 to-electric-500 rounded-xl flex items-center justify-center shadow-lg">
+                <Zap className="w-6 h-6 text-dark-900" />
               </div>
               <div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-primary-600 to-electric-600 bg-clip-text text-transparent">
+                <h1 className="text-xl font-bold bg-gradient-to-r from-electric-400 to-electric-500 bg-clip-text text-transparent">
                   InvenAI
                 </h1>
-                <p className="text-xs text-gray-500">Smart Inventory</p>
+                <p className="text-xs text-gray-400">Smart Inventory</p>
               </div>
             </div>
 
             <div className="flex items-center space-x-4">
               {user ? (
                 <div className="flex items-center space-x-3">
-                  <span className="text-sm text-gray-700">Welcome, {user.displayName || user.email}</span>
+                  <span className="text-sm text-gray-300">Welcome, {user.displayName || user.email}</span>
                   <button
                     onClick={onEnterApp}
-                    className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                    className="px-4 py-2 bg-gradient-to-r from-electric-400 to-electric-500 text-dark-900 rounded-lg hover:from-electric-500 hover:to-electric-600 transition-all duration-200 font-medium"
                   >
                     Enter App
                   </button>
@@ -110,13 +110,13 @@ const Homepage = ({ onEnterApp }) => {
                 <div className="flex items-center space-x-3">
                   <button
                     onClick={() => setAuthModal({ isOpen: true, mode: 'login' })}
-                    className="px-4 py-2 text-gray-700 hover:text-primary-600 transition-colors"
+                    className="px-4 py-2 text-gray-300 hover:text-electric-400 transition-colors"
                   >
                     Sign In
                   </button>
                   <button
                     onClick={() => setAuthModal({ isOpen: true, mode: 'signup' })}
-                    className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                    className="px-4 py-2 bg-gradient-to-r from-electric-400 to-electric-500 text-dark-900 rounded-lg hover:from-electric-500 hover:to-electric-600 transition-all duration-200 font-medium"
                   >
                     Get Started
                   </button>
@@ -134,10 +134,10 @@ const Homepage = ({ onEnterApp }) => {
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-5xl md:text-7xl font-bold text-gray-900 mb-6"
+              className="text-5xl md:text-7xl font-bold text-white mb-6"
             >
               Smart Inventory for
-              <span className="bg-gradient-to-r from-primary-600 to-electric-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-electric-400 to-electric-500 bg-clip-text text-transparent">
                 {' '}EV Manufacturing
               </span>
             </motion.h1>
@@ -146,7 +146,7 @@ const Homepage = ({ onEnterApp }) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto"
+              className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto"
             >
               Revolutionize your electric vehicle manufacturing with AI-powered inventory management, 
               real-time analytics, and intelligent demand forecasting.
@@ -161,7 +161,7 @@ const Homepage = ({ onEnterApp }) => {
               {user ? (
                 <button
                   onClick={onEnterApp}
-                  className="px-8 py-4 bg-gradient-to-r from-primary-600 to-electric-600 text-white rounded-xl hover:shadow-lg transition-all duration-300 flex items-center space-x-2 text-lg font-medium"
+                  className="px-8 py-4 bg-gradient-to-r from-electric-400 to-electric-500 text-dark-900 rounded-xl hover:shadow-xl hover:from-electric-500 hover:to-electric-600 transition-all duration-300 flex items-center space-x-2 text-lg font-medium"
                 >
                   <span>Enter Dashboard</span>
                   <ArrowRight className="w-5 h-5" />
@@ -170,12 +170,12 @@ const Homepage = ({ onEnterApp }) => {
                 <>
                   <button
                     onClick={() => setAuthModal({ isOpen: true, mode: 'signup' })}
-                    className="px-8 py-4 bg-gradient-to-r from-primary-600 to-electric-600 text-white rounded-xl hover:shadow-lg transition-all duration-300 flex items-center space-x-2 text-lg font-medium"
+                    className="px-8 py-4 bg-gradient-to-r from-electric-400 to-electric-500 text-dark-900 rounded-xl hover:shadow-xl hover:from-electric-500 hover:to-electric-600 transition-all duration-300 flex items-center space-x-2 text-lg font-medium"
                   >
                     <span>Start Free Trial</span>
                     <ArrowRight className="w-5 h-5" />
                   </button>
-                  <button className="px-8 py-4 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors flex items-center space-x-2 text-lg font-medium">
+                  <button className="px-8 py-4 border border-electric-400/30 text-gray-300 rounded-xl hover:bg-dark-700 hover:border-electric-400/50 transition-all duration-200 flex items-center space-x-2 text-lg font-medium">
                     <Play className="w-5 h-5" />
                     <span>Watch Demo</span>
                   </button>
@@ -192,35 +192,35 @@ const Homepage = ({ onEnterApp }) => {
             className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8"
           >
             <div className="text-center">
-              <div className="text-4xl font-bold text-primary-600 mb-2">
+              <div className="text-4xl font-bold bg-gradient-to-r from-electric-400 to-electric-500 bg-clip-text text-transparent mb-2">
                 {stats.users.toLocaleString()}+
               </div>
-              <div className="text-gray-600">Active Users</div>
+              <div className="text-gray-400">Active Users</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-electric-500 mb-2">
+              <div className="text-4xl font-bold bg-gradient-to-r from-electric-400 to-electric-500 bg-clip-text text-transparent mb-2">
                 {stats.parts.toLocaleString()}+
               </div>
-              <div className="text-gray-600">Parts Managed</div>
+              <div className="text-gray-400">Parts Managed</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-green-600 mb-2">
+              <div className="text-4xl font-bold text-green-400 mb-2">
                 {stats.savings}%
               </div>
-              <div className="text-gray-600">Cost Reduction</div>
+              <div className="text-gray-400">Cost Reduction</div>
             </div>
           </motion.div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-dark-800/50 border-t border-electric-400/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl font-bold text-white mb-4">
               Powerful Features for Modern Manufacturing
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
               Everything you need to optimize your EV manufacturing inventory in one intelligent platform
             </p>
           </div>
@@ -234,15 +234,15 @@ const Homepage = ({ onEnterApp }) => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  className="p-8 rounded-2xl border border-gray-200 hover:shadow-lg transition-all duration-300"
+                  className="p-8 rounded-2xl bg-dark-700/50 border border-electric-400/20 hover:bg-dark-700/70 hover:border-electric-400/30 transition-all duration-300"
                 >
                   <div className={`w-12 h-12 bg-gradient-to-r ${feature.color} rounded-xl flex items-center justify-center mb-6`}>
                     <Icon className="w-6 h-6 text-white" />
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                  <h3 className="text-xl font-semibold text-white mb-3">
                     {feature.title}
                   </h3>
-                  <p className="text-gray-600">
+                  <p className="text-gray-300">
                     {feature.description}
                   </p>
                 </motion.div>
@@ -253,13 +253,13 @@ const Homepage = ({ onEnterApp }) => {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 bg-gradient-to-r from-primary-50 to-electric-50">
+      <section className="py-20 bg-gradient-to-r from-dark-800 to-dark-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl font-bold text-white mb-4">
               Trusted by Industry Leaders
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-xl text-gray-300">
               See what our customers say about InvenAI
             </p>
           </div>
@@ -271,17 +271,17 @@ const Homepage = ({ onEnterApp }) => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white p-6 rounded-2xl shadow-sm"
+                className="bg-dark-900/50 border border-electric-400/20 p-6 rounded-2xl hover:bg-dark-900/70 hover:border-electric-400/30 transition-all duration-300"
               >
                 <div className="flex items-center mb-4">
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
                   ))}
                 </div>
-                <p className="text-gray-700 mb-4">"{testimonial.content}"</p>
+                <p className="text-gray-300 mb-4">"{testimonial.content}"</p>
                 <div>
-                  <div className="font-semibold text-gray-900">{testimonial.name}</div>
-                  <div className="text-sm text-gray-500">{testimonial.role}</div>
+                  <div className="font-semibold text-white">{testimonial.name}</div>
+                  <div className="text-sm text-gray-400">{testimonial.role}</div>
                 </div>
               </motion.div>
             ))}
@@ -290,12 +290,12 @@ const Homepage = ({ onEnterApp }) => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-primary-600 to-electric-600">
+      <section className="py-20 bg-gradient-to-r from-electric-400 to-electric-500">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-white mb-6">
+          <h2 className="text-4xl font-bold text-dark-900 mb-6">
             Ready to Transform Your Inventory Management?
           </h2>
-          <p className="text-xl text-blue-100 mb-8">
+          <p className="text-xl text-dark-800 mb-8">
             Join thousands of manufacturers who trust InvenAI for their inventory optimization needs.
           </p>
           
@@ -303,18 +303,18 @@ const Homepage = ({ onEnterApp }) => {
             <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
               <button
                 onClick={() => setAuthModal({ isOpen: true, mode: 'signup' })}
-                className="px-8 py-4 bg-white text-primary-600 rounded-xl hover:bg-gray-50 transition-colors flex items-center space-x-2 text-lg font-medium"
+                className="px-8 py-4 bg-dark-900 text-white rounded-xl hover:bg-dark-800 transition-colors flex items-center space-x-2 text-lg font-medium"
               >
                 <span>Start Free Trial</span>
                 <ArrowRight className="w-5 h-5" />
               </button>
-              <button className="px-8 py-4 border border-white/30 text-white rounded-xl hover:bg-white/10 transition-colors text-lg font-medium">
+              <button className="px-8 py-4 border border-dark-900/30 text-dark-900 rounded-xl hover:bg-dark-900/10 transition-colors text-lg font-medium">
                 Schedule Demo
               </button>
             </div>
           )}
 
-          <div className="mt-8 flex items-center justify-center space-x-6 text-blue-100">
+          <div className="mt-8 flex items-center justify-center space-x-6 text-dark-800">
             <div className="flex items-center space-x-2">
               <CheckCircle className="w-5 h-5" />
               <span>14-day free trial</span>
@@ -332,15 +332,15 @@ const Homepage = ({ onEnterApp }) => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
+      <footer className="bg-dark-900 text-white py-12 border-t border-electric-400/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center space-x-3 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-r from-primary-500 to-electric-500 rounded-lg flex items-center justify-center">
-                  <Zap className="w-4 h-4 text-white" />
+                <div className="w-8 h-8 bg-gradient-to-r from-electric-400 to-electric-500 rounded-lg flex items-center justify-center">
+                  <Zap className="w-4 h-4 text-dark-900" />
                 </div>
-                <span className="text-xl font-bold">InvenAI</span>
+                <span className="text-xl font-bold bg-gradient-to-r from-electric-400 to-electric-500 bg-clip-text text-transparent">InvenAI</span>
               </div>
               <p className="text-gray-400">
                 Smart inventory management for the future of EV manufacturing.
@@ -350,35 +350,35 @@ const Homepage = ({ onEnterApp }) => {
             <div>
               <h3 className="font-semibold mb-4">Product</h3>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">Features</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Pricing</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">API</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Integrations</a></li>
+                <li><a href="#" className="hover:text-electric-400 transition-colors">Features</a></li>
+                <li><a href="#" className="hover:text-electric-400 transition-colors">Pricing</a></li>
+                <li><a href="#" className="hover:text-electric-400 transition-colors">API</a></li>
+                <li><a href="#" className="hover:text-electric-400 transition-colors">Integrations</a></li>
               </ul>
             </div>
             
             <div>
               <h3 className="font-semibold mb-4">Company</h3>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">About</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Careers</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
+                <li><a href="#" className="hover:text-electric-400 transition-colors">About</a></li>
+                <li><a href="#" className="hover:text-electric-400 transition-colors">Blog</a></li>
+                <li><a href="#" className="hover:text-electric-400 transition-colors">Careers</a></li>
+                <li><a href="#" className="hover:text-electric-400 transition-colors">Contact</a></li>
               </ul>
             </div>
             
             <div>
               <h3 className="font-semibold mb-4">Support</h3>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Documentation</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Status</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Security</a></li>
+                <li><a href="#" className="hover:text-electric-400 transition-colors">Help Center</a></li>
+                <li><a href="#" className="hover:text-electric-400 transition-colors">Documentation</a></li>
+                <li><a href="#" className="hover:text-electric-400 transition-colors">Status</a></li>
+                <li><a href="#" className="hover:text-electric-400 transition-colors">Security</a></li>
               </ul>
             </div>
           </div>
           
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+          <div className="border-t border-electric-400/20 mt-8 pt-8 text-center text-gray-400">
             <p>&copy; 2025 InvenAI. All rights reserved.</p>
           </div>
         </div>
