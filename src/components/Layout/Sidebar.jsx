@@ -66,8 +66,21 @@ const Sidebar = ({ isOpen, onClose, activeTab, setActiveTab, isMobile }) => {
           <div className="flex items-center justify-between p-6">
             <div className="flex items-center space-x-3">
               <div className="relative">
-                <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-2xl flex items-center justify-center shadow-xl glow-effect">
-                  <img src="/favicon.svg" alt="InvenAI Logo" className="w-7 h-7" />
+                <div className="w-12 h-12 bg-gradient-to-br from-electric-400 to-electric-500 rounded-2xl flex items-center justify-center shadow-xl glow-effect">
+                  <svg width="28" height="28" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                      <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#ffffff" />
+                        <stop offset="100%" stopColor="#f0f9ff" />
+                      </linearGradient>
+                    </defs>
+                    <circle cx="50" cy="50" r="45" fill="url(#logoGradient)" fillOpacity="0.1" stroke="url(#logoGradient)" strokeWidth="2"/>
+                    <path d="M30 35 L50 20 L70 35 L65 40 L50 30 L35 40 Z" fill="url(#logoGradient)"/>
+                    <path d="M25 45 L50 25 L75 45 L70 50 L50 35 L30 50 Z" fill="url(#logoGradient)" fillOpacity="0.8"/>
+                    <path d="M20 55 L50 30 L80 55 L75 60 L50 40 L25 60 Z" fill="url(#logoGradient)" fillOpacity="0.6"/>
+                    <circle cx="50" cy="65" r="8" fill="url(#logoGradient)"/>
+                    <path d="M42 65 L50 55 L58 65" stroke="url(#logoGradient)" strokeWidth="2" fill="none"/>
+                  </svg>
                 </div>
                 <div className="absolute -top-1 -right-1 w-4 h-4 bg-neon-400 rounded-full border-2 border-white animate-bounce shadow-lg">
                   <div className="w-2 h-2 bg-white rounded-full m-0.5"></div>

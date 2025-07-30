@@ -9,7 +9,7 @@ const ModernEVModel = ({ onPartClick, selectedPart }) => {
 
   useFrame((state) => {
     if (groupRef.current) {
-      groupRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.1;
+      groupRef.current.rotation.y += 0.005; // Slow continuous rotation
     }
   });
 
@@ -109,7 +109,7 @@ const ModernEVModel = ({ onPartClick, selectedPart }) => {
 
   return (
     <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.5}>
-      <group ref={groupRef}>
+      <group ref={groupRef} scale={[1.5, 1.5, 1.5]} position={[0, -0.5, 0]}>
         {/* Enhanced Car Body - More realistic EV shape */}
         <Box
           position={[0, 0, 0]}
@@ -264,19 +264,20 @@ const ModernEVModel = ({ onPartClick, selectedPart }) => {
 
         {/* Dynamic Labels */}
         <Text
-          position={[0, 3, 0]}
-          fontSize={0.6}
+          position={[0, 4, 0]}
+          fontSize={0.8}
           color="#00f2fe"
           anchorX="center"
           anchorY="middle"
+          font="/fonts/inter-bold.woff"
         >
-          EVStockMaster
+          InvenAI EV Model
         </Text>
 
         {/* Dynamic Part Label */}
         <Text
-          position={[0, -2.5, 0]}
-          fontSize={0.3}
+          position={[0, -3.5, 0]}
+          fontSize={0.4}
           color={selectedPart ? "#4facfe" : "#94a3b8"}
           anchorX="center"
           anchorY="middle"
@@ -294,15 +295,15 @@ const EVModel = ({ onPartSelect, selectedPart }) => {
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="h-full w-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl overflow-hidden relative shadow-2xl"
+      className="h-full w-full bg-gradient-to-br from-gray-100 via-blue-50 to-purple-50 rounded-2xl overflow-hidden relative shadow-2xl border border-gray-200"
     >
       {/* Electric Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-br from-electric-400/10 via-electric-500/10 to-electric-400/10"></div>
-      <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-electric-400/5 to-transparent"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-electric-400/5 via-electric-500/5 to-electric-400/5"></div>
+      <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent"></div>
       
       {/* 3D Scene */}
       <Canvas 
-        camera={{ position: [8, 6, 8], fov: 50 }}
+        camera={{ position: [10, 8, 10], fov: 45 }}
         gl={{ 
           antialias: true, 
           alpha: true,
@@ -314,7 +315,7 @@ const EVModel = ({ onPartSelect, selectedPart }) => {
         dpr={[1, 2]}
       >
         {/* Enhanced Lighting Setup */}
-        <ambientLight intensity={0.4} color="#f0fdff" />
+        <ambientLight intensity={0.8} color="#ffffff" />
         
         {/* Key Light - Main illumination */}
         <directionalLight 
@@ -334,7 +335,7 @@ const EVModel = ({ onPartSelect, selectedPart }) => {
         {/* Fill Light - Electric theme */}
         <pointLight 
           position={[-8, 6, -8]} 
-          intensity={0.8} 
+          intensity={1.2} 
           color="#00f2fe"
           distance={20}
           decay={2}
@@ -343,7 +344,7 @@ const EVModel = ({ onPartSelect, selectedPart }) => {
         {/* Rim Light - Highlights edges */}
         <pointLight 
           position={[5, 8, -10]} 
-          intensity={1.0} 
+          intensity={1.5} 
           color="#4facfe"
           distance={25}
           decay={2}
@@ -354,7 +355,7 @@ const EVModel = ({ onPartSelect, selectedPart }) => {
           position={[0, 12, 8]}
           angle={0.4}
           penumbra={0.8}
-          intensity={1.2}
+          intensity={1.8}
           color="#00f2fe"
           distance={30}
           decay={2}
@@ -363,7 +364,7 @@ const EVModel = ({ onPartSelect, selectedPart }) => {
         {/* Environment-style lighting */}
         <pointLight 
           position={[0, -5, 0]} 
-          intensity={0.3} 
+          intensity={0.6} 
           color="#0ea5e9"
           distance={15}
         />
@@ -382,8 +383,8 @@ const EVModel = ({ onPartSelect, selectedPart }) => {
           enablePan={true}
           enableZoom={true}
           enableRotate={true}
-          maxDistance={25}
-          minDistance={5}
+          maxDistance={20}
+          minDistance={8}
           maxPolarAngle={Math.PI / 2}
           autoRotate={false}
           autoRotateSpeed={0.5}
@@ -393,40 +394,40 @@ const EVModel = ({ onPartSelect, selectedPart }) => {
       {/* UI Overlay */}
       <div className="absolute top-4 left-4 right-4 flex justify-between items-start pointer-events-none">
         <motion.div 
-          className="glass-card p-4 pointer-events-auto"
+          className="bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-white/50 pointer-events-auto"
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.5 }}
         >
-          <h3 className="text-lg font-bold text-gray-800 mb-2">Interactive 3D Model</h3>
-          <p className="text-sm text-gray-600 mb-3">Click on parts to view details</p>
+          <h3 className="text-lg font-bold text-gray-900 mb-2">Interactive 3D Model</h3>
+          <p className="text-sm text-gray-700 mb-3">Click on parts to view details</p>
           <div className="space-y-2 text-xs">
             <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-              <span>Body & Chassis</span>
+              <div className="w-3 h-3 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full"></div>
+              <span className="text-gray-700">Body & Chassis</span>
             </div>
             <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-              <span>Battery Pack</span>
+              <div className="w-3 h-3 bg-gradient-to-r from-electric-400 to-electric-500 rounded-full"></div>
+              <span className="text-gray-700">Battery Pack</span>
             </div>
             <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-              <span>Electric Motor</span>
+              <div className="w-3 h-3 bg-gradient-to-r from-neon-500 to-neon-600 rounded-full"></div>
+              <span className="text-gray-700">Electric Motor</span>
             </div>
           </div>
         </motion.div>
 
         <motion.div 
-          className="glass-card p-3 pointer-events-auto"
+          className="bg-white/90 backdrop-blur-sm rounded-xl p-3 shadow-lg border border-white/50 pointer-events-auto"
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.7 }}
         >
           <div className="text-center">
-            <div className="text-sm font-semibold text-gray-700">Model Status</div>
+            <div className="text-sm font-semibold text-gray-900">Model Status</div>
             <div className="flex items-center justify-center mt-1 space-x-2">
               <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-              <span className="text-xs text-gray-600">Live</span>
+              <span className="text-xs text-gray-700">Live</span>
             </div>
           </div>
         </motion.div>
@@ -435,12 +436,12 @@ const EVModel = ({ onPartSelect, selectedPart }) => {
       {/* Bottom Controls */}
       <div className="absolute bottom-4 left-4 right-4 flex justify-center pointer-events-none">
         <motion.div 
-          className="glass-card px-6 py-3 pointer-events-auto"
+          className="bg-white/90 backdrop-blur-sm rounded-xl px-6 py-3 shadow-lg border border-white/50 pointer-events-auto"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1 }}
         >
-          <div className="flex items-center space-x-4 text-sm text-gray-600">
+          <div className="flex items-center space-x-4 text-sm text-gray-700 font-medium">
             <span>🖱️ Drag to rotate</span>
             <span>🔍 Scroll to zoom</span>
             <span>👆 Click parts to inspect</span>
