@@ -56,28 +56,6 @@ function App() {
     fetchUserProfile();
   }, [user]);
 
-  // Show loading while checking auth state or profile
-  if (loading || profileLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-primary-50 to-electric-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 font-medium">Loading InvenAI...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Show homepage if user is not authenticated or hasn't entered the app
-  if (!user || !showApp) {
-    return (
-      <>
-        <Homepage onEnterApp={() => setShowApp(true)} />
-        <ChatBot />
-      </>
-    );
-  }
-
   // Handle profile setup completion
   const handleProfileSetupComplete = (profileData) => {
     setUserProfile({ ...userProfile, ...profileData, isProfileComplete: true });
@@ -257,6 +235,108 @@ function App() {
         return null;
     }
   };
+
+  // Show loading while checking auth state or profile
+  if (loading || profileLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-primary-50 to-electric-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600 font-medium">Loading InvenAI...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show homepage if user is not authenticated or hasn't entered the app
+  if ((!user && !showApp) || (!user && showApp)) {
+    // If showApp is true but no user, treat as demo mode
+    const demoUserProfile = showApp && !user ? {
+      displayName: 'Demo User',
+      email: 'demo@invenai.com',
+      role: 'Inventory Manager',
+      photoURL: null,
+      isProfileComplete: true
+    } : null;
+
+    if (showApp && !user) {
+      // Demo mode - show the app with demo data
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 flex relative overflow-hidden">
+          {/* Animated Background Elements */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-primary-200/30 to-secondary-200/30 rounded-full blur-3xl animate-pulse-slow"></div>
+            <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-electric-200/30 to-neon-200/30 rounded-full blur-3xl animate-pulse-slow" style={{animationDelay: '1s'}}></div>
+          </div>
+
+          {/* Demo Banner */}
+          <div className="fixed top-0 left-0 right-0 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-center py-2 z-50 shadow-lg">
+            <span className="font-medium">🎯 Demo Mode - Explore InvenAI features</span>
+            <button 
+              onClick={() => setShowApp(false)}
+              className="ml-4 px-3 py-1 bg-white/20 hover:bg-white/30 rounded transition-colors text-sm"
+            >
+              Exit Demo
+            </button>
+          </div>
+
+          <div className="w-full pt-12">
+            {/* Sidebar */}
+            <Sidebar
+              isOpen={sidebarOpen}
+              onClose={() => setSidebarOpen(false)}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+              isMobile={isMobile}
+            />
+
+            {/* Main Content Area */}
+            <div className={`flex-1 flex flex-col transition-all duration-300 relative z-10 ${
+              sidebarOpen && !isMobile ? 'ml-72' : 'ml-0'
+            }`}>
+              {/* Header */}
+              <Header
+                onMenuClick={handleSidebarToggle}
+                activeTab={activeTab}
+                isMobile={isMobile}
+                userProfile={demoUserProfile}
+                onProfileUpdate={() => {}}
+              />
+
+              {/* Main Content */}
+              <main className="flex-1 p-6 overflow-auto">
+                <div className={`transition-all duration-300 ${
+                  infoPanelOpen && !isMobile ? 'mr-96' : 'mr-0'
+                }`}>
+                  <AnimatePresence mode="wait">
+                    {renderMainContent()}
+                  </AnimatePresence>
+                </div>
+              </main>
+            </div>
+
+            {/* Info Panel */}
+            <InfoPanel
+              isOpen={infoPanelOpen}
+              onClose={handleInfoPanelClose}
+              selectedPart={selectedPart}
+              isMobile={isMobile}
+            />
+            
+            {/* ChatBot */}
+            <ChatBot />
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <>
+        <Homepage onEnterApp={() => setShowApp(true)} />
+        <ChatBot />
+      </>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 flex relative overflow-hidden">
