@@ -40,6 +40,13 @@ const ChatBot = () => {
     setIsTyping(true);
 
     try {
+      const apiKey = process.env.REACT_APP_GEMINI_API_KEY;
+      
+      // Check if we have a valid API key
+      if (!apiKey || apiKey === 'demo-key' || apiKey === 'your-gemini-api-key-here') {
+        throw new Error('API key not configured');
+      }
+
       // Enhanced prompt for better EV inventory management responses
       const enhancedPrompt = `You are InvenAI, an advanced AI assistant specialized in Electric Vehicle (EV) manufacturing inventory management and supply chain optimization. You have expertise in:
 
@@ -53,11 +60,18 @@ const ChatBot = () => {
 
 Context: You're helping manage inventory for an EV manufacturing facility that produces electric vehicles with components like lithium-ion battery packs, electric motors, charging ports, control units, and cooling systems.
 
+Current inventory status:
+- Battery Packs: 245 units (minimum: 100)
+- Electric Motors: 180 units (minimum: 75)
+- Charging Ports: 320 units (minimum: 150)
+- Control Units: 90 units (minimum: 50)
+- Cooling Systems: 160 units (minimum: 80)
+
 Please provide detailed, actionable insights for this query: "${inputMessage}"
 
 Format your response to be practical and specific to EV manufacturing operations.`;
 
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${process.env.REACT_APP_GEMINI_API_KEY || 'demo-key'}`, {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -87,31 +101,46 @@ Format your response to be practical and specific to EV manufacturing operations
         };
         setMessages(prev => [...prev, botResponse]);
       } else {
-        throw new Error(`API Error: ${response.status}`);
+        throw new Error(`API Error: ${response.status} - ${response.statusText}`);
       }
     } catch (error) {
       console.warn('Gemini API unavailable:', error.message);
       
       // Enhanced fallback responses for EV inventory management
       const fallbackResponses = {
-        'battery': "Based on current industry standards, lithium-ion battery packs typically have a 5-8 year lifespan and should be monitored for thermal management. Recommend maintaining stock levels at 2-3 months of production demand with proper storage at 15-25°C.",
-        'motor': "Electric motors require minimal maintenance but proper inventory tracking is crucial. Stock electric motors in climate-controlled environments and maintain a 1-2 month buffer stock. Consider motor efficiency ratings (>90%) when procuring.",
-        'charging': "Fast charging infrastructure is critical for EV adoption. Maintain adequate stock of CCS Type 2 ports and ensure compatibility with 150kW+ charging standards. Monitor connector wear and replace every 10,000 charge cycles.",
-        'inventory': "For optimal EV manufacturing inventory management: 1) Implement just-in-time delivery for high-value components like batteries, 2) Maintain 2-week safety stock for critical parts, 3) Use demand forecasting based on production schedules, 4) Monitor supplier lead times closely.",
-        'forecast': "EV market demand is growing 20-30% annually. Plan inventory levels accordingly with focus on battery capacity increases and charging speed improvements. Consider seasonal variations in EV sales (higher in Q4, lower in Q1).",
-        'cost': "Cost optimization strategies: 1) Negotiate volume discounts for battery packs (typically 40-50% of vehicle cost), 2) Consider local sourcing to reduce logistics costs, 3) Implement vendor-managed inventory for non-critical components, 4) Track total cost of ownership, not just unit price.",
-        'default': "I'm currently operating in offline mode with limited capabilities. For comprehensive EV inventory insights, I can help with: stock level optimization, demand forecasting, supplier management, cost analysis, and quality control strategies. Please specify your particular area of interest."
+        'battery': "🔋 **Battery Pack Analysis**: Current stock: 245 units (healthy above minimum of 100). Lithium-ion batteries require storage at 15-25°C and <60% humidity. With Tesla Energy as supplier, lead times are 8-12 weeks. **Recommendations**: Monitor thermal conditions, maintain 2-3 month buffer stock, check for capacity degradation quarterly.",
+        'motor': "⚡ **Electric Motor Status**: Stock: 180 units (good buffer above minimum 75). Bosch motors (150kW, 310Nm) require climate-controlled storage. **Key insights**: 4-6 week delivery window, store upright to prevent bearing damage, quarterly inspection recommended. Consider predictive maintenance integration.",
+        'charging': "🔌 **Charging Infrastructure**: Current stock: 320 CCS Type 2 ports (excellent coverage above minimum 150). ChargePoint units support 150kW fast charging. **Maintenance notes**: Replace connectors every 10,000 cycles, ensure IP67 protection, monitor for wear patterns.",
+        'control': "🖥️ **Control Unit Critical Alert**: Stock: 90 units (approaching minimum 50). ARM Cortex-A78 units from Continental AG have 6-8 week lead times with no substitutes. **Action required**: Place order within 72 hours, establish backup supplier, increase minimum threshold to 75 units.",
+        'cooling': "❄️ **Cooling System Status**: Stock: 160 units (stable above minimum 80). Valeo glycol-based systems essential for battery thermal management. **Monitoring**: Check coolant quality, seasonal demand increases 20% in summer, 15L/min flow rate optimal.",
+        'inventory': "📊 **Comprehensive Inventory Overview**: Total value ~₹3.2M. **Critical actions needed**: 1) Battery reorder urgent (9 days stock), 2) Control units low (order in 72hrs), 3) Other components stable. **Optimization**: ABC analysis shows batteries 68% of value - prioritize just-in-time.",
+        'forecast': "📈 **EV Market Forecast**: Industry growth 20-30% annually. **Key trends**: Solid-state batteries emerging, 350kW+ charging standards, autonomous systems requiring more sensors. **Planning**: Increase battery capacity planning, evaluate silicon carbide electronics.",
+        'cost': "💰 **Cost Optimization Strategy**: Current breakdown - Batteries: 68%, Motors: 18%, Others: 14%. **Opportunities**: 1) Volume discounts (batteries), 2) Local sourcing (reduce logistics 15%), 3) Vendor-managed inventory (low-value items), 4) Total cost of ownership analysis.",
+        'supplier': "🤝 **Supplier Performance**: **Top suppliers**: Tesla Energy (batteries), Bosch (motors), Continental (control), ChargePoint (charging), Valeo (cooling). **KPIs**: Delivery reliability >95%, lead time consistency, quality metrics. **Risk**: Diversify critical component suppliers.",
+        'stock': "📦 **Stock Level Intelligence**: **Critical items**: Battery (9 days), Control units (18 days). **Healthy**: Motors (15 days), Charging (40 days), Cooling (26 days). **Actions**: Implement dynamic reorder points, safety stock optimization, lead time monitoring.",
+        'api': "⚠️ **AI Assistant Status**: Currently running in offline mode. For full AI capabilities including real-time analysis, predictive insights, and personalized recommendations, please configure your Gemini API key in the environment settings. Contact your system administrator to enable advanced AI features.",
+        'default': "🤖 **InvenAI Assistant**: I'm operating in intelligent offline mode with comprehensive EV inventory knowledge. I can help with: **Stock analysis**, **Demand forecasting**, **Supplier management**, **Cost optimization**, **Quality control**, **Maintenance scheduling**. Try asking about specific parts (battery, motor, charging, control, cooling) or processes!"
       };
       
       const query = inputMessage.toLowerCase();
       let responseText = fallbackResponses.default;
       
-      if (query.includes('battery') || query.includes('lithium')) responseText = fallbackResponses.battery;
-      else if (query.includes('motor') || query.includes('electric')) responseText = fallbackResponses.motor;
+      // Check for API configuration issues
+      if (query.includes('api') || query.includes('not working') || query.includes('offline')) {
+        responseText = fallbackResponses.api;
+      }
+      // Part-specific responses
+      else if (query.includes('battery') || query.includes('lithium')) responseText = fallbackResponses.battery;
+      else if (query.includes('motor') || query.includes('electric') && !query.includes('electric vehicle')) responseText = fallbackResponses.motor;
       else if (query.includes('charg') || query.includes('port')) responseText = fallbackResponses.charging;
-      else if (query.includes('inventory') || query.includes('stock')) responseText = fallbackResponses.inventory;
-      else if (query.includes('forecast') || query.includes('demand')) responseText = fallbackResponses.forecast;
-      else if (query.includes('cost') || query.includes('price') || query.includes('budget')) responseText = fallbackResponses.cost;
+      else if (query.includes('control') || query.includes('ecu') || query.includes('unit')) responseText = fallbackResponses.control;
+      else if (query.includes('cool') || query.includes('thermal')) responseText = fallbackResponses.cooling;
+      // Process-specific responses
+      else if (query.includes('inventory') || query.includes('overview') || query.includes('summary')) responseText = fallbackResponses.inventory;
+      else if (query.includes('stock') || query.includes('level') || query.includes('quantity')) responseText = fallbackResponses.stock;
+      else if (query.includes('forecast') || query.includes('demand') || query.includes('predict')) responseText = fallbackResponses.forecast;
+      else if (query.includes('cost') || query.includes('price') || query.includes('budget') || query.includes('money')) responseText = fallbackResponses.cost;
+      else if (query.includes('supplier') || query.includes('vendor') || query.includes('delivery')) responseText = fallbackResponses.supplier;
 
       const errorMessage = {
         id: Date.now() + 1,
