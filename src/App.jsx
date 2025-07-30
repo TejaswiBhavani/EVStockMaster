@@ -18,14 +18,15 @@ import useResponsive from './hooks/useResponsive';
 function App() {
   const [user, loading] = useAuthState(auth);
   const [showApp, setShowApp] = useState(false);
+  const [demoMode, setDemoMode] = useState(false);
   const [activeTab, setActiveTab] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [selectedPart, setSelectedPart] = useState(null);
   const [infoPanelOpen, setInfoPanelOpen] = useState(false);
   const { isMobile } = useResponsive();
 
-  // Show loading while checking auth state
-  if (loading) {
+  // Show loading while checking auth state (only if not in demo mode)
+  if (loading && !demoMode) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-primary-50 to-electric-50 flex items-center justify-center">
         <div className="text-center">
@@ -36,11 +37,16 @@ function App() {
     );
   }
 
-  // Show homepage if user is not authenticated or hasn't entered the app
-  if (!user || !showApp) {
+  // Show homepage if user is not authenticated or hasn't entered the app (and not in demo mode)
+  if ((!user && !demoMode) || !showApp) {
     return (
       <>
-        <Homepage onEnterApp={() => setShowApp(true)} />
+        <Homepage 
+          onEnterApp={() => {
+            setShowApp(true);
+            setDemoMode(true);
+          }} 
+        />
         <ChatBot />
       </>
     );

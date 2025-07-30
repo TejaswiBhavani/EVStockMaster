@@ -17,30 +17,12 @@ const InventoryTable = ({ onPartSelect }) => {
   const [sortBy, setSortBy] = useState('name');
   const [sortOrder, setSortOrder] = useState('asc');
 
-  const getHealthIcon = (health) => {
-    const icons = {
-      'excellent': CheckCircle,
-      'good': CheckCircle,
-      'warning': AlertTriangle,
-      'critical': XCircle
-    };
-    return icons[health] || CheckCircle;
-  };
-
-  const getHealthColor = (health) => {
-    const colors = {
-      'excellent': 'text-green-600 bg-green-100',
-      'good': 'text-blue-600 bg-blue-100',
-      'warning': 'text-yellow-600 bg-yellow-100',
-      'critical': 'text-red-600 bg-red-100'
-    };
-    return colors[health] || 'text-gray-600 bg-gray-100';
-  };
-
   const getStockStatus = (part) => {
-    if (part.stock <= part.minStock * 0.5) return 'critical';
-    if (part.stock <= part.minStock) return 'warning';
-    if (part.stock >= part.maxStock * 0.8) return 'high';
+    if (part.currentStock <= part.minimumStock * 0.5) return 'critical';
+    if (part.currentStock <= part.minimumStock) return 'warning';
+    // Since mockData doesn't have maxStock, use a reasonable calculation
+    const estimatedMaxStock = part.minimumStock * 3;
+    if (part.currentStock >= estimatedMaxStock * 0.8) return 'high';
     return 'normal';
   };
 
@@ -150,11 +132,11 @@ const InventoryTable = ({ onPartSelect }) => {
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 <button
-                  onClick={() => handleSort('stock')}
+                  onClick={() => handleSort('currentStock')}
                   className="flex items-center space-x-1 hover:text-gray-700"
                 >
                   <span>Stock</span>
-                  {sortBy === 'stock' && (
+                  {sortBy === 'currentStock' && (
                     <span className="text-primary-500">
                       {sortOrder === 'asc' ? '↑' : '↓'}
                     </span>
@@ -162,7 +144,7 @@ const InventoryTable = ({ onPartSelect }) => {
                 </button>
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Health
+                Status
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 <button
@@ -179,11 +161,11 @@ const InventoryTable = ({ onPartSelect }) => {
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 <button
-                  onClick={() => handleSort('cost')}
+                  onClick={() => handleSort('price')}
                   className="flex items-center space-x-1 hover:text-gray-700"
                 >
-                  <span>Cost</span>
-                  {sortBy === 'cost' && (
+                  <span>Price</span>
+                  {sortBy === 'price' && (
                     <span className="text-primary-500">
                       {sortOrder === 'asc' ? '↑' : '↓'}
                     </span>
@@ -197,8 +179,6 @@ const InventoryTable = ({ onPartSelect }) => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {filteredParts.map((part, index) => {
-              const HealthIcon = getHealthIcon(part.health);
-              const healthColor = getHealthColor(part.health);
               const stockStatus = getStockStatus(part);
               const stockColor = getStockColor(stockStatus);
               
@@ -217,37 +197,37 @@ const InventoryTable = ({ onPartSelect }) => {
                       </div>
                       <div>
                         <div className="text-sm font-medium text-gray-900">{part.name}</div>
-                        <div className="text-sm text-gray-500">{part.location}</div>
+                        <div className="text-sm text-gray-500">{part.category}</div>
                       </div>
                     </div>
                   </td>
                   
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center space-x-2">
-                      <span className="text-sm font-medium text-gray-900">{part.stock}</span>
+                      <span className="text-sm font-medium text-gray-900">{part.currentStock}</span>
                       <span className={`px-2 py-1 text-xs font-medium rounded-full ${stockColor}`}>
                         {stockStatus}
                       </span>
                     </div>
                     <div className="text-xs text-gray-500 mt-1">
-                      Min: {part.minStock} | Max: {part.maxStock}
+                      Min: {part.minimumStock} | Status: {part.status}
                     </div>
                   </td>
                   
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${healthColor}`}>
-                      <HealthIcon className="w-3 h-3 mr-1" />
-                      {part.health}
+                    <div className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStockColor(stockStatus)}`}>
+                      <CheckCircle className="w-3 h-3 mr-1" />
+                      {part.status}
                     </div>
                   </td>
                   
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">{part.supplier}</div>
-                    <div className="text-sm text-gray-500">Last checked: {part.lastChecked}</div>
+                    <div className="text-sm text-gray-500">Last updated: {part.lastUpdated}</div>
                   </td>
                   
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">₹{part.cost.toLocaleString()}</div>
+                    <div className="text-sm font-medium text-gray-900">₹{part.price.toLocaleString()}</div>
                     <div className="text-sm text-gray-500">per unit</div>
                   </td>
                   

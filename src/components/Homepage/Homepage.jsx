@@ -155,9 +155,12 @@ const Homepage = ({ onEnterApp }) => {
                     <span>Start Free Trial</span>
                     <ArrowRight className="w-5 h-5" />
                   </button>
-                  <button className="px-8 py-4 border border-electric-400/30 text-gray-300 rounded-xl hover:bg-dark-700 hover:border-electric-400/50 transition-all duration-200 flex items-center space-x-2 text-lg font-medium">
+                  <button
+                    onClick={onEnterApp}
+                    className="px-8 py-4 border border-electric-400/30 text-gray-300 rounded-xl hover:bg-dark-700 hover:border-electric-400/50 transition-all duration-200 flex items-center space-x-2 text-lg font-medium"
+                  >
                     <Play className="w-5 h-5" />
-                    <span>Watch Demo</span>
+                    <span>Continue as Demo</span>
                   </button>
                 </>
               )}

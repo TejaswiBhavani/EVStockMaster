@@ -4,7 +4,7 @@ import { OrbitControls, Text, Box, Sphere, Cylinder, PresentationControls, Float
 import { motion } from 'framer-motion';
 import * as THREE from 'three';
 
-const ModernEVModel = ({ onPartClick }) => {
+const ModernEVModel = ({ onPartClick, selectedPart }) => {
   const groupRef = useRef();
 
   useFrame((state) => {
@@ -17,6 +17,21 @@ const ModernEVModel = ({ onPartClick }) => {
     if (onPartClick) {
       onPartClick(partId);
     }
+  };
+
+  // Get dynamic label based on selected part
+  const getPartLabel = () => {
+    if (!selectedPart) return "Interactive EV Model";
+    
+    const partLabels = {
+      'battery': 'High-Performance Lithium-Ion Battery Pack',
+      'motor': 'High-Efficiency Electric Motor',
+      'charging-port': 'Fast Charging Port (CCS Type 2)',
+      'control-unit': 'Vehicle Control Unit',
+      'cooling-system': 'Battery Thermal Management System'
+    };
+    
+    return partLabels[selectedPart] || "EV Component Selected";
   };
 
   // Create materials with enhanced lighting and consistent electric theme
@@ -141,6 +156,36 @@ const ModernEVModel = ({ onPartClick }) => {
           material={controlMaterial}
         />
 
+        {/* Cooling System - Radiator/heat exchanger */}
+        <Box
+          position={[2.0, -0.8, 0]}
+          scale={[0.3, 0.8, 1.5]}
+          onClick={() => handlePartClick('cooling-system')}
+          material={new THREE.MeshStandardMaterial({ 
+            color: '#60a5fa', // Blue for cooling
+            metalness: 0.7,
+            roughness: 0.3,
+            emissive: '#3b82f6',
+            emissiveIntensity: 0.1
+          })}
+        />
+        
+        {/* Cooling pipes */}
+        {[0.2, -0.2].map((y, index) => (
+          <Cylinder
+            key={index}
+            position={[1.7, y, 0]}
+            args={[0.05, 0.05, 1.2, 8]}
+            rotation={[0, 0, Math.PI / 2]}
+            onClick={() => handlePartClick('cooling-system')}
+            material={new THREE.MeshStandardMaterial({ 
+              color: '#1e40af',
+              metalness: 0.9,
+              roughness: 0.1
+            })}
+          />
+        ))}
+
         {/* Enhanced Wheels with rotation */}
         {[[-1.8, -1.5, 1.2], [1.8, -1.5, 1.2], [-1.8, -1.5, -1.2], [1.8, -1.5, -1.2]].map((position, index) => (
           <group key={index} position={position}>
@@ -200,7 +245,7 @@ const ModernEVModel = ({ onPartClick }) => {
           })}
         />
 
-        {/* Updated Labels with electric theme */}
+        {/* Dynamic Labels */}
         <Text
           position={[0, 3, 0]}
           fontSize={0.6}
@@ -211,22 +256,22 @@ const ModernEVModel = ({ onPartClick }) => {
           EVStockMaster
         </Text>
 
-        {/* Part Labels */}
+        {/* Dynamic Part Label */}
         <Text
           position={[0, -2.5, 0]}
           fontSize={0.3}
-          color="#4facfe"
+          color={selectedPart ? "#4facfe" : "#94a3b8"}
           anchorX="center"
           anchorY="middle"
         >
-          High-Performance EV Battery
+          {getPartLabel()}
         </Text>
       </group>
     </Float>
   );
 };
 
-const EVModel = ({ onPartSelect }) => {
+const EVModel = ({ onPartSelect, selectedPart }) => {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
@@ -279,7 +324,7 @@ const EVModel = ({ onPartSelect }) => {
           config={{ mass: 2, tension: 500 }}
           snap={{ mass: 4, tension: 1500 }}
         >
-          <ModernEVModel onPartClick={onPartSelect} />
+          <ModernEVModel onPartClick={onPartSelect} selectedPart={selectedPart} />
         </PresentationControls>
 
         {/* Enhanced Controls */}
