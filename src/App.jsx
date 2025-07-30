@@ -14,6 +14,7 @@ import ProductionSchedule from './components/Dashboard/ProductionSchedule';
 import InventoryTable from './components/Inventory/InventoryTable';
 import AISummary from './components/InfoPanel/AISummary';
 import InfoPanel from './components/InfoPanel/InfoPanel';
+import SettingsPage from './components/Settings/SettingsPage';
 import useResponsive from './hooks/useResponsive';
 
 function App() {
@@ -189,74 +190,8 @@ function App() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="max-w-4xl mx-auto"
           >
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Settings</h2>
-              
-              {/* User Profile Section */}
-              <div className="mb-8 p-6 bg-gradient-to-r from-primary-50 to-secondary-50 rounded-lg border border-primary-100">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                  <div className="w-2 h-2 bg-primary-500 rounded-full mr-3"></div>
-                  User Profile
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                    <div className="p-3 bg-white rounded-lg border border-gray-200">
-                      {user ? (user.displayName || 'Not set') : 'Not signed in'}
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                    <div className="p-3 bg-white rounded-lg border border-gray-200">
-                      {user?.email || 'Not signed in'}
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Sign-in Provider</label>
-                    <div className="p-3 bg-white rounded-lg border border-gray-200">
-                      {user?.providerData?.[0]?.providerId === 'google.com' ? 'Google' : 'Email/Password'}
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Account Created</label>
-                    <div className="p-3 bg-white rounded-lg border border-gray-200">
-                      {user?.metadata?.creationTime ? new Date(user.metadata.creationTime).toLocaleDateString() : 'Unknown'}
-                    </div>
-                  </div>
-                </div>
-                {!user?.displayName && user && (
-                  <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                    <p className="text-sm text-yellow-800">
-                      💡 <strong>Tip:</strong> Your display name isn't set. Consider updating your profile to personalize your experience.
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">System Preferences</h3>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <label className="text-sm font-medium text-gray-700">Real-time Updates</label>
-                        <p className="text-sm text-gray-500">Enable live data synchronization</p>
-                      </div>
-                      <input type="checkbox" defaultChecked className="rounded" />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <label className="text-sm font-medium text-gray-700">AI Recommendations</label>
-                        <p className="text-sm text-gray-500">Show intelligent insights</p>
-                      </div>
-                      <input type="checkbox" defaultChecked className="rounded" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <SettingsPage />
           </motion.div>
         );
 

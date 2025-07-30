@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../config/firebase';
@@ -11,9 +11,12 @@ import {
   Wifi,
   Battery
 } from 'lucide-react';
+import NotificationCenter from '../Notifications/NotificationCenter';
 
 const Header = ({ onMenuClick, activeTab, isMobile }) => {
   const [user] = useAuthState(auth);
+  const [notificationCenterOpen, setNotificationCenterOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(3); // This would come from your notification state management
   
   const getPageTitle = (tab) => {
     const titles = {
@@ -127,18 +130,23 @@ const Header = ({ onMenuClick, activeTab, isMobile }) => {
         <motion.button
           whileHover={{ scale: 1.1, rotate: 5 }}
           whileTap={{ scale: 0.9 }}
+          onClick={() => setNotificationCenterOpen(true)}
           className="relative p-3 rounded-xl bg-white/50 hover:bg-white/70 transition-all duration-200 shadow-lg hover:shadow-xl group"
         >
           <Bell className="w-5 h-5 text-gray-600 group-hover:text-primary-600 transition-colors" />
-          <motion.span 
-            className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs rounded-full flex items-center justify-center font-bold shadow-lg"
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.3, type: "spring" }}
-          >
-            3
-          </motion.span>
-          <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-400 rounded-full animate-ping opacity-30"></div>
+          {unreadCount > 0 && (
+            <>
+              <motion.span 
+                className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs rounded-full flex items-center justify-center font-bold shadow-lg"
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.3, type: "spring" }}
+              >
+                {unreadCount > 9 ? '9+' : unreadCount}
+              </motion.span>
+              <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-400 rounded-full animate-ping opacity-30"></div>
+            </>
+          )}
         </motion.button>
 
         {/* Enhanced User Profile */}
@@ -162,6 +170,12 @@ const Header = ({ onMenuClick, activeTab, isMobile }) => {
           <ChevronDown className="w-4 h-4 text-gray-500 transition-transform group-hover:rotate-180" />
         </motion.div>
       </div>
+
+      {/* Notification Center */}
+      <NotificationCenter
+        isOpen={notificationCenterOpen}
+        onClose={() => setNotificationCenterOpen(false)}
+      />
     </motion.header>
   );
 };
