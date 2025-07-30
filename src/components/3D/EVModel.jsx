@@ -35,49 +35,76 @@ const ModernEVModel = ({ onPartClick, selectedPart }) => {
   };
 
   // Create materials with enhanced lighting and consistent electric theme
-  const bodyMaterial = useMemo(() => new THREE.MeshStandardMaterial({ 
+  const bodyMaterial = useMemo(() => new THREE.MeshPhysicalMaterial({ 
     color: '#4facfe', // Electric blue to match favicon
     metalness: 0.9,
     roughness: 0.1,
-    envMapIntensity: 1.0,
+    envMapIntensity: 1.5,
+    clearcoat: 1.0,
+    clearcoatRoughness: 0.1,
+    reflectivity: 0.9,
   }), []);
   
-  const batteryMaterial = useMemo(() => new THREE.MeshStandardMaterial({ 
+  const batteryMaterial = useMemo(() => new THREE.MeshPhysicalMaterial({ 
     color: '#00f2fe', // Primary electric color from favicon
     metalness: 0.8,
     roughness: 0.2,
     emissive: '#00f2fe',
-    emissiveIntensity: 0.2
-  }), []);
+    emissiveIntensity: selectedPart === 'battery' ? 0.4 : 0.2,
+    envMapIntensity: 1.2,
+    clearcoat: 0.8,
+    transmission: 0.1,
+    thickness: 0.5
+  }), [selectedPart]);
 
-  const motorMaterial = useMemo(() => new THREE.MeshStandardMaterial({ 
+  const motorMaterial = useMemo(() => new THREE.MeshPhysicalMaterial({ 
     color: '#2dd4bf', // Complementary electric teal
     metalness: 0.9,
     roughness: 0.1,
     emissive: '#0f766e',
-    emissiveIntensity: 0.15
-  }), []);
+    emissiveIntensity: selectedPart === 'motor' ? 0.3 : 0.15,
+    envMapIntensity: 1.8,
+    clearcoat: 1.0,
+    clearcoatRoughness: 0.05,
+  }), [selectedPart]);
 
-  const chargingMaterial = useMemo(() => new THREE.MeshStandardMaterial({ 
+  const chargingMaterial = useMemo(() => new THREE.MeshPhysicalMaterial({ 
     color: '#00f2fe', // Match primary electric color
     metalness: 0.7,
     roughness: 0.2,
     emissive: '#00f2fe',
-    emissiveIntensity: 0.4
-  }), []);
+    emissiveIntensity: selectedPart === 'charging-port' ? 0.6 : 0.4,
+    envMapIntensity: 1.0,
+    iridescence: 1.0,
+    iridescenceIOR: 1.3,
+  }), [selectedPart]);
 
-  const controlMaterial = useMemo(() => new THREE.MeshStandardMaterial({ 
+  const controlMaterial = useMemo(() => new THREE.MeshPhysicalMaterial({ 
     color: '#5eead4', // Light electric blue-green
     metalness: 0.6,
     roughness: 0.3,
     emissive: '#14b8a6',
-    emissiveIntensity: 0.1
-  }), []);
+    emissiveIntensity: selectedPart === 'control-unit' ? 0.2 : 0.1,
+    envMapIntensity: 1.0,
+    transmission: 0.2,
+    thickness: 0.8,
+  }), [selectedPart]);
 
-  const wheelMaterial = useMemo(() => new THREE.MeshStandardMaterial({ 
+  const coolingMaterial = useMemo(() => new THREE.MeshPhysicalMaterial({
+    color: '#38bdf8', // Cool blue for cooling system
+    metalness: 0.7,
+    roughness: 0.25,
+    emissive: '#0ea5e9',
+    emissiveIntensity: selectedPart === 'cooling-system' ? 0.3 : 0.15,
+    envMapIntensity: 1.1,
+    clearcoat: 0.6,
+  }), [selectedPart]);
+
+  const wheelMaterial = useMemo(() => new THREE.MeshPhysicalMaterial({ 
     color: '#0f172a', // Dark color for contrast
     metalness: 0.8,
-    roughness: 0.4
+    roughness: 0.4,
+    envMapIntensity: 0.8
   }), []);
 
   return (
@@ -161,13 +188,7 @@ const ModernEVModel = ({ onPartClick, selectedPart }) => {
           position={[2.0, -0.8, 0]}
           scale={[0.3, 0.8, 1.5]}
           onClick={() => handlePartClick('cooling-system')}
-          material={new THREE.MeshStandardMaterial({ 
-            color: '#60a5fa', // Blue for cooling
-            metalness: 0.7,
-            roughness: 0.3,
-            emissive: '#3b82f6',
-            emissiveIntensity: 0.1
-          })}
+          material={coolingMaterial}
         />
         
         {/* Cooling pipes */}
@@ -178,11 +199,7 @@ const ModernEVModel = ({ onPartClick, selectedPart }) => {
             args={[0.05, 0.05, 1.2, 8]}
             rotation={[0, 0, Math.PI / 2]}
             onClick={() => handlePartClick('cooling-system')}
-            material={new THREE.MeshStandardMaterial({ 
-              color: '#1e40af',
-              metalness: 0.9,
-              roughness: 0.1
-            })}
+            material={coolingMaterial}
           />
         ))}
 
@@ -289,33 +306,66 @@ const EVModel = ({ onPartSelect, selectedPart }) => {
         gl={{ 
           antialias: true, 
           alpha: true,
-          powerPreference: "high-performance"
+          powerPreference: "high-performance",
+          toneMapping: THREE.ACESFilmicToneMapping,
+          toneMappingExposure: 1.2
         }}
         shadows
         dpr={[1, 2]}
       >
-        {/* Enhanced Lighting with electric theme */}
-        <ambientLight intensity={0.6} color="#f0fdff" />
-        <pointLight 
-          position={[10, 10, 10]} 
-          intensity={1.2} 
-          color="#00f2fe"
+        {/* Enhanced Lighting Setup */}
+        <ambientLight intensity={0.4} color="#f0fdff" />
+        
+        {/* Key Light - Main illumination */}
+        <directionalLight 
+          position={[10, 10, 5]} 
+          intensity={1.5} 
+          color="#ffffff"
           castShadow
-          shadow-mapSize-width={1024}
-          shadow-mapSize-height={1024}
+          shadow-mapSize-width={2048}
+          shadow-mapSize-height={2048}
+          shadow-camera-far={50}
+          shadow-camera-left={-10}
+          shadow-camera-right={10}
+          shadow-camera-top={10}
+          shadow-camera-bottom={-10}
         />
+        
+        {/* Fill Light - Electric theme */}
         <pointLight 
-          position={[-10, 5, -10]} 
+          position={[-8, 6, -8]} 
           intensity={0.8} 
-          color="#4facfe"
-        />
-        <spotLight
-          position={[0, 15, 0]}
-          angle={0.3}
-          penumbra={1}
-          intensity={1}
           color="#00f2fe"
-          castShadow
+          distance={20}
+          decay={2}
+        />
+        
+        {/* Rim Light - Highlights edges */}
+        <pointLight 
+          position={[5, 8, -10]} 
+          intensity={1.0} 
+          color="#4facfe"
+          distance={25}
+          decay={2}
+        />
+        
+        {/* Accent Light - Electric glow */}
+        <spotLight
+          position={[0, 12, 8]}
+          angle={0.4}
+          penumbra={0.8}
+          intensity={1.2}
+          color="#00f2fe"
+          distance={30}
+          decay={2}
+        />
+        
+        {/* Environment-style lighting */}
+        <pointLight 
+          position={[0, -5, 0]} 
+          intensity={0.3} 
+          color="#0ea5e9"
+          distance={15}
         />
         
         {/* 3D Model */}

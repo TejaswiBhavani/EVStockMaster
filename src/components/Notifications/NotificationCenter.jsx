@@ -1,0 +1,265 @@
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Bell, 
+  Filter, 
+  Search, 
+  CheckCircle, 
+  Trash2, 
+  X,
+  AlertTriangle,
+  Info
+} from 'lucide-react';
+import NotificationItem from './NotificationItem';
+
+const NotificationCenter = ({ isOpen, onClose }) => {
+  const [notifications, setNotifications] = useState([]);
+  const [filter, setFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Mock notifications data
+  useEffect(() => {
+    const mockNotifications = [
+      {
+        id: '1',
+        type: 'critical',
+        title: 'Critical Stock Alert',
+        message: 'Battery pack inventory is critically low (5 units remaining). Immediate reorder required.',
+        category: 'inventory',
+        timestamp: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
+        isRead: false
+      },
+      {
+        id: '2',
+        type: 'warning',
+        title: 'AI Insight Available',
+        message: 'New demand forecast suggests 25% increase in motor requirements for next quarter.',
+        category: 'ai',
+        timestamp: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
+        isRead: false
+      },
+      {
+        id: '3',
+        type: 'info',
+        title: 'Production Schedule Updated',
+        message: 'Schedule updated for manufacturing line B. Review new timeline in dashboard.',
+        category: 'production',
+        timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+        isRead: true
+      },
+      {
+        id: '4',
+        type: 'success',
+        title: 'Supplier Delivery Confirmed',
+        message: 'Charging port components delivery confirmed for tomorrow 9:00 AM.',
+        category: 'production',
+        timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
+        isRead: false
+      },
+      {
+        id: '5',
+        type: 'warning',
+        title: 'Cooling System Alert',
+        message: 'Cooling system components approaching minimum threshold (12 units).',
+        category: 'inventory',
+        timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
+        isRead: true
+      }
+    ];
+    setNotifications(mockNotifications);
+  }, []);
+
+  const filteredNotifications = notifications.filter(notification => {
+    const matchesFilter = filter === 'all' || 
+      (filter === 'unread' && !notification.isRead) ||
+      (filter === 'critical' && notification.type === 'critical') ||
+      (filter === notification.category);
+    
+    const matchesSearch = searchTerm === '' || 
+      notification.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      notification.message.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    return matchesFilter && matchesSearch;
+  });
+
+  const unreadCount = notifications.filter(n => !n.isRead).length;
+
+  const handleMarkAsRead = (id) => {
+    setNotifications(prev => 
+      prev.map(notification => 
+        notification.id === id ? { ...notification, isRead: true } : notification
+      )
+    );
+  };
+
+  const handleDelete = (id) => {
+    setNotifications(prev => prev.filter(notification => notification.id !== id));
+  };
+
+  const handleMarkAllAsRead = () => {
+    setNotifications(prev => 
+      prev.map(notification => ({ ...notification, isRead: true }))
+    );
+  };
+
+  const handleClearAll = () => {
+    if (window.confirm('Are you sure you want to delete all notifications?')) {
+      setNotifications([]);
+    }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <>
+      {/* Overlay */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 bg-black bg-opacity-50 z-50"
+        onClick={onClose}
+      />
+
+      {/* Notification Panel */}
+      <motion.div
+        initial={{ opacity: 0, x: 300 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: 300 }}
+        className="fixed right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl z-50 flex flex-col"
+      >
+        {/* Header */}
+        <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-primary-50 to-secondary-50">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center space-x-3">
+              <div className="relative">
+                <Bell className="w-6 h-6 text-primary-600" />
+                {unreadCount > 0 && (
+                  <div className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold">
+                    {unreadCount}
+                  </div>
+                )}
+              </div>
+              <h2 className="text-xl font-bold text-gray-900">Notifications</h2>
+            </div>
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              <X className="w-5 h-5 text-gray-500" />
+            </button>
+          </div>
+
+          {/* Search */}
+          <div className="relative mb-4">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search notifications..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            />
+          </div>
+
+          {/* Filters */}
+          <div className="flex flex-wrap gap-2 mb-4">
+            {[
+              { key: 'all', label: 'All' },
+              { key: 'unread', label: 'Unread' },
+              { key: 'critical', label: 'Critical' },
+              { key: 'inventory', label: 'Inventory' },
+              { key: 'ai', label: 'AI' },
+              { key: 'production', label: 'Production' }
+            ].map(({ key, label }) => (
+              <button
+                key={key}
+                onClick={() => setFilter(key)}
+                className={`px-3 py-1 text-xs rounded-full transition-colors ${
+                  filter === key
+                    ? 'bg-primary-500 text-white'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
+          {/* Actions */}
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={handleMarkAllAsRead}
+              className="flex items-center space-x-1 text-sm text-primary-600 hover:text-primary-700 font-medium"
+              disabled={unreadCount === 0}
+            >
+              <CheckCircle className="w-4 h-4" />
+              <span>Mark all read</span>
+            </button>
+            <button
+              onClick={handleClearAll}
+              className="flex items-center space-x-1 text-sm text-red-600 hover:text-red-700 font-medium"
+              disabled={notifications.length === 0}
+            >
+              <Trash2 className="w-4 h-4" />
+              <span>Clear all</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Notifications List */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-3">
+          <AnimatePresence>
+            {filteredNotifications.length > 0 ? (
+              filteredNotifications.map((notification) => (
+                <NotificationItem
+                  key={notification.id}
+                  notification={notification}
+                  onMarkAsRead={handleMarkAsRead}
+                  onDelete={handleDelete}
+                />
+              ))
+            ) : (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-center py-12"
+              >
+                <Bell className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+                <p className="text-gray-500 font-medium">
+                  {searchTerm || filter !== 'all' 
+                    ? 'No notifications match your filters' 
+                    : 'No notifications'
+                  }
+                </p>
+                {(searchTerm || filter !== 'all') && (
+                  <button
+                    onClick={() => {
+                      setSearchTerm('');
+                      setFilter('all');
+                    }}
+                    className="text-primary-600 hover:text-primary-700 text-sm mt-2"
+                  >
+                    Clear filters
+                  </button>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Footer Stats */}
+        {notifications.length > 0 && (
+          <div className="p-4 border-t border-gray-200 bg-gray-50">
+            <div className="flex items-center justify-between text-sm text-gray-600">
+              <span>{filteredNotifications.length} of {notifications.length} notifications</span>
+              <span>{unreadCount} unread</span>
+            </div>
+          </div>
+        )}
+      </motion.div>
+    </>
+  );
+};
+
+export default NotificationCenter;

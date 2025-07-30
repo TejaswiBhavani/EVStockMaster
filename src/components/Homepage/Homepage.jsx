@@ -65,7 +65,7 @@ const Homepage = ({ onEnterApp }) => {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-gradient-to-r from-electric-400 to-electric-500 rounded-xl flex items-center justify-center shadow-lg">
-                <Zap className="w-6 h-6 text-dark-900" />
+                <img src="/favicon.svg" alt="InvenAI Logo" className="w-6 h-6" />
               </div>
               <div>
                 <h1 className="text-xl font-bold bg-gradient-to-r from-electric-400 to-electric-500 bg-clip-text text-transparent">
@@ -286,7 +286,7 @@ const Homepage = ({ onEnterApp }) => {
             <div>
               <div className="flex items-center space-x-3 mb-4">
                 <div className="w-8 h-8 bg-gradient-to-r from-electric-400 to-electric-500 rounded-lg flex items-center justify-center">
-                  <Zap className="w-4 h-4 text-dark-900" />
+                  <img src="/favicon.svg" alt="InvenAI Logo" className="w-4 h-4" />
                 </div>
                 <span className="text-xl font-bold bg-gradient-to-r from-electric-400 to-electric-500 bg-clip-text text-transparent">InvenAI</span>
               </div>

@@ -67,7 +67,7 @@ const Sidebar = ({ isOpen, onClose, activeTab, setActiveTab, isMobile }) => {
             <div className="flex items-center space-x-3">
               <div className="relative">
                 <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-2xl flex items-center justify-center shadow-xl glow-effect">
-                  <Zap className="w-7 h-7 text-white" />
+                  <img src="/favicon.svg" alt="InvenAI Logo" className="w-7 h-7" />
                 </div>
                 <div className="absolute -top-1 -right-1 w-4 h-4 bg-neon-400 rounded-full border-2 border-white animate-bounce shadow-lg">
                   <div className="w-2 h-2 bg-white rounded-full m-0.5"></div>
