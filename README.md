@@ -1,6 +1,6 @@
 # InvenAI - Smart Inventory Management Platform
 
-![InvenAI Logo](https://via.placeholder.com/200x80/3b82f6/ffffff?text=InvenAI)
+![InvenAI Logo]([https://via.placeholder.com/200x80/3b82f6/ffffff?text=InvenAI](https://github.com/TejaswiBhavani/EVStockMaster/blob/main/public/favicon.svg))
 
 ## 🚀 Overview
 
