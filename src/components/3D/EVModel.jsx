@@ -19,84 +19,118 @@ const ModernEVModel = ({ onPartClick }) => {
     }
   };
 
-  // Create materials with enhanced lighting
+  // Create materials with enhanced lighting and consistent electric theme
   const bodyMaterial = useMemo(() => new THREE.MeshStandardMaterial({ 
-    color: '#3b82f6',
-    metalness: 0.8,
-    roughness: 0.2,
+    color: '#4facfe', // Electric blue to match favicon
+    metalness: 0.9,
+    roughness: 0.1,
+    envMapIntensity: 1.0,
   }), []);
   
   const batteryMaterial = useMemo(() => new THREE.MeshStandardMaterial({ 
-    color: '#10b981',
-    metalness: 0.6,
-    roughness: 0.3,
-    emissive: '#064e3b',
-    emissiveIntensity: 0.1
-  }), []);
-
-  const motorMaterial = useMemo(() => new THREE.MeshStandardMaterial({ 
-    color: '#ef4444',
-    metalness: 0.9,
-    roughness: 0.1,
-    emissive: '#7f1d1d',
+    color: '#00f2fe', // Primary electric color from favicon
+    metalness: 0.8,
+    roughness: 0.2,
+    emissive: '#00f2fe',
     emissiveIntensity: 0.2
   }), []);
 
+  const motorMaterial = useMemo(() => new THREE.MeshStandardMaterial({ 
+    color: '#2dd4bf', // Complementary electric teal
+    metalness: 0.9,
+    roughness: 0.1,
+    emissive: '#0f766e',
+    emissiveIntensity: 0.15
+  }), []);
+
   const chargingMaterial = useMemo(() => new THREE.MeshStandardMaterial({ 
-    color: '#8b5cf6',
+    color: '#00f2fe', // Match primary electric color
     metalness: 0.7,
     roughness: 0.2,
-    emissive: '#581c87',
-    emissiveIntensity: 0.3
+    emissive: '#00f2fe',
+    emissiveIntensity: 0.4
   }), []);
 
   const controlMaterial = useMemo(() => new THREE.MeshStandardMaterial({ 
-    color: '#f59e0b',
-    metalness: 0.5,
-    roughness: 0.4,
-    emissive: '#92400e',
+    color: '#5eead4', // Light electric blue-green
+    metalness: 0.6,
+    roughness: 0.3,
+    emissive: '#14b8a6',
     emissiveIntensity: 0.1
   }), []);
 
   const wheelMaterial = useMemo(() => new THREE.MeshStandardMaterial({ 
-    color: '#374151',
+    color: '#0f172a', // Dark color for contrast
     metalness: 0.8,
-    roughness: 0.6
+    roughness: 0.4
   }), []);
 
   return (
     <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.5}>
       <group ref={groupRef}>
-        {/* Enhanced Car Body */}
+        {/* Enhanced Car Body - More realistic EV shape */}
         <Box
           position={[0, 0, 0]}
-          scale={[4.5, 1.8, 2.2]}
+          scale={[4.2, 1.5, 2.0]}
+          onClick={() => handlePartClick('body')}
+          material={bodyMaterial}
+        />
+        
+        {/* Car Roof - Separate for better realism */}
+        <Box
+          position={[0.3, 0.8, 0]}
+          scale={[3.0, 0.4, 1.8]}
           onClick={() => handlePartClick('body')}
           material={bodyMaterial}
         />
 
-        {/* Enhanced Battery Pack with glow effect */}
+        {/* Enhanced Battery Pack - More realistic position and size */}
         <Box
-          position={[0, -1.2, 0]}
-          scale={[4, 0.6, 2]}
+          position={[0, -1.1, 0]}
+          scale={[3.8, 0.5, 1.8]}
           onClick={() => handlePartClick('battery')}
           material={batteryMaterial}
         />
+        
+        {/* Secondary battery cells */}
+        {[-1.5, -0.5, 0.5, 1.5].map((x, index) => (
+          <Box
+            key={index}
+            position={[x, -1.3, 0]}
+            scale={[0.6, 0.2, 1.6]}
+            onClick={() => handlePartClick('battery')}
+            material={batteryMaterial}
+          />
+        ))}
 
-        {/* Enhanced Electric Motor */}
+        {/* Enhanced Electric Motor - Dual motor setup */}
         <Cylinder
-          position={[1.8, -0.5, 0]}
-          args={[0.6, 0.6, 1, 16]}
+          position={[1.6, -0.6, 0]}
+          args={[0.5, 0.5, 0.8, 16]}
+          onClick={() => handlePartClick('motor')}
+          material={motorMaterial}
+        />
+        <Cylinder
+          position={[-1.6, -0.6, 0]}
+          args={[0.5, 0.5, 0.8, 16]}
           onClick={() => handlePartClick('motor')}
           material={motorMaterial}
         />
 
-        {/* Enhanced Charging Port */}
+        {/* Enhanced Charging Port - More realistic position */}
         <Box
-          position={[-2, 0.3, 1]}
-          scale={[0.4, 0.4, 0.3]}
+          position={[-2.1, 0.2, 0.8]}
+          scale={[0.3, 0.3, 0.2]}
           onClick={() => handlePartClick('charging-port')}
           material={chargingMaterial}
+        />
+        
+        {/* Charging port cover */}
+        <Box
+          position={[-2.2, 0.2, 0.8]}
+          scale={[0.1, 0.4, 0.3]}
+          onClick={() => handlePartClick('charging-port')}
+          material={bodyMaterial}
         />
 
         {/* Enhanced Control Unit */}
@@ -128,53 +162,64 @@ const ModernEVModel = ({ onPartClick }) => {
           </group>
         ))}
 
-        {/* Windshield */}
+        {/* Windshield - Electric blue tint */}
         <Box
-          position={[1.5, 0.5, 0]}
-          scale={[0.8, 1.2, 1.8]}
+          position={[1.3, 0.5, 0]}
+          scale={[0.6, 1.0, 1.6]}
           material={new THREE.MeshStandardMaterial({ 
-            color: '#60a5fa',
+            color: '#00f2fe',
             transparent: true,
-            opacity: 0.3,
+            opacity: 0.2,
             metalness: 0.1,
+            roughness: 0.05
+          })}
+        />
+
+        {/* LED Headlights - Electric blue theme */}
+        {[[-0.4, 0.1, 2.1], [0.4, 0.1, 2.1]].map((position, index) => (
+          <Sphere
+            key={index}
+            position={position}
+            args={[0.12, 16, 16]}
+            material={new THREE.MeshStandardMaterial({ 
+              color: '#ffffff',
+              emissive: '#00f2fe',
+              emissiveIntensity: 0.8
+            })}
+          />
+        ))}
+        
+        {/* Front grille/badge */}
+        <Box
+          position={[0, 0.3, 2.0]}
+          scale={[0.8, 0.3, 0.05]}
+          material={new THREE.MeshStandardMaterial({ 
+            color: '#0f172a',
+            metalness: 0.9,
             roughness: 0.1
           })}
         />
 
-        {/* Headlights */}
-        {[[-0.5, 0.2, 2.3], [0.5, 0.2, 2.3]].map((position, index) => (
-          <Sphere
-            key={index}
-            position={position}
-            args={[0.15, 16, 16]}
-            material={new THREE.MeshStandardMaterial({ 
-              color: '#ffffff',
-              emissive: '#e5e7eb',
-              emissiveIntensity: 0.5
-            })}
-          />
-        ))}
-
-        {/* Floating Label */}
+        {/* Updated Labels with electric theme */}
         <Text
           position={[0, 3, 0]}
           fontSize={0.6}
-          color="#1f2937"
+          color="#00f2fe"
           anchorX="center"
           anchorY="middle"
         >
-          Next-Gen EV Model
+          EVStockMaster
         </Text>
 
         {/* Part Labels */}
         <Text
           position={[0, -2.5, 0]}
           fontSize={0.3}
-          color="#059669"
+          color="#4facfe"
           anchorX="center"
           anchorY="middle"
         >
-          High-Performance Battery
+          High-Performance EV Battery
         </Text>
       </group>
     </Float>
@@ -187,10 +232,11 @@ const EVModel = ({ onPartSelect }) => {
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="h-full w-full bg-gradient-to-br from-slate-900 via-blue-900 to-purple-900 rounded-2xl overflow-hidden relative shadow-2xl"
+      className="h-full w-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl overflow-hidden relative shadow-2xl"
     >
-      {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary-500/10 via-secondary-500/10 to-electric-500/10"></div>
+      {/* Electric Background Effects */}
+      <div className="absolute inset-0 bg-gradient-to-br from-electric-400/10 via-electric-500/10 to-electric-400/10"></div>
+      <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-electric-400/5 to-transparent"></div>
       
       {/* 3D Scene */}
       <Canvas 
@@ -203,12 +249,12 @@ const EVModel = ({ onPartSelect }) => {
         shadows
         dpr={[1, 2]}
       >
-        {/* Enhanced Lighting */}
-        <ambientLight intensity={0.6} color="#f0f9ff" />
+        {/* Enhanced Lighting with electric theme */}
+        <ambientLight intensity={0.6} color="#f0fdff" />
         <pointLight 
           position={[10, 10, 10]} 
           intensity={1.2} 
-          color="#3b82f6"
+          color="#00f2fe"
           castShadow
           shadow-mapSize-width={1024}
           shadow-mapSize-height={1024}
@@ -216,14 +262,14 @@ const EVModel = ({ onPartSelect }) => {
         <pointLight 
           position={[-10, 5, -10]} 
           intensity={0.8} 
-          color="#8b5cf6"
+          color="#4facfe"
         />
         <spotLight
           position={[0, 15, 0]}
           angle={0.3}
           penumbra={1}
           intensity={1}
-          color="#06b6d4"
+          color="#00f2fe"
           castShadow
         />
         
