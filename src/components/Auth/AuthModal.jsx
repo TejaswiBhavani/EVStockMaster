@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Mail, Lock, User, Eye, EyeOff, AlertCircle, ExternalLink } from 'lucide-react';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, updateProfile } from 'firebase/auth';
 import { auth, googleProvider, domainUtils } from '../../config/firebase';
 
 const AuthModal = ({ isOpen, onClose, mode, setMode }) => {
@@ -38,7 +38,15 @@ const AuthModal = ({ isOpen, onClose, mode, setMode }) => {
         if (formData.password !== formData.confirmPassword) {
           throw new Error('Passwords do not match');
         }
-        await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+        const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+        
+        // Update the user's display name with first and last name
+        if (formData.firstName || formData.lastName) {
+          const displayName = `${formData.firstName} ${formData.lastName}`.trim();
+          await updateProfile(userCredential.user, {
+            displayName: displayName
+          });
+        }
       }
       onClose();
     } catch (error) {
