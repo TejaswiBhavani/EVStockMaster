@@ -213,3 +213,19 @@
 ::selection {
   @apply bg-primary-200 text-primary-900;
 }
+
+/* 3D Model Container Fix */
+.three-model-container {
+  height: 100% !important;
+  width: 100% !important;
+  min-height: 700px !important;
+  display: block !important;
+  position: relative !important;
+}
+
+.three-model-container canvas {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 600px !important;
+}

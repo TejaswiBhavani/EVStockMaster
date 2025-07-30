@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useMemo, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Box, Sphere, Cylinder, PresentationControls, Float } from '@react-three/drei';
 import { motion } from 'framer-motion';
@@ -527,12 +527,34 @@ const EVModel = ({ onPartSelect, selectedPart }) => {
     
     return partLabels[partId] || "EV Component Selected";
   };
+
+  // Debug logging to check component mounting
+  React.useEffect(() => {
+    console.log("✅ 3D Model Viewer initialized");
+    
+    // Check WebGL support
+    const canvas = document.createElement('canvas');
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if (gl) {
+      console.log("✅ WebGL supported");
+    } else {
+      console.error("❌ WebGL not supported");
+    }
+  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="h-full w-full bg-gradient-to-br from-gray-100 via-blue-50 to-purple-50 rounded-2xl overflow-hidden relative shadow-2xl border border-gray-200"
+      className="three-model-container h-full w-full bg-gradient-to-br from-gray-100 via-blue-50 to-purple-50 rounded-2xl overflow-hidden relative shadow-2xl border border-gray-200"
+      style={{ 
+        minHeight: '700px',
+        height: '100%',
+        width: '100%',
+        display: 'block',
+        position: 'relative'
+      }}
     >
       {/* Electric Background Effects */}
       <div className="absolute inset-0 bg-gradient-to-br from-electric-400/5 via-electric-500/5 to-electric-400/5"></div>
@@ -546,19 +568,33 @@ const EVModel = ({ onPartSelect, selectedPart }) => {
           alpha: true,
           powerPreference: "high-performance",
           toneMapping: THREE.ACESFilmicToneMapping,
-          toneMappingExposure: 1.0
+          toneMappingExposure: 1.0,
+          preserveDrawingBuffer: true
         }}
         shadows
         dpr={[1, 2]}
         performance={{ min: 0.5 }}
+        style={{
+          width: '100%',
+          height: '100%',
+          minHeight: '600px',
+          display: 'block',
+          background: 'transparent'
+        }}
+        onCreated={(state) => {
+          console.log("✅ 3D Canvas initialized successfully");
+        }}
+        onError={(error) => {
+          console.error("❌ Canvas error:", error);
+        }}
       >
-        {/* Optimized Lighting Setup */}
-        <ambientLight intensity={0.6} color="#f8fafc" />
+        {/* Enhanced Lighting Setup */}
+        <ambientLight intensity={0.8} color="#f8fafc" />
         
         {/* Main directional light */}
         <directionalLight 
           position={[8, 8, 5]} 
-          intensity={1.2} 
+          intensity={1.5} 
           color="#ffffff"
           castShadow
           shadow-mapSize-width={1024}
@@ -573,7 +609,7 @@ const EVModel = ({ onPartSelect, selectedPart }) => {
         {/* Fill lights for better illumination */}
         <pointLight 
           position={[-6, 4, -6]} 
-          intensity={0.8} 
+          intensity={1.0} 
           color="#60a5fa"
           distance={15}
           decay={2}
@@ -581,7 +617,7 @@ const EVModel = ({ onPartSelect, selectedPart }) => {
         
         <pointLight 
           position={[6, 4, 6]} 
-          intensity={0.8} 
+          intensity={1.0} 
           color="#34d399"
           distance={15}
           decay={2}
@@ -592,7 +628,7 @@ const EVModel = ({ onPartSelect, selectedPart }) => {
           position={[0, 10, -8]}
           angle={0.3}
           penumbra={0.5}
-          intensity={1.0}
+          intensity={1.2}
           color="#a855f7"
           distance={20}
           decay={2}
@@ -616,7 +652,7 @@ const EVModel = ({ onPartSelect, selectedPart }) => {
           enableZoom={true}
           enableRotate={true}
           maxDistance={15}
-          minDistance={5}
+          minDistance={3}
           maxPolarAngle={Math.PI / 2}
           minPolarAngle={Math.PI / 6}
           autoRotate={false}
