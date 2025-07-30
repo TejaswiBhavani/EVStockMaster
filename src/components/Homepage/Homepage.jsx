@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
-  Zap, 
   BarChart3, 
   Brain, 
   Shield, 
@@ -14,6 +13,7 @@ import {
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../config/firebase';
 import AuthModal from '../Auth/AuthModal';
+import InvenAILogo from '../UI/InvenAILogo';
 
 const Homepage = ({ onEnterApp }) => {
   const [user] = useAuthState(auth);
@@ -64,9 +64,7 @@ const Homepage = ({ onEnterApp }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-electric-400 to-electric-500 rounded-xl flex items-center justify-center shadow-lg">
-                <Zap className="w-6 h-6 text-dark-900" />
-              </div>
+              <InvenAILogo size={40} />
               <div>
                 <h1 className="text-xl font-bold bg-gradient-to-r from-electric-400 to-electric-500 bg-clip-text text-transparent">
                   InvenAI
@@ -93,6 +91,12 @@ const Homepage = ({ onEnterApp }) => {
                     className="px-4 py-2 text-gray-300 hover:text-electric-400 transition-colors"
                   >
                     Sign In
+                  </button>
+                  <button
+                    onClick={onEnterApp}
+                    className="px-3 py-2 text-electric-400 hover:text-electric-300 transition-colors text-sm font-medium"
+                  >
+                    Demo
                   </button>
                   <button
                     onClick={() => setAuthModal({ isOpen: true, mode: 'signup' })}
@@ -155,9 +159,12 @@ const Homepage = ({ onEnterApp }) => {
                     <span>Start Free Trial</span>
                     <ArrowRight className="w-5 h-5" />
                   </button>
-                  <button className="px-8 py-4 border border-electric-400/30 text-gray-300 rounded-xl hover:bg-dark-700 hover:border-electric-400/50 transition-all duration-200 flex items-center space-x-2 text-lg font-medium">
+                  <button
+                    onClick={onEnterApp}
+                    className="px-8 py-4 border border-electric-400/30 text-gray-300 rounded-xl hover:bg-dark-700 hover:border-electric-400/50 transition-all duration-200 flex items-center space-x-2 text-lg font-medium"
+                  >
                     <Play className="w-5 h-5" />
-                    <span>Watch Demo</span>
+                    <span>Try Demo</span>
                   </button>
                 </>
               )}
@@ -282,9 +289,7 @@ const Homepage = ({ onEnterApp }) => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center space-x-3 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-r from-electric-400 to-electric-500 rounded-lg flex items-center justify-center">
-                  <Zap className="w-4 h-4 text-dark-900" />
-                </div>
+                <InvenAILogo size={32} />
                 <span className="text-xl font-bold bg-gradient-to-r from-electric-400 to-electric-500 bg-clip-text text-transparent">InvenAI</span>
               </div>
               <p className="text-gray-400">
