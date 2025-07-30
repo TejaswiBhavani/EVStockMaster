@@ -65,7 +65,20 @@ const Homepage = ({ onEnterApp }) => {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-gradient-to-r from-electric-400 to-electric-500 rounded-xl flex items-center justify-center shadow-lg">
-                <img src="/favicon.svg" alt="InvenAI Logo" className="w-6 h-6" />
+                <svg width="24" height="24" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="navLogoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#ffffff" />
+                      <stop offset="100%" stopColor="#f0f9ff" />
+                    </linearGradient>
+                  </defs>
+                  <circle cx="50" cy="50" r="45" fill="url(#navLogoGradient)" fillOpacity="0.1" stroke="url(#navLogoGradient)" strokeWidth="2"/>
+                  <path d="M30 35 L50 20 L70 35 L65 40 L50 30 L35 40 Z" fill="url(#navLogoGradient)"/>
+                  <path d="M25 45 L50 25 L75 45 L70 50 L50 35 L30 50 Z" fill="url(#navLogoGradient)" fillOpacity="0.8"/>
+                  <path d="M20 55 L50 30 L80 55 L75 60 L50 40 L25 60 Z" fill="url(#navLogoGradient)" fillOpacity="0.6"/>
+                  <circle cx="50" cy="65" r="8" fill="url(#navLogoGradient)"/>
+                  <path d="M42 65 L50 55 L58 65" stroke="url(#navLogoGradient)" strokeWidth="2" fill="none"/>
+                </svg>
               </div>
               <div>
                 <h1 className="text-xl font-bold bg-gradient-to-r from-electric-400 to-electric-500 bg-clip-text text-transparent">
@@ -286,7 +299,20 @@ const Homepage = ({ onEnterApp }) => {
             <div>
               <div className="flex items-center space-x-3 mb-4">
                 <div className="w-8 h-8 bg-gradient-to-r from-electric-400 to-electric-500 rounded-lg flex items-center justify-center">
-                  <img src="/favicon.svg" alt="InvenAI Logo" className="w-4 h-4" />
+                  <svg width="16" height="16" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                      <linearGradient id="footerLogoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#ffffff" />
+                        <stop offset="100%" stopColor="#f0f9ff" />
+                      </linearGradient>
+                    </defs>
+                    <circle cx="50" cy="50" r="45" fill="url(#footerLogoGradient)" fillOpacity="0.1" stroke="url(#footerLogoGradient)" strokeWidth="2"/>
+                    <path d="M30 35 L50 20 L70 35 L65 40 L50 30 L35 40 Z" fill="url(#footerLogoGradient)"/>
+                    <path d="M25 45 L50 25 L75 45 L70 50 L50 35 L30 50 Z" fill="url(#footerLogoGradient)" fillOpacity="0.8"/>
+                    <path d="M20 55 L50 30 L80 55 L75 60 L50 40 L25 60 Z" fill="url(#footerLogoGradient)" fillOpacity="0.6"/>
+                    <circle cx="50" cy="65" r="8" fill="url(#footerLogoGradient)"/>
+                    <path d="M42 65 L50 55 L58 65" stroke="url(#footerLogoGradient)" strokeWidth="2" fill="none"/>
+                  </svg>
                 </div>
                 <span className="text-xl font-bold bg-gradient-to-r from-electric-400 to-electric-500 bg-clip-text text-transparent">InvenAI</span>
               </div>
