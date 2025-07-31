@@ -58,7 +58,7 @@ const Sidebar = ({ isOpen, onClose, activeTab, setActiveTab, isMobile }) => {
         initial={isMobile ? "closed" : "open"}
         animate={isOpen ? "open" : "closed"}
         className={`
-          fixed left-0 top-0 h-full w-72 glass-card border-r border-white/20 shadow-2xl z-sidebar backdrop-blur-xl
+          fixed left-0 top-0 h-full w-72 glass-card border-r border-white/20 dark:border-dark-700/30 shadow-2xl z-sidebar backdrop-blur-xl
           ${isMobile ? 'lg:relative lg:translate-x-0' : ''}
         `}
         style={{ zIndex: 30 }}
@@ -92,15 +92,15 @@ const Sidebar = ({ isOpen, onClose, activeTab, setActiveTab, isMobile }) => {
                 <h1 className="text-2xl font-bold heading-gradient">
                   InvenAI
                 </h1>
-                <p className="text-sm text-gray-500 font-medium">Smart Inventory</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">Smart Inventory</p>
               </div>
             </div>
             {isMobile && (
               <button
                 onClick={onClose}
-                className="p-2 rounded-xl hover:bg-gray-100 transition-all duration-200 hover:scale-110"
+                className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-dark-700 transition-all duration-200 hover:scale-110"
               >
-                <X className="w-5 h-5 text-gray-500" />
+                <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
               </button>
             )}
           </div>
@@ -132,14 +132,14 @@ const Sidebar = ({ isOpen, onClose, activeTab, setActiveTab, isMobile }) => {
                     <div className={`p-2 rounded-xl mr-3 transition-all duration-200 ${
                       isActive 
                         ? 'bg-white/20 shadow-lg' 
-                        : 'bg-transparent group-hover:bg-white/10'
+                        : 'bg-transparent group-hover:bg-white/10 dark:group-hover:bg-dark-600/50'
                     }`}>
                       <Icon className={`w-5 h-5 transition-colors ${
-                        isActive ? 'text-white' : 'text-gray-600 group-hover:text-primary-600'
+                        isActive ? 'text-white' : 'text-gray-600 dark:text-gray-300 group-hover:text-primary-600 dark:group-hover:text-primary-400'
                       }`} />
                     </div>
                     <span className={`font-semibold transition-colors ${
-                      isActive ? 'text-white' : 'text-gray-700 group-hover:text-primary-700'
+                      isActive ? 'text-white' : 'text-gray-700 dark:text-gray-200 group-hover:text-primary-700 dark:group-hover:text-primary-300'
                     }`}>
                       {item.label}
                     </span>
@@ -177,10 +177,10 @@ const Sidebar = ({ isOpen, onClose, activeTab, setActiveTab, isMobile }) => {
           </motion.div>
 
           {/* Enhanced Footer */}
-          <div className="p-6 border-t border-gray-200/50">
+          <div className="p-6 border-t border-gray-200/50 dark:border-dark-700/50">
             <div className="text-center space-y-1">
-              <p className="text-sm font-semibold text-gray-600">InvenAI v2.1.0</p>
-              <p className="text-xs text-gray-500">© 2025 TATA Motors</p>
+              <p className="text-sm font-semibold text-gray-600 dark:text-gray-300">InvenAI v2.1.0</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">invenAI version is base version</p>
               <div className="flex justify-center mt-3">
                 <div className="flex space-x-1">
                   <div className="w-2 h-2 bg-primary-400 rounded-full animate-pulse"></div>

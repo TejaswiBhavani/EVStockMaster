@@ -3,6 +3,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Box, Package, Brain } from 'lucide-react';
 import { auth } from './config/firebase';
+import { ThemeProvider } from './hooks/useTheme';
 import Homepage from './components/Homepage/Homepage';
 import ChatBot from './components/Chat/ChatBot';
 import Sidebar from './components/Layout/Sidebar';
@@ -30,19 +31,21 @@ function App() {
   // Show loading while checking auth state (only if not in demo mode)
   if (loading && !demoMode) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-primary-50 to-electric-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 font-medium">Loading InvenAI...</p>
+      <ThemeProvider>
+        <div className="min-h-screen bg-gradient-to-br from-primary-50 to-electric-50 dark:from-dark-900 dark:to-dark-800 flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-16 h-16 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-gray-600 dark:text-gray-300 font-medium">Loading InvenAI...</p>
+          </div>
         </div>
-      </div>
+      </ThemeProvider>
     );
   }
 
   // Show homepage if user is not authenticated or hasn't entered the app (and not in demo mode)
   if ((!user && !demoMode) || !showApp) {
     return (
-      <>
+      <ThemeProvider>
         <Homepage 
           onEnterApp={() => {
             setShowApp(true);
@@ -50,7 +53,7 @@ function App() {
           }} 
         />
         <ChatBot />
-      </>
+      </ThemeProvider>
     );
   }
 
@@ -201,56 +204,58 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 flex relative overflow-hidden">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-background">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-primary-200/30 to-secondary-200/30 rounded-full blur-3xl animate-pulse-slow"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-electric-200/30 to-neon-200/30 rounded-full blur-3xl animate-pulse-slow" style={{animationDelay: '1s'}}></div>
-      </div>
+    <ThemeProvider>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 dark:from-dark-900 dark:via-dark-800 dark:to-dark-900 flex relative overflow-hidden">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none z-background">
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-primary-200/30 to-secondary-200/30 dark:from-primary-400/20 dark:to-secondary-400/20 rounded-full blur-3xl animate-pulse-slow"></div>
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-electric-200/30 to-neon-200/30 dark:from-electric-400/20 dark:to-neon-400/20 rounded-full blur-3xl animate-pulse-slow" style={{animationDelay: '1s'}}></div>
+        </div>
 
-      {/* Sidebar */}
-      <Sidebar
-        isOpen={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        isMobile={isMobile}
-      />
-
-      {/* Main Content Area */}
-      <div className={`flex-1 flex flex-col transition-all duration-300 relative z-content ${
-        sidebarOpen && !isMobile ? 'ml-72' : 'ml-0'
-      }`}>
-        {/* Header */}
-        <Header
-          onMenuClick={handleSidebarToggle}
+        {/* Sidebar */}
+        <Sidebar
+          isOpen={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
           activeTab={activeTab}
+          setActiveTab={setActiveTab}
           isMobile={isMobile}
         />
 
-        {/* Main Content */}
-        <main className="flex-1 p-4 sm:p-6 overflow-auto">
-          <div className={`transition-all duration-300 ${
-            infoPanelOpen && !isMobile ? 'mr-96' : 'mr-0'
-          }`}>
-            <AnimatePresence mode="wait">
-              {renderMainContent()}
-            </AnimatePresence>
-          </div>
-        </main>
-      </div>
+        {/* Main Content Area */}
+        <div className={`flex-1 flex flex-col transition-all duration-300 relative z-content ${
+          sidebarOpen && !isMobile ? 'ml-72' : 'ml-0'
+        }`}>
+          {/* Header */}
+          <Header
+            onMenuClick={handleSidebarToggle}
+            activeTab={activeTab}
+            isMobile={isMobile}
+          />
 
-      {/* Info Panel */}
-      <InfoPanel
-        isOpen={infoPanelOpen}
-        onClose={handleInfoPanelClose}
-        selectedPart={selectedPart}
-        isMobile={isMobile}
-      />
-      
-      {/* ChatBot */}
-      <ChatBot />
-    </div>
+          {/* Main Content */}
+          <main className="flex-1 p-4 sm:p-6 overflow-auto">
+            <div className={`transition-all duration-300 ${
+              infoPanelOpen && !isMobile ? 'mr-96' : 'mr-0'
+            }`}>
+              <AnimatePresence mode="wait">
+                {renderMainContent()}
+              </AnimatePresence>
+            </div>
+          </main>
+        </div>
+
+        {/* Info Panel */}
+        <InfoPanel
+          isOpen={infoPanelOpen}
+          onClose={handleInfoPanelClose}
+          selectedPart={selectedPart}
+          isMobile={isMobile}
+        />
+        
+        {/* ChatBot */}
+        <ChatBot />
+      </div>
+    </ThemeProvider>
   );
 }
 

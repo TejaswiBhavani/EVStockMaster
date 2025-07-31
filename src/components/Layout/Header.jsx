@@ -77,11 +77,11 @@ const Header = ({ onMenuClick, activeTab, isMobile }) => {
     <motion.header 
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      className="glass-card border-b border-white/20 backdrop-blur-xl px-4 sm:px-6 py-4 flex items-center justify-between shadow-lg relative overflow-hidden z-header"
+      className="glass-card border-b border-white/20 dark:border-dark-700/30 backdrop-blur-xl px-4 sm:px-6 py-4 flex items-center justify-between shadow-lg relative overflow-hidden z-header"
       style={{ zIndex: 20 }}
     >
       {/* Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-r from-primary-500/5 via-secondary-500/5 to-electric-500/5"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-primary-500/5 via-secondary-500/5 to-electric-500/5 dark:from-primary-400/10 dark:via-secondary-400/10 dark:to-electric-400/10"></div>
       
       {/* Left Section */}
       <div className="flex items-center space-x-4 sm:space-x-6 relative z-10">
@@ -90,9 +90,9 @@ const Header = ({ onMenuClick, activeTab, isMobile }) => {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={onMenuClick}
-            className="p-2 sm:p-3 rounded-xl bg-white/50 hover:bg-white/70 transition-all duration-200 shadow-lg lg:hidden"
+            className="p-2 sm:p-3 rounded-xl bg-white/50 dark:bg-dark-800/50 hover:bg-white/70 dark:hover:bg-dark-700/70 transition-all duration-200 shadow-lg lg:hidden"
           >
-            <Menu className="w-5 h-5 text-gray-600" />
+            <Menu className="w-5 h-5 text-gray-600 dark:text-gray-300" />
           </motion.button>
         )}
         
@@ -109,7 +109,7 @@ const Header = ({ onMenuClick, activeTab, isMobile }) => {
           <h1 className="text-xl sm:text-2xl font-bold heading-gradient">
             {getPageTitle(activeTab)}
           </h1>
-          <p className="text-xs sm:text-sm text-gray-600 font-medium">
+          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 font-medium">
             {new Date().toLocaleDateString('en-US', { 
               weekday: 'long', 
               year: 'numeric', 
@@ -123,14 +123,14 @@ const Header = ({ onMenuClick, activeTab, isMobile }) => {
       {/* Center Section - Enhanced Search */}
       <div className="hidden md:flex flex-1 max-w-lg mx-4 sm:mx-8 relative z-10">
         <div className="relative w-full group">
-          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-primary-500 transition-colors" />
+          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500 group-focus-within:text-primary-500 transition-colors" />
           <input
             type="text"
             placeholder="Search parts, inventory, or insights..."
-            className="input-modern w-full pl-12 pr-4 py-3 text-sm placeholder-gray-400 shadow-lg group-focus-within:shadow-xl"
+            className="input-modern w-full pl-12 pr-4 py-3 text-sm placeholder-gray-400 dark:placeholder-gray-500 shadow-lg group-focus-within:shadow-xl"
           />
           <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-            <kbd className="px-2 py-1 text-xs font-semibold text-gray-500 bg-gray-100 border border-gray-200 rounded">⌘K</kbd>
+            <kbd className="px-2 py-1 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-dark-700 border border-gray-200 dark:border-dark-600 rounded">⌘K</kbd>
           </div>
         </div>
       </div>
@@ -157,9 +157,9 @@ const Header = ({ onMenuClick, activeTab, isMobile }) => {
           whileHover={{ scale: 1.1, rotate: 5 }}
           whileTap={{ scale: 0.9 }}
           onClick={() => setNotificationCenterOpen(true)}
-          className="relative p-2 sm:p-3 rounded-xl bg-white/50 hover:bg-white/70 transition-all duration-200 shadow-lg hover:shadow-xl group"
+          className="relative p-2 sm:p-3 rounded-xl bg-white/50 dark:bg-dark-800/50 hover:bg-white/70 dark:hover:bg-dark-700/70 transition-all duration-200 shadow-lg hover:shadow-xl group"
         >
-          <Bell className="w-5 h-5 text-gray-600 group-hover:text-primary-600 transition-colors" />
+          <Bell className="w-5 h-5 text-gray-600 dark:text-gray-300 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors" />
           {unreadCount > 0 && (
             <>
               <motion.span 
@@ -181,7 +181,7 @@ const Header = ({ onMenuClick, activeTab, isMobile }) => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-            className="flex items-center space-x-2 sm:space-x-3 px-2 sm:px-4 py-2 sm:py-3 rounded-xl bg-white/50 hover:bg-white/70 cursor-pointer transition-all duration-200 shadow-lg hover:shadow-xl border border-white/30"
+            className="flex items-center space-x-2 sm:space-x-3 px-2 sm:px-4 py-2 sm:py-3 rounded-xl bg-white/50 dark:bg-dark-800/50 hover:bg-white/70 dark:hover:bg-dark-700/70 cursor-pointer transition-all duration-200 shadow-lg hover:shadow-xl border border-white/30 dark:border-dark-600/30"
           >
             <div className="relative">
               <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-primary-500 via-secondary-500 to-electric-500 rounded-xl flex items-center justify-center shadow-lg">
@@ -192,10 +192,10 @@ const Header = ({ onMenuClick, activeTab, isMobile }) => {
               </div>
             </div>
             <div className="hidden sm:block text-left">
-              <p className="text-sm font-bold text-gray-900">{getUserDisplayName()}</p>
-              <p className="text-xs text-gray-600 font-medium">{getUserRole()}</p>
+              <p className="text-sm font-bold text-gray-900 dark:text-white">{getUserDisplayName()}</p>
+              <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">{getUserRole()}</p>
             </div>
-            <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${profileDropdownOpen ? 'rotate-180' : ''}`} />
+            <ChevronDown className={`w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform duration-200 ${profileDropdownOpen ? 'rotate-180' : ''}`} />
           </motion.button>
 
           {/* Profile Dropdown */}
@@ -204,22 +204,22 @@ const Header = ({ onMenuClick, activeTab, isMobile }) => {
               initial={{ opacity: 0, y: 10, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.95 }}
-              className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-2xl border border-gray-200 py-2 z-dropdown"
+              className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-dark-800 rounded-xl shadow-2xl border border-gray-200 dark:border-dark-700 py-2 z-dropdown"
               style={{ zIndex: 40 }}
             >
-              <div className="px-4 py-3 border-b border-gray-100">
-                <p className="text-sm font-bold text-gray-900">{getUserDisplayName()}</p>
-                <p className="text-xs text-gray-600">{getUserRole()}</p>
+              <div className="px-4 py-3 border-b border-gray-100 dark:border-dark-700">
+                <p className="text-sm font-bold text-gray-900 dark:text-white">{getUserDisplayName()}</p>
+                <p className="text-xs text-gray-600 dark:text-gray-400">{getUserRole()}</p>
               </div>
               
-              <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-3">
+              <button className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-700 flex items-center space-x-3">
                 <Settings className="w-4 h-4" />
                 <span>Settings</span>
               </button>
               
               <button 
                 onClick={() => auth.signOut()}
-                className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center space-x-3"
+                className="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center space-x-3"
               >
                 <LogOut className="w-4 h-4" />
                 <span>Sign Out</span>
