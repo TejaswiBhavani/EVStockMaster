@@ -4,10 +4,10 @@
 
 @layer base {
   * {
-    @apply border-gray-200;
+    @apply border-gray-200 dark:border-dark-700;
   }
   body {
-    @apply bg-gradient-to-br from-slate-50 to-blue-50 text-gray-900 antialiased;
+    @apply bg-gradient-to-br from-slate-50 to-blue-50 dark:from-dark-900 dark:to-dark-800 text-gray-900 dark:text-gray-100 antialiased;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
   html {
@@ -18,7 +18,7 @@
 @layer components {
   /* Modern Glass Effects */
   .glass-card {
-    @apply bg-white/80 backdrop-blur-lg border border-white/20 shadow-xl rounded-2xl;
+    @apply bg-white/80 dark:bg-dark-800/80 backdrop-blur-lg border border-white/20 dark:border-dark-700/30 shadow-xl rounded-2xl;
   }
   
   .glass-dark {
@@ -44,7 +44,7 @@
 
   /* Modern Cards */
   .modern-card {
-    @apply bg-white rounded-2xl shadow-card border border-gray-100 transition-all duration-300 hover:shadow-card-hover hover:scale-[1.02] hover:border-primary-200;
+    @apply bg-white dark:bg-dark-800 rounded-2xl shadow-card border border-gray-100 dark:border-dark-700 transition-all duration-300 hover:shadow-card-hover hover:scale-[1.02] hover:border-primary-200 dark:hover:border-primary-600;
   }
 
   .neon-card {
@@ -52,7 +52,7 @@
   }
 
   .neon-card-inner {
-    @apply bg-white rounded-2xl p-6 h-full;
+    @apply bg-white dark:bg-dark-800 rounded-2xl p-6 h-full;
   }
 
   /* Enhanced Buttons */
@@ -69,12 +69,12 @@
   }
 
   .btn-ghost {
-    @apply bg-white/10 backdrop-blur-sm border border-white/20 text-gray-700 hover:bg-white/20 hover:border-white/30 font-medium py-2 px-4 rounded-lg transition-all duration-200;
+    @apply bg-white/10 dark:bg-dark-700/50 backdrop-blur-sm border border-white/20 dark:border-dark-600/50 text-gray-700 dark:text-gray-300 hover:bg-white/20 dark:hover:bg-dark-600/50 hover:border-white/30 dark:hover:border-dark-500/50 font-medium py-2 px-4 rounded-lg transition-all duration-200;
   }
 
   /* Modern Sidebar Items */
   .sidebar-item {
-    @apply flex items-center px-4 py-3 text-gray-600 rounded-xl transition-all duration-200 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 hover:text-primary-700 hover:shadow-md hover:scale-105 relative overflow-hidden;
+    @apply flex items-center px-4 py-3 text-gray-600 dark:text-gray-300 rounded-xl transition-all duration-200 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 dark:hover:from-primary-900/50 dark:hover:to-secondary-900/50 hover:text-primary-700 dark:hover:text-primary-300 hover:shadow-md hover:scale-105 relative overflow-hidden;
   }
   
   .sidebar-item.active {
@@ -92,7 +92,7 @@
 
   /* Modern Metrics & Stats */
   .metric-card {
-    @apply bg-gradient-to-br from-white to-gray-50 rounded-2xl p-6 border border-gray-100 shadow-card hover:shadow-card-hover transition-all duration-300 hover:scale-105 relative overflow-hidden;
+    @apply bg-gradient-to-br from-white to-gray-50 dark:from-dark-800 dark:to-dark-700 rounded-2xl p-6 border border-gray-100 dark:border-dark-600 shadow-card hover:shadow-card-hover transition-all duration-300 hover:scale-105 relative overflow-hidden;
   }
 
   .metric-card::before {
@@ -190,7 +190,7 @@
 
   /* Form Elements */
   .input-modern {
-    @apply bg-white/50 backdrop-blur-sm border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 hover:bg-white/70;
+    @apply bg-white/50 dark:bg-dark-700/50 backdrop-blur-sm border border-gray-200 dark:border-dark-600 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 hover:bg-white/70 dark:hover:bg-dark-700/70 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400;
   }
 
   /* Loading States */

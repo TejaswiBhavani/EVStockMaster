@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../config/firebase';
+import { useTheme } from '../../hooks/useTheme';
 import { 
   User, 
   Mail, 
@@ -14,14 +15,17 @@ import {
   Zap,
   Trash2,
   Save,
-  RefreshCw
+  RefreshCw,
+  Moon,
+  Sun,
+  Monitor
 } from 'lucide-react';
 
 const SettingsPage = () => {
   const [user] = useAuthState(auth);
+  const { theme, changeTheme, isDark } = useTheme();
   const [settings, setSettings] = useState({
     // Application Preferences
-    theme: 'system',
     notifications: {
       lowStock: true,
       aiInsights: true,
@@ -71,6 +75,15 @@ const SettingsPage = () => {
     }
   };
 
+  const getThemeIcon = (themeType) => {
+    switch (themeType) {
+      case 'light': return Sun;
+      case 'dark': return Moon;
+      case 'system': return Monitor;
+      default: return Monitor;
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -80,39 +93,39 @@ const SettingsPage = () => {
       {/* Header */}
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold heading-gradient mb-2">Settings</h1>
-        <p className="text-gray-600">Customize your InvenAI experience</p>
+        <p className="text-gray-600 dark:text-gray-300">Customize your InvenAI experience</p>
       </div>
 
       {/* User Profile Management */}
       <motion.div 
-        className="modern-card p-6"
+        className="modern-card p-6 dark:bg-dark-800 dark:border-dark-700"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
       >
-        <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
-          <User className="w-5 h-5 mr-3 text-primary-600" />
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center">
+          <User className="w-5 h-5 mr-3 text-primary-600 dark:text-primary-400" />
           User Profile Management
         </h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Display Name</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Display Name</label>
             <input
               type="text"
-              className="input-modern w-full"
+              className="input-modern w-full dark:bg-dark-700 dark:border-dark-600 dark:text-white"
               placeholder="Enter your display name"
               defaultValue={user?.displayName || ''}
             />
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email Address</label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
                 type="email"
-                className="input-modern w-full pl-10"
+                className="input-modern w-full pl-10 dark:bg-dark-700 dark:border-dark-600 dark:text-white"
                 value={user?.email || 'Not signed in'}
                 readOnly
               />
@@ -120,7 +133,7 @@ const SettingsPage = () => {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Password</label>
             <button className="btn-secondary flex items-center space-x-2">
               <Shield className="w-4 h-4" />
               <span>Change Password</span>
@@ -128,7 +141,7 @@ const SettingsPage = () => {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Profile Picture</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Profile Picture</label>
             <div className="flex items-center space-x-4">
               <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-xl flex items-center justify-center">
                 <User className="w-6 h-6 text-white" />
@@ -139,10 +152,10 @@ const SettingsPage = () => {
         </div>
 
         {/* Account Actions */}
-        <div className="mt-6 pt-6 border-t border-gray-200">
+        <div className="mt-6 pt-6 border-t border-gray-200 dark:border-dark-700">
           <button
             onClick={handleDeleteAccount}
-            className="flex items-center space-x-2 text-red-600 hover:text-red-700 font-medium"
+            className="flex items-center space-x-2 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium"
           >
             <Trash2 className="w-4 h-4" />
             <span>Delete Account</span>
@@ -152,40 +165,62 @@ const SettingsPage = () => {
 
       {/* Application Preferences */}
       <motion.div 
-        className="modern-card p-6"
+        className="modern-card p-6 dark:bg-dark-800 dark:border-dark-700"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
-          <Palette className="w-5 h-5 mr-3 text-secondary-600" />
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center">
+          <Palette className="w-5 h-5 mr-3 text-secondary-600 dark:text-secondary-400" />
           Application Preferences
         </h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Theme Selection */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">Theme Selection</label>
-            <div className="space-y-2">
-              {['light', 'dark', 'system'].map((theme) => (
-                <label key={theme} className="flex items-center space-x-3 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="theme"
-                    value={theme}
-                    checked={settings.theme === theme}
-                    onChange={(e) => handleSettingChange(null, 'theme', e.target.value)}
-                    className="w-4 h-4 text-primary-600"
-                  />
-                  <span className="text-sm text-gray-700 capitalize">{theme} Mode</span>
-                </label>
-              ))}
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Theme Selection</label>
+            <div className="space-y-3">
+              {['light', 'dark', 'system'].map((themeOption) => {
+                const IconComponent = getThemeIcon(themeOption);
+                return (
+                  <motion.label 
+                    key={themeOption} 
+                    className="flex items-center space-x-3 cursor-pointer p-3 rounded-xl border border-gray-200 dark:border-dark-600 hover:bg-gray-50 dark:hover:bg-dark-700 transition-colors"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <input
+                      type="radio"
+                      name="theme"
+                      value={themeOption}
+                      checked={theme === themeOption}
+                      onChange={(e) => changeTheme(e.target.value)}
+                      className="w-4 h-4 text-primary-600"
+                    />
+                    <IconComponent className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                    <div>
+                      <span className="text-sm text-gray-700 dark:text-gray-300 font-medium capitalize">{themeOption} Mode</span>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        {themeOption === 'system' ? 'Follow system preference' : 
+                         themeOption === 'light' ? 'Light appearance' : 'Dark appearance'}
+                      </p>
+                    </div>
+                    {theme === themeOption && (
+                      <motion.div
+                        layoutId="themeCheck"
+                        className="ml-auto w-2 h-2 bg-primary-500 rounded-full"
+                        initial={false}
+                      />
+                    )}
+                  </motion.label>
+                );
+              })}
             </div>
           </div>
 
           {/* Notifications */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3 flex items-center">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
               <Bell className="w-4 h-4 mr-2" />
               Notification Preferences
             </label>
@@ -196,8 +231,8 @@ const SettingsPage = () => {
                 productionUpdates: 'Production Schedule Changes',
                 systemAnnouncements: 'System Announcements'
               }).map(([key, label]) => (
-                <label key={key} className="flex items-center justify-between">
-                  <span className="text-sm text-gray-700">{label}</span>
+                <label key={key} className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-dark-700">
+                  <span className="text-sm text-gray-700 dark:text-gray-300">{label}</span>
                   <input
                     type="checkbox"
                     checked={settings.notifications[key]}
@@ -211,14 +246,14 @@ const SettingsPage = () => {
 
           {/* Data Refresh Interval */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3 flex items-center">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
               <Clock className="w-4 h-4 mr-2" />
               Data Refresh Interval
             </label>
             <select
               value={settings.dataRefreshInterval}
               onChange={(e) => handleSettingChange(null, 'dataRefreshInterval', parseInt(e.target.value))}
-              className="input-modern w-full"
+              className="input-modern w-full dark:bg-dark-700 dark:border-dark-600 dark:text-white"
             >
               <option value={5}>Every 5 minutes</option>
               <option value={15}>Every 15 minutes</option>
@@ -229,7 +264,7 @@ const SettingsPage = () => {
 
           {/* Units of Measurement */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3 flex items-center">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
               <Ruler className="w-4 h-4 mr-2" />
               Units of Measurement
             </label>
@@ -244,7 +279,7 @@ const SettingsPage = () => {
                     onChange={(e) => handleSettingChange(null, 'units', e.target.value)}
                     className="w-4 h-4 text-primary-600"
                   />
-                  <span className="text-sm text-gray-700 capitalize">{unit}</span>
+                  <span className="text-sm text-gray-700 dark:text-gray-300 capitalize">{unit}</span>
                 </label>
               ))}
             </div>
