@@ -12,7 +12,7 @@ import {
   Truck
 } from 'lucide-react';
 
-const NotificationItem = ({ notification, onMarkAsRead, onDelete }) => {
+const NotificationItem = ({ notification, onMarkAsRead, onDelete, onNavigate }) => {
   const getIcon = (type, category) => {
     // First check category for more specific icons
     if (category === 'inventory') return Package;
@@ -71,6 +71,33 @@ const NotificationItem = ({ notification, onMarkAsRead, onDelete }) => {
     }
   };
 
+  const getActionButton = (category, type) => {
+    switch (category) {
+      case 'inventory':
+        return {
+          label: 'View Inventory',
+          action: () => onNavigate?.('inventory'),
+          icon: Package
+        };
+      case 'ai':
+        return {
+          label: 'View AI Insights',
+          action: () => onNavigate?.('ai-summary'),
+          icon: Brain
+        };
+      case 'production':
+        return {
+          label: 'View Dashboard',
+          action: () => onNavigate?.('dashboard'),
+          icon: SettingsIcon
+        };
+      default:
+        return null;
+    }
+  };
+
+  const actionButton = getActionButton(notification.category, notification.type);
+
   const Icon = getIcon(notification.type, notification.category);
   const styles = getTypeStyles(notification.type);
   const isUnread = !notification.isRead;
@@ -128,21 +155,39 @@ const NotificationItem = ({ notification, onMarkAsRead, onDelete }) => {
                 {notification.message}
               </p>
               
-              {/* Metadata */}
-              <div className="flex items-center flex-wrap gap-x-4 gap-y-1 mt-3">
-                <div className="flex items-center space-x-1 text-xs text-gray-500 dark:text-gray-400">
-                  <Clock className="w-3 h-3" />
-                  <span>{formatTime(notification.timestamp)}</span>
+              {/* Metadata and Actions */}
+              <div className="flex items-center justify-between flex-wrap gap-2 mt-3">
+                <div className="flex items-center flex-wrap gap-x-4 gap-y-1">
+                  <div className="flex items-center space-x-1 text-xs text-gray-500 dark:text-gray-400">
+                    <Clock className="w-3 h-3" />
+                    <span>{formatTime(notification.timestamp)}</span>
+                  </div>
+                  {notification.category && (
+                    <span className="text-xs text-gray-600 dark:text-gray-400 bg-white/60 dark:bg-dark-700/60 px-2 py-1 rounded-full font-medium border border-gray-200/50 dark:border-dark-600/30">
+                      {getCategoryLabel(notification.category)}
+                    </span>
+                  )}
+                  {notification.type === 'critical' && (
+                    <span className="text-xs text-red-700 dark:text-red-300 bg-red-200/50 dark:bg-red-900/30 px-2 py-1 rounded-full font-bold animate-pulse">
+                      URGENT
+                    </span>
+                  )}
                 </div>
-                {notification.category && (
-                  <span className="text-xs text-gray-600 dark:text-gray-400 bg-white/60 dark:bg-dark-700/60 px-2 py-1 rounded-full font-medium border border-gray-200/50 dark:border-dark-600/30">
-                    {getCategoryLabel(notification.category)}
-                  </span>
-                )}
-                {notification.type === 'critical' && (
-                  <span className="text-xs text-red-700 dark:text-red-300 bg-red-200/50 dark:bg-red-900/30 px-2 py-1 rounded-full font-bold animate-pulse">
-                    URGENT
-                  </span>
+                
+                {/* Action Button */}
+                {actionButton && (
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => {
+                      actionButton.action();
+                      if (isUnread) onMarkAsRead(notification.id);
+                    }}
+                    className="text-xs font-medium text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 bg-primary-50/50 dark:bg-primary-900/20 hover:bg-primary-100/50 dark:hover:bg-primary-900/30 px-3 py-1.5 rounded-lg transition-all duration-200 flex items-center space-x-1.5 border border-primary-200/30 dark:border-primary-700/30 hover:border-primary-300/50 dark:hover:border-primary-600/50"
+                  >
+                    <actionButton.icon className="w-3 h-3" />
+                    <span>{actionButton.label}</span>
+                  </motion.button>
                 )}
               </div>
             </div>

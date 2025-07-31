@@ -68,6 +68,16 @@ function App() {
     setSidebarOpen(!sidebarOpen);
   };
 
+  // Handle navigation from notifications
+  const handleNotificationNavigate = (tab, itemId = null) => {
+    setActiveTab(tab);
+    // Could also handle itemId for deep linking in the future
+    if (itemId) {
+      console.log('Navigate to item:', itemId);
+      // Future: implement deep linking to specific items
+    }
+  };
+
   // Handle info panel close
   const handleInfoPanelClose = () => {
     setInfoPanelOpen(false);
@@ -230,6 +240,7 @@ function App() {
             onMenuClick={handleSidebarToggle}
             activeTab={activeTab}
             isMobile={isMobile}
+            onNavigate={handleNotificationNavigate}
           />
 
           {/* Main Content */}
