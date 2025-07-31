@@ -157,20 +157,20 @@ const Header = ({ onMenuClick, activeTab, isMobile }) => {
           whileHover={{ scale: 1.1, rotate: 5 }}
           whileTap={{ scale: 0.9 }}
           onClick={() => setNotificationCenterOpen(true)}
-          className="relative p-2 sm:p-3 rounded-xl bg-white/50 dark:bg-dark-800/50 hover:bg-white/70 dark:hover:bg-dark-700/70 transition-all duration-200 shadow-lg hover:shadow-xl group"
+          className="relative p-2 sm:p-3 rounded-xl bg-white/60 dark:bg-dark-800/60 hover:bg-white/80 dark:hover:bg-dark-700/80 transition-all duration-200 shadow-lg hover:shadow-xl group border border-white/30 dark:border-dark-600/30"
         >
           <Bell className="w-5 h-5 text-gray-600 dark:text-gray-300 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors" />
           {unreadCount > 0 && (
             <>
               <motion.span 
-                className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs rounded-full flex items-center justify-center font-bold shadow-lg"
+                className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs rounded-full flex items-center justify-center font-bold shadow-lg border-2 border-white dark:border-dark-800"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.3, type: "spring" }}
               >
                 {unreadCount > 9 ? '9+' : unreadCount}
               </motion.span>
-              <div className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-red-400 rounded-full animate-ping opacity-30"></div>
+              <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-400 rounded-full animate-ping opacity-30"></div>
             </>
           )}
         </motion.button>
