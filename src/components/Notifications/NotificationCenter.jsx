@@ -14,62 +14,99 @@ import {
 } from 'lucide-react';
 import NotificationItem from './NotificationItem';
 
-const NotificationCenter = ({ isOpen, onClose }) => {
+const NotificationCenter = ({ isOpen, onClose, onNavigate }) => {
   const [notifications, setNotifications] = useState([]);
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Mock notifications data
+  // Load notifications from localStorage or use mock data
   useEffect(() => {
-    const mockNotifications = [
-      {
-        id: '1',
-        type: 'critical',
-        title: 'Critical Stock Alert',
-        message: 'Battery pack inventory is critically low (5 units remaining). Immediate reorder required.',
-        category: 'inventory',
-        timestamp: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
-        isRead: false
-      },
-      {
-        id: '2',
-        type: 'warning',
-        title: 'AI Insight Available',
-        message: 'New demand forecast suggests 25% increase in motor requirements for next quarter.',
-        category: 'ai',
-        timestamp: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
-        isRead: false
-      },
-      {
-        id: '3',
-        type: 'info',
-        title: 'Production Schedule Updated',
-        message: 'Schedule updated for manufacturing line B. Review new timeline in dashboard.',
-        category: 'production',
-        timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-        isRead: true
-      },
-      {
-        id: '4',
-        type: 'success',
-        title: 'Supplier Delivery Confirmed',
-        message: 'Charging port components delivery confirmed for tomorrow 9:00 AM.',
-        category: 'production',
-        timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-        isRead: false
-      },
-      {
-        id: '5',
-        type: 'warning',
-        title: 'Cooling System Alert',
-        message: 'Cooling system components approaching minimum threshold (12 units).',
-        category: 'inventory',
-        timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
-        isRead: true
+    const loadNotifications = () => {
+      try {
+        const saved = localStorage.getItem('invenai-notifications');
+        if (saved) {
+          const parsedNotifications = JSON.parse(saved);
+          // Validate and set notifications
+          if (Array.isArray(parsedNotifications)) {
+            setNotifications(parsedNotifications);
+            return;
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to load notifications from localStorage:', error);
       }
-    ];
-    setNotifications(mockNotifications);
+      
+      // Fallback to mock notifications
+      const mockNotifications = [
+        {
+          id: '1',
+          type: 'critical',
+          title: 'Critical Stock Alert',
+          message: 'Battery pack inventory is critically low (5 units remaining). Immediate reorder required.',
+          category: 'inventory',
+          timestamp: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
+          isRead: false,
+          itemId: 'battery-pack-001', // For potential deep linking
+        },
+        {
+          id: '2',
+          type: 'warning',
+          title: 'AI Insight Available',
+          message: 'New demand forecast suggests 25% increase in motor requirements for next quarter.',
+          category: 'ai',
+          timestamp: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
+          isRead: false,
+          itemId: 'forecast-q2-2025',
+        },
+        {
+          id: '3',
+          type: 'info',
+          title: 'Production Schedule Updated',
+          message: 'Schedule updated for manufacturing line B. Review new timeline in dashboard.',
+          category: 'production',
+          timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+          isRead: true,
+          itemId: 'line-b-schedule',
+        },
+        {
+          id: '4',
+          type: 'success',
+          title: 'Supplier Delivery Confirmed',
+          message: 'Charging port components delivery confirmed for tomorrow 9:00 AM.',
+          category: 'production',
+          timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
+          isRead: false,
+          itemId: 'delivery-charging-ports',
+        },
+        {
+          id: '5',
+          type: 'warning',
+          title: 'Cooling System Alert',
+          message: 'Cooling system components approaching minimum threshold (12 units).',
+          category: 'inventory',
+          timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
+          isRead: true,
+          itemId: 'cooling-system-components',
+        }
+      ];
+      setNotifications(mockNotifications);
+      // Save to localStorage
+      localStorage.setItem('invenai-notifications', JSON.stringify(mockNotifications));
+    };
+    
+    loadNotifications();
   }, []);
+
+  // Save notifications to localStorage whenever they change
+  useEffect(() => {
+    if (notifications.length > 0) {
+      try {
+        localStorage.setItem('invenai-notifications', JSON.stringify(notifications));
+      } catch (error) {
+        console.warn('Failed to save notifications to localStorage:', error);
+      }
+    }
+  }, [notifications]);
 
   const filteredNotifications = notifications.filter(notification => {
     const matchesFilter = filter === 'all' || 
@@ -104,6 +141,13 @@ const NotificationCenter = ({ isOpen, onClose }) => {
     );
   };
 
+  const handleNavigate = (tab, itemId = null) => {
+    if (onNavigate) {
+      onNavigate(tab, itemId);
+      onClose(); // Close notification panel after navigation
+    }
+  };
+
   const handleClearAll = () => {
     if (window.confirm('Are you sure you want to delete all notifications?')) {
       setNotifications([]);
@@ -114,23 +158,25 @@ const NotificationCenter = ({ isOpen, onClose }) => {
 
   return (
     <>
-      {/* Overlay */}
+      {/* Overlay - Modified to not block header interactions */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40"
+        className="fixed inset-0 bg-black/30 backdrop-blur-sm z-notification-overlay"
+        style={{ 
+          top: '5rem' // Start below header to preserve header interactions
+        }}
         onClick={onClose}
       />
 
-      {/* Notification Panel - Standardized Design */}
+      {/* Notification Panel - Improved positioning and mobile responsiveness */}
       <motion.div
         initial={{ opacity: 0, x: 400, scale: 0.95 }}
         animate={{ opacity: 1, x: 0, scale: 1 }}
         exit={{ opacity: 0, x: 400, scale: 0.95 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="fixed right-4 top-4 bottom-4 w-full max-w-md modern-card flex flex-col z-50 shadow-2xl border-0"
-        style={{ maxHeight: 'calc(100vh - 2rem)' }}
+        className="fixed right-2 sm:right-4 w-full max-w-sm sm:max-w-md modern-card flex flex-col z-notification shadow-2xl border-0 notification-panel"
       >
         {/* Header - Consistent with app design */}
         <div className="p-6 border-b border-gray-200 dark:border-dark-700 bg-gradient-to-r from-primary-50 to-electric-50 dark:from-primary-900/20 dark:to-electric-900/20 rounded-t-2xl">
@@ -256,6 +302,7 @@ const NotificationCenter = ({ isOpen, onClose }) => {
                     notification={notification}
                     onMarkAsRead={handleMarkAsRead}
                     onDelete={handleDelete}
+                    onNavigate={handleNavigate}
                   />
                 </motion.div>
               ))
