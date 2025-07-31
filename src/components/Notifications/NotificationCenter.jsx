@@ -126,18 +126,18 @@ const NotificationCenter = ({ isOpen, onClose }) => {
         initial={{ opacity: 0, x: 300 }}
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: 300 }}
-        className="fixed right-0 top-0 h-full w-full max-w-sm sm:max-w-md bg-white dark:bg-dark-800 shadow-2xl z-notification flex flex-col border-l border-gray-200 dark:border-dark-700"
+        className="fixed right-0 top-0 h-full w-full max-w-sm sm:max-w-lg glass-card shadow-2xl z-notification flex flex-col border-l border-white/20 dark:border-dark-700/30"
         style={{ zIndex: 60 }}
       >
         {/* Header */}
-        <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-dark-700 bg-gradient-to-r from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20">
+        <div className="p-4 sm:p-6 border-b border-white/20 dark:border-dark-700/30 bg-gradient-to-r from-primary-50/80 to-secondary-50/80 dark:from-primary-900/30 dark:to-secondary-900/30 backdrop-blur-sm">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
               <div className="relative">
                 <Bell className="w-6 h-6 text-primary-600 dark:text-primary-400" />
                 {unreadCount > 0 && (
                   <motion.div 
-                    className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold"
+                    className="absolute -top-2 -right-2 w-5 h-5 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs rounded-full flex items-center justify-center font-bold shadow-lg"
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ type: "spring" }}
@@ -148,12 +148,14 @@ const NotificationCenter = ({ isOpen, onClose }) => {
               </div>
               <h2 className="text-xl font-bold text-gray-900 dark:text-white">Notifications</h2>
             </div>
-            <button
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
               onClick={onClose}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-dark-700 rounded-lg transition-colors"
+              className="p-2 hover:bg-white/20 dark:hover:bg-dark-700/50 rounded-xl transition-all duration-200"
             >
               <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-            </button>
+            </motion.button>
           </div>
 
           {/* Search */}
@@ -164,7 +166,7 @@ const NotificationCenter = ({ isOpen, onClose }) => {
               placeholder="Search notifications..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 border border-gray-300 dark:border-dark-600 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors bg-white dark:bg-dark-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 shadow-sm"
+              className="input-modern w-full pl-12 pr-4 py-3 shadow-lg"
             />
           </div>
 
@@ -183,10 +185,10 @@ const NotificationCenter = ({ isOpen, onClose }) => {
                 onClick={() => setFilter(key)}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={`px-4 py-2 text-xs font-medium rounded-full transition-colors shadow-sm ${
+                className={`px-4 py-2 text-xs font-medium rounded-full transition-all duration-200 shadow-sm ${
                   filter === key
-                    ? 'bg-primary-500 text-white shadow-md'
-                    : 'bg-gray-100 dark:bg-dark-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-dark-600'
+                    ? 'bg-gradient-to-r from-primary-500 to-secondary-500 text-white shadow-lg'
+                    : 'bg-white/50 dark:bg-dark-700/50 text-gray-600 dark:text-gray-300 hover:bg-white/70 dark:hover:bg-dark-600/70 backdrop-blur-sm border border-white/20 dark:border-dark-600/30'
                 }`}
               >
                 {label}
@@ -196,22 +198,26 @@ const NotificationCenter = ({ isOpen, onClose }) => {
 
           {/* Actions */}
           <div className="flex items-center justify-between">
-            <button
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={handleMarkAllAsRead}
-              className="flex items-center space-x-2 text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="flex items-center space-x-2 text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 px-3 py-2 rounded-lg hover:bg-primary-50/50 dark:hover:bg-primary-900/20"
               disabled={unreadCount === 0}
             >
               <CheckCircle className="w-4 h-4" />
               <span>Mark all read</span>
-            </button>
-            <button
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={handleClearAll}
-              className="flex items-center space-x-2 text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="flex items-center space-x-2 text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 px-3 py-2 rounded-lg hover:bg-red-50/50 dark:hover:bg-red-900/20"
               disabled={notifications.length === 0}
             >
               <Trash2 className="w-4 h-4" />
               <span>Clear all</span>
-            </button>
+            </motion.button>
           </div>
         </div>
 
@@ -247,15 +253,17 @@ const NotificationCenter = ({ isOpen, onClose }) => {
                   }
                 </p>
                 {(searchTerm || filter !== 'all') && (
-                  <button
+                  <motion.button
                     onClick={() => {
                       setSearchTerm('');
                       setFilter('all');
                     }}
-                    className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 text-sm font-medium bg-primary-50 dark:bg-primary-900/20 px-4 py-2 rounded-lg transition-colors"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 text-sm font-medium bg-primary-50/50 dark:bg-primary-900/30 px-4 py-2 rounded-lg transition-all duration-200 backdrop-blur-sm border border-primary-200/30 dark:border-primary-600/30"
                   >
                     Clear filters
-                  </button>
+                  </motion.button>
                 )}
               </motion.div>
             )}
@@ -264,7 +272,7 @@ const NotificationCenter = ({ isOpen, onClose }) => {
 
         {/* Footer Stats */}
         {notifications.length > 0 && (
-          <div className="p-4 border-t border-gray-200 dark:border-dark-700 bg-gray-50 dark:bg-dark-800/50">
+          <div className="p-4 border-t border-white/20 dark:border-dark-700/30 bg-gradient-to-r from-gray-50/80 to-primary-50/80 dark:from-dark-800/50 dark:to-primary-900/20 backdrop-blur-sm">
             <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
               <span>{filteredNotifications.length} of {notifications.length} notifications</span>
               <span className="flex items-center space-x-2">

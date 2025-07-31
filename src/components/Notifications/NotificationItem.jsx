@@ -78,15 +78,15 @@ const NotificationItem = ({ notification, onMarkAsRead, onDelete }) => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, x: -100 }}
       className={`
-        p-4 sm:p-5 rounded-xl border transition-all duration-200
+        p-4 sm:p-5 rounded-xl border transition-all duration-300
         ${styles.bg} ${styles.border}
-        ${isUnread ? 'shadow-md ring-1 ring-primary-200/50 dark:ring-primary-400/30' : 'shadow-sm'}
-        hover:shadow-lg hover:scale-[1.02]
+        ${isUnread ? 'shadow-lg ring-1 ring-primary-200/50 dark:ring-primary-400/30 backdrop-blur-sm' : 'shadow-md backdrop-blur-sm'}
+        hover:shadow-xl hover:scale-[1.02] hover:ring-2 hover:ring-primary-300/30 dark:hover:ring-primary-400/40
       `}
     >
       <div className="flex items-start space-x-3">
         {/* Icon */}
-        <div className={`flex-shrink-0 p-2 rounded-xl ${styles.icon} bg-white/70 dark:bg-dark-600/50 shadow-sm`}>
+        <div className={`flex-shrink-0 p-2 rounded-xl ${styles.icon} bg-white/80 dark:bg-dark-600/60 shadow-md backdrop-blur-sm border border-white/30 dark:border-dark-500/30`}>
           <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
         </div>
 
@@ -106,7 +106,7 @@ const NotificationItem = ({ notification, onMarkAsRead, onDelete }) => {
                   <span>{formatTime(notification.timestamp)}</span>
                 </div>
                 {notification.category && (
-                  <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-dark-700 px-2 py-1 rounded-full font-medium">
+                  <span className="text-xs text-gray-500 dark:text-gray-400 bg-white/50 dark:bg-dark-700/50 px-2 py-1 rounded-full font-medium backdrop-blur-sm border border-white/20 dark:border-dark-600/30">
                     {notification.category}
                   </span>
                 )}
@@ -120,7 +120,7 @@ const NotificationItem = ({ notification, onMarkAsRead, onDelete }) => {
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   onClick={() => onMarkAsRead(notification.id)}
-                  className="p-2 text-gray-400 dark:text-gray-500 hover:text-green-600 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg transition-colors"
+                  className="p-2 text-gray-400 dark:text-gray-500 hover:text-green-600 dark:hover:text-green-400 hover:bg-green-50/50 dark:hover:bg-green-900/30 rounded-lg transition-all duration-200 backdrop-blur-sm"
                   title="Mark as read"
                 >
                   <CheckCircle className="w-4 h-4" />
@@ -130,7 +130,7 @@ const NotificationItem = ({ notification, onMarkAsRead, onDelete }) => {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={() => onDelete(notification.id)}
-                className="p-2 text-gray-400 dark:text-gray-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                className="p-2 text-gray-400 dark:text-gray-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50/50 dark:hover:bg-red-900/30 rounded-lg transition-all duration-200 backdrop-blur-sm"
                 title="Delete notification"
               >
                 <X className="w-4 h-4" />
