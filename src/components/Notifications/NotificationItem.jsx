@@ -27,32 +27,32 @@ const NotificationItem = ({ notification, onMarkAsRead, onDelete }) => {
     switch (type) {
       case 'critical':
         return {
-          bg: 'bg-red-50',
-          border: 'border-red-200',
-          icon: 'text-red-600',
-          title: 'text-red-900'
+          bg: 'bg-red-50 dark:bg-red-900/20',
+          border: 'border-red-200 dark:border-red-800',
+          icon: 'text-red-600 dark:text-red-400',
+          title: 'text-red-900 dark:text-red-100'
         };
       case 'warning':
         return {
-          bg: 'bg-yellow-50',
-          border: 'border-yellow-200',
-          icon: 'text-yellow-600',
-          title: 'text-yellow-900'
+          bg: 'bg-yellow-50 dark:bg-yellow-900/20',
+          border: 'border-yellow-200 dark:border-yellow-800',
+          icon: 'text-yellow-600 dark:text-yellow-400',
+          title: 'text-yellow-900 dark:text-yellow-100'
         };
       case 'success':
         return {
-          bg: 'bg-green-50',
-          border: 'border-green-200',
-          icon: 'text-green-600',
-          title: 'text-green-900'
+          bg: 'bg-green-50 dark:bg-green-900/20',
+          border: 'border-green-200 dark:border-green-800',
+          icon: 'text-green-600 dark:text-green-400',
+          title: 'text-green-900 dark:text-green-100'
         };
       case 'info':
       default:
         return {
-          bg: 'bg-blue-50',
-          border: 'border-blue-200',
-          icon: 'text-blue-600',
-          title: 'text-blue-900'
+          bg: 'bg-blue-50 dark:bg-blue-900/20',
+          border: 'border-blue-200 dark:border-blue-800',
+          icon: 'text-blue-600 dark:text-blue-400',
+          title: 'text-blue-900 dark:text-blue-100'
         };
     }
   };
@@ -80,13 +80,13 @@ const NotificationItem = ({ notification, onMarkAsRead, onDelete }) => {
       className={`
         p-3 sm:p-4 rounded-lg border transition-all duration-200
         ${styles.bg} ${styles.border}
-        ${isUnread ? 'shadow-md ring-1 ring-primary-200/50' : 'shadow-sm'}
+        ${isUnread ? 'shadow-md ring-1 ring-primary-200/50 dark:ring-primary-800/50' : 'shadow-sm'}
         hover:shadow-lg hover:scale-[1.02]
       `}
     >
       <div className="flex items-start space-x-3">
         {/* Icon */}
-        <div className={`flex-shrink-0 p-1.5 rounded-lg ${styles.icon} bg-white/50`}>
+        <div className={`flex-shrink-0 p-1.5 rounded-lg ${styles.icon} bg-white/50 dark:bg-gray-800/50`}>
           <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
         </div>
 
@@ -97,16 +97,16 @@ const NotificationItem = ({ notification, onMarkAsRead, onDelete }) => {
               <p className={`text-sm font-medium ${styles.title} ${isUnread ? 'font-bold' : ''} line-clamp-2`}>
                 {notification.title || 'Notification'}
               </p>
-              <p className="text-sm text-gray-600 mt-1 line-clamp-3">
+              <p className="text-sm text-gray-600 dark:text-gray-300 mt-1 line-clamp-3">
                 {notification.message}
               </p>
               <div className="flex items-center flex-wrap gap-x-4 gap-y-1 mt-2">
-                <div className="flex items-center space-x-1 text-xs text-gray-500">
+                <div className="flex items-center space-x-1 text-xs text-gray-500 dark:text-gray-400">
                   <Clock className="w-3 h-3" />
                   <span>{formatTime(notification.timestamp)}</span>
                 </div>
                 {notification.category && (
-                  <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full font-medium">
+                  <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full font-medium">
                     {notification.category}
                   </span>
                 )}
@@ -120,7 +120,7 @@ const NotificationItem = ({ notification, onMarkAsRead, onDelete }) => {
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   onClick={() => onMarkAsRead(notification.id)}
-                  className="p-1.5 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-md transition-colors"
+                  className="p-1.5 text-gray-400 dark:text-gray-500 hover:text-green-600 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-md transition-colors"
                   title="Mark as read"
                 >
                   <CheckCircle className="w-4 h-4" />
@@ -130,7 +130,7 @@ const NotificationItem = ({ notification, onMarkAsRead, onDelete }) => {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={() => onDelete(notification.id)}
-                className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                className="p-1.5 text-gray-400 dark:text-gray-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors"
                 title="Delete notification"
               >
                 <X className="w-4 h-4" />

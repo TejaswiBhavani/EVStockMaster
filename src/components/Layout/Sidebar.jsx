@@ -180,7 +180,7 @@ const Sidebar = ({ isOpen, onClose, activeTab, setActiveTab, isMobile }) => {
           <div className="p-6 border-t border-gray-200/50">
             <div className="text-center space-y-1">
               <p className="text-sm font-semibold text-gray-600">InvenAI v2.1.0</p>
-              <p className="text-xs text-gray-500">© 2025 TATA Motors</p>
+              <p className="text-xs text-gray-500">invenAI version is base version</p>
               <div className="flex justify-center mt-3">
                 <div className="flex space-x-1">
                   <div className="w-2 h-2 bg-primary-400 rounded-full animate-pulse"></div>

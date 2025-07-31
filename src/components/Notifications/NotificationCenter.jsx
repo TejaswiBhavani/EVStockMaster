@@ -126,11 +126,11 @@ const NotificationCenter = ({ isOpen, onClose }) => {
         initial={{ opacity: 0, x: 300 }}
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: 300 }}
-        className="fixed right-0 top-0 h-full w-full max-w-sm sm:max-w-md bg-white shadow-2xl z-notification flex flex-col"
+        className="fixed right-0 top-0 h-full w-full max-w-sm sm:max-w-md bg-white dark:bg-gray-800 shadow-2xl z-notification flex flex-col"
         style={{ zIndex: 60 }}
       >
         {/* Header */}
-        <div className="p-4 sm:p-6 border-b border-gray-200 bg-gradient-to-r from-primary-50 to-secondary-50">
+        <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-primary-50 to-secondary-50 dark:from-gray-800 dark:to-gray-700">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
               <div className="relative">
@@ -146,25 +146,25 @@ const NotificationCenter = ({ isOpen, onClose }) => {
                   </motion.div>
                 )}
               </div>
-              <h2 className="text-xl font-bold text-gray-900">Notifications</h2>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Notifications</h2>
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
             >
-              <X className="w-5 h-5 text-gray-500" />
+              <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
             </button>
           </div>
 
           {/* Search */}
           <div className="relative mb-4">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
             <input
               type="text"
               placeholder="Search notifications..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors"
+              className="w-full pl-10 pr-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
             />
           </div>
 
@@ -186,7 +186,7 @@ const NotificationCenter = ({ isOpen, onClose }) => {
                 className={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors ${
                   filter === key
                     ? 'bg-primary-500 text-white shadow-md'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                 }`}
               >
                 {label}
@@ -198,7 +198,7 @@ const NotificationCenter = ({ isOpen, onClose }) => {
           <div className="flex items-center justify-between">
             <button
               onClick={handleMarkAllAsRead}
-              className="flex items-center space-x-1 text-sm text-primary-600 hover:text-primary-700 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center space-x-1 text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={unreadCount === 0}
             >
               <CheckCircle className="w-4 h-4" />
@@ -206,7 +206,7 @@ const NotificationCenter = ({ isOpen, onClose }) => {
             </button>
             <button
               onClick={handleClearAll}
-              className="flex items-center space-x-1 text-sm text-red-600 hover:text-red-700 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center space-x-1 text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={notifications.length === 0}
             >
               <Trash2 className="w-4 h-4" />
@@ -234,7 +234,7 @@ const NotificationCenter = ({ isOpen, onClose }) => {
                 className="text-center py-12"
               >
                 <Bell className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500 font-medium mb-2">
+                <p className="text-gray-500 dark:text-gray-400 font-medium mb-2">
                   {searchTerm || filter !== 'all' 
                     ? 'No notifications match your filters' 
                     : 'No notifications'
@@ -246,7 +246,7 @@ const NotificationCenter = ({ isOpen, onClose }) => {
                       setSearchTerm('');
                       setFilter('all');
                     }}
-                    className="text-primary-600 hover:text-primary-700 text-sm font-medium"
+                    className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 text-sm font-medium"
                   >
                     Clear filters
                   </button>
@@ -258,8 +258,8 @@ const NotificationCenter = ({ isOpen, onClose }) => {
 
         {/* Footer Stats */}
         {notifications.length > 0 && (
-          <div className="p-4 border-t border-gray-200 bg-gray-50">
-            <div className="flex items-center justify-between text-sm text-gray-600">
+          <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+            <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
               <span>{filteredNotifications.length} of {notifications.length} notifications</span>
               <span>{unreadCount} unread</span>
             </div>

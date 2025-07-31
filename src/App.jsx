@@ -201,11 +201,11 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 flex relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex relative overflow-hidden">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-background">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-primary-200/30 to-secondary-200/30 rounded-full blur-3xl animate-pulse-slow"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-electric-200/30 to-neon-200/30 rounded-full blur-3xl animate-pulse-slow" style={{animationDelay: '1s'}}></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-primary-200/30 to-secondary-200/30 rounded-full blur-3xl animate-pulse-slow dark:from-primary-800/20 dark:to-secondary-800/20"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-electric-200/30 to-neon-200/30 rounded-full blur-3xl animate-pulse-slow dark:from-electric-800/20 dark:to-neon-800/20" style={{animationDelay: '1s'}}></div>
       </div>
 
       {/* Sidebar */}

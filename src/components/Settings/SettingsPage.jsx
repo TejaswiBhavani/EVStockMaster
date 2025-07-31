@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../config/firebase';
+import { useTheme } from '../../contexts/ThemeContext';
 import { 
   User, 
   Mail, 
@@ -19,9 +20,9 @@ import {
 
 const SettingsPage = () => {
   const [user] = useAuthState(auth);
+  const { theme, changeTheme } = useTheme();
   const [settings, setSettings] = useState({
     // Application Preferences
-    theme: 'system',
     notifications: {
       lowStock: true,
       aiInsights: true,
@@ -165,19 +166,19 @@ const SettingsPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Theme Selection */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">Theme Selection</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Theme Selection</label>
             <div className="space-y-2">
-              {['light', 'dark', 'system'].map((theme) => (
-                <label key={theme} className="flex items-center space-x-3 cursor-pointer">
+              {['light', 'dark', 'system'].map((themeOption) => (
+                <label key={themeOption} className="flex items-center space-x-3 cursor-pointer">
                   <input
                     type="radio"
                     name="theme"
-                    value={theme}
-                    checked={settings.theme === theme}
-                    onChange={(e) => handleSettingChange(null, 'theme', e.target.value)}
+                    value={themeOption}
+                    checked={theme === themeOption}
+                    onChange={(e) => changeTheme(e.target.value)}
                     className="w-4 h-4 text-primary-600"
                   />
-                  <span className="text-sm text-gray-700 capitalize">{theme} Mode</span>
+                  <span className="text-sm text-gray-700 dark:text-gray-300 capitalize">{themeOption} Mode</span>
                 </label>
               ))}
             </div>
