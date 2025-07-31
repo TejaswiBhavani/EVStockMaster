@@ -1,5 +1,5 @@
 // Test setup file for Vitest
-import { expect, afterEach } from 'vitest'
+import { expect, afterEach, vi } from 'vitest'
 import { cleanup } from '@testing-library/react'
 import * as matchers from '@testing-library/jest-dom/matchers'
 
@@ -17,7 +17,12 @@ const mockFirebase = {
     currentUser: null,
     signInWithPopup: vi.fn(),
     signOut: vi.fn(),
-    onAuthStateChanged: vi.fn(),
+    onAuthStateChanged: vi.fn((callback) => {
+      // Call callback immediately with null user
+      if (callback) callback(null)
+      // Return unsubscribe function
+      return vi.fn()
+    }),
   },
   db: {
     collection: vi.fn(),
@@ -30,6 +35,12 @@ vi.mock('../config/firebase', () => ({
   auth: mockFirebase.auth,
   db: mockFirebase.db,
   googleProvider: {},
+}))
+
+// Mock react-firebase-hooks to prevent listener errors
+vi.mock('react-firebase-hooks/auth', () => ({
+  useAuthState: vi.fn(() => [null, false, null]),
+  useSignInWithPopup: vi.fn(() => [vi.fn(), null, false, null]),
 }))
 
 // Mock Three.js modules to avoid WebGL errors in tests
@@ -48,7 +59,7 @@ vi.mock('three', () => ({
 
 // Mock @react-three/fiber to avoid canvas errors
 vi.mock('@react-three/fiber', () => ({
-  Canvas: ({ children, ...props }) => <div data-testid="three-canvas" {...props}>{children}</div>,
+  Canvas: vi.fn().mockImplementation(({ children }) => children),
   useFrame: vi.fn(),
   useThree: vi.fn(() => ({
     camera: {},
@@ -59,9 +70,9 @@ vi.mock('@react-three/fiber', () => ({
 
 // Mock @react-three/drei components
 vi.mock('@react-three/drei', () => ({
-  OrbitControls: () => <div data-testid="orbit-controls" />,
-  Environment: () => <div data-testid="environment" />,
-  ContactShadows: () => <div data-testid="contact-shadows" />,
+  OrbitControls: vi.fn(),
+  Environment: vi.fn(),
+  ContactShadows: vi.fn(),
   useGLTF: vi.fn(() => ({
     scene: { clone: vi.fn() },
     nodes: {},

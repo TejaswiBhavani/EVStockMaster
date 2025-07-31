@@ -1,18 +1,23 @@
-import { describe, it, expect } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { describe, it, expect, beforeEach } from 'vitest'
+import { render } from '@testing-library/react'
 import App from '../App'
+
+// Add a root element to the document for testing
+beforeEach(() => {
+  const root = document.createElement('div')
+  root.id = 'root'
+  document.body.appendChild(root)
+})
 
 describe('App Component', () => {
   it('renders without crashing', () => {
-    render(<App />)
-    expect(document.body).toBeTruthy()
+    const { container } = render(<App />)
+    expect(container).toBeTruthy()
   })
 
   it('renders the main application container', () => {
-    render(<App />)
-    // Check if the app container exists
-    const appElement = document.querySelector('#root') || document.body
-    expect(appElement).toBeTruthy()
+    const { container } = render(<App />)
+    expect(container.firstChild).toBeTruthy()
   })
 })
 

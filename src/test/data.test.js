@@ -1,42 +1,42 @@
 import { describe, it, expect } from 'vitest'
-import { inventoryData } from '../../data/mockData'
+import { evParts } from '../data/mockData'
 
 describe('Mock Data', () => {
-  it('should have inventory data available', () => {
-    expect(inventoryData).toBeDefined()
-    expect(Array.isArray(inventoryData)).toBe(true)
+  it('should have EV parts data available', () => {
+    expect(evParts).toBeDefined()
+    expect(Array.isArray(evParts)).toBe(true)
   })
 
-  it('should have properly structured inventory items', () => {
-    if (inventoryData.length > 0) {
-      const item = inventoryData[0]
+  it('should have properly structured EV parts', () => {
+    if (evParts.length > 0) {
+      const item = evParts[0]
       expect(item).toHaveProperty('id')
       expect(item).toHaveProperty('name')
-      expect(item).toHaveProperty('stock')
-      expect(item).toHaveProperty('minStock')
+      expect(item).toHaveProperty('currentStock')
+      expect(item).toHaveProperty('minimumStock')
     }
   })
 
-  it('should have at least some inventory items', () => {
-    expect(inventoryData.length).toBeGreaterThan(0)
+  it('should have at least some EV parts', () => {
+    expect(evParts.length).toBeGreaterThan(0)
   })
 })
 
 describe('Data Validation', () => {
   it('should have valid stock numbers', () => {
-    inventoryData.forEach(item => {
-      if (item.stock !== undefined) {
-        expect(typeof item.stock).toBe('number')
-        expect(item.stock).toBeGreaterThanOrEqual(0)
+    evParts.forEach(item => {
+      if (item.currentStock !== undefined) {
+        expect(typeof item.currentStock).toBe('number')
+        expect(item.currentStock).toBeGreaterThanOrEqual(0)
       }
     })
   })
 
   it('should have valid minimum stock levels', () => {
-    inventoryData.forEach(item => {
-      if (item.minStock !== undefined) {
-        expect(typeof item.minStock).toBe('number')
-        expect(item.minStock).toBeGreaterThanOrEqual(0)
+    evParts.forEach(item => {
+      if (item.minimumStock !== undefined) {
+        expect(typeof item.minimumStock).toBe('number')
+        expect(item.minimumStock).toBeGreaterThanOrEqual(0)
       }
     })
   })
