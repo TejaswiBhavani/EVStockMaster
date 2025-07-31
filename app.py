@@ -14,7 +14,7 @@ from modules.analytics import calculate_part_statistics, generate_leaderboard
 
 # Configure Streamlit page
 st.set_page_config(
-    page_title="GenAI Smart Inventory Optimizer",
+    page_title="EVStockMaster - Smart Inventory Optimizer",
     page_icon="🚗",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -206,7 +206,7 @@ def render_login_modal():
         <div class="professional-modal">
             <div class="modal-header">
                 <h1 class="modal-title">Welcome Back</h1>
-                <p class="modal-subtitle">Sign in to your InvenAI account</p>
+                <p class="modal-subtitle">Sign in to your EVStockMaster account</p>
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -345,7 +345,7 @@ def render_signup_modal():
         <div class="signup-backdrop"></div>
         <div class="signup-modal">
             <div class="signup-header">
-                <h1 class="signup-title">Join InvenAI</h1>
+                <h1 class="signup-title">Join EVStockMaster</h1>
                 <p class="signup-subtitle">Create your account to get started</p>
             </div>
         </div>
@@ -552,7 +552,7 @@ def render_header():
                 <line x1="18" y1="42" x2="25" y2="35" stroke="#ffffff" stroke-width="1" opacity="0.6"/>
                 <line x1="42" y1="42" x2="35" y2="35" stroke="#ffffff" stroke-width="1" opacity="0.6"/>
             </svg>
-            <div class="logo-text">InvenAI</div>
+            <div class="logo-text">EVStockMaster</div>
         </div>
         """
         st.markdown(logo_html, unsafe_allow_html=True)
@@ -1049,7 +1049,7 @@ def main():
     if not st.session_state.user_logged_in:
         st.markdown("""
         <div class="welcome-gradient">
-            <h3 class="welcome-title">Welcome to InvenAI Smart Inventory Optimizer</h3>
+            <h3 class="welcome-title">Welcome to EVStockMaster Smart Inventory Optimizer</h3>
             <p class="welcome-text">Sign in to unlock personalized features and advanced analytics</p>
         </div>
         """, unsafe_allow_html=True)
