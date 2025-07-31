@@ -78,35 +78,35 @@ const NotificationItem = ({ notification, onMarkAsRead, onDelete }) => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, x: -100 }}
       className={`
-        p-4 rounded-lg border transition-all duration-200
+        p-3 sm:p-4 rounded-lg border transition-all duration-200
         ${styles.bg} ${styles.border}
-        ${isUnread ? 'shadow-md' : 'shadow-sm'}
-        hover:shadow-lg
+        ${isUnread ? 'shadow-md ring-1 ring-primary-200/50' : 'shadow-sm'}
+        hover:shadow-lg hover:scale-[1.02]
       `}
     >
       <div className="flex items-start space-x-3">
         {/* Icon */}
-        <div className={`flex-shrink-0 p-1 ${styles.icon}`}>
-          <Icon className="w-5 h-5" />
+        <div className={`flex-shrink-0 p-1.5 rounded-lg ${styles.icon} bg-white/50`}>
+          <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
         </div>
 
         {/* Content */}
         <div className="flex-1 min-w-0">
-          <div className="flex items-start justify-between">
-            <div className="flex-1">
-              <p className={`text-sm font-medium ${styles.title} ${isUnread ? 'font-bold' : ''}`}>
+          <div className="flex items-start justify-between gap-2">
+            <div className="flex-1 min-w-0">
+              <p className={`text-sm font-medium ${styles.title} ${isUnread ? 'font-bold' : ''} line-clamp-2`}>
                 {notification.title || 'Notification'}
               </p>
-              <p className="text-sm text-gray-600 mt-1">
+              <p className="text-sm text-gray-600 mt-1 line-clamp-3">
                 {notification.message}
               </p>
-              <div className="flex items-center space-x-4 mt-2">
+              <div className="flex items-center flex-wrap gap-x-4 gap-y-1 mt-2">
                 <div className="flex items-center space-x-1 text-xs text-gray-500">
                   <Clock className="w-3 h-3" />
                   <span>{formatTime(notification.timestamp)}</span>
                 </div>
                 {notification.category && (
-                  <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                  <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full font-medium">
                     {notification.category}
                   </span>
                 )}
@@ -114,30 +114,34 @@ const NotificationItem = ({ notification, onMarkAsRead, onDelete }) => {
             </div>
 
             {/* Actions */}
-            <div className="flex items-center space-x-2 ml-4">
+            <div className="flex items-center space-x-1 flex-shrink-0">
               {isUnread && (
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
                   onClick={() => onMarkAsRead(notification.id)}
-                  className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
+                  className="p-1.5 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-md transition-colors"
                   title="Mark as read"
                 >
                   <CheckCircle className="w-4 h-4" />
-                </button>
+                </motion.button>
               )}
-              <button
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
                 onClick={() => onDelete(notification.id)}
-                className="p-1 text-gray-400 hover:text-red-600 transition-colors"
+                className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
                 title="Delete notification"
               >
                 <X className="w-4 h-4" />
-              </button>
+              </motion.button>
             </div>
           </div>
         </div>
 
         {/* Unread indicator */}
         {isUnread && (
-          <div className="flex-shrink-0 w-2 h-2 bg-primary-500 rounded-full mt-2"></div>
+          <div className="flex-shrink-0 w-2 h-2 bg-primary-500 rounded-full mt-2 animate-pulse"></div>
         )}
       </div>
     </motion.div>
