@@ -11,9 +11,40 @@ import ChassisSystem from './components/ChassisSystem';
 import BrakingSystem from './components/BrakingSystem';
 import { advancedMaterials } from './materials/AdvancedMaterials';
 
+// Import interactive controls and features
+import { 
+  useModelInteraction, 
+  ExplodedGroupWrapper, 
+  CrossSectionPlane,
+  useCameraControls,
+  useAnimationSequence,
+  AnimationSequences,
+  PerformanceOptimizer
+} from './controls/InteractiveControls';
+import ModelControlPanel from './controls/ModelControlPanel';
+import { 
+  useInventoryVisualization,
+  InventoryStatusIndicator,
+  SupplyChainVisualization,
+  AssemblySequenceVisualization,
+  QualityMetricsVisualization,
+  CostAnalysisVisualization
+} from './integration/InventoryIntegration';
+
 const ModernEVModel = ({ onPartClick, selectedPart }) => {
   const groupRef = useRef();
   const wheelRefs = useRef([]);
+  const cameraRef = useRef();
+  const controlsRef = useRef();
+
+  // Interactive controls integration
+  const modelControls = useModelInteraction();
+  const { animateToPreset } = useCameraControls(cameraRef, controlsRef);
+  const animationSequence = useAnimationSequence();
+  const performanceOptimizer = PerformanceOptimizer();
+  
+  // Inventory integration
+  const inventoryData = useInventoryVisualization(selectedPart);
 
   useFrame((state) => {
     if (groupRef.current) {
@@ -102,8 +133,34 @@ const ModernEVModel = ({ onPartClick, selectedPart }) => {
     <Float speed={1.5} rotationIntensity={0.1} floatIntensity={0.3}>
       <group ref={groupRef} scale={[1.2, 1.2, 1.2]} position={[0, -0.8, 0]}>
         
+        {/* Cross-section plane for cross-section view */}
+        {modelControls.viewMode === 'cross-section' && (
+          <CrossSectionPlane 
+            plane={modelControls.crossSectionPlane} 
+            axis="x" 
+          />
+        )}
+        
+        {/* Supply chain visualization */}
+        <SupplyChainVisualization 
+          selectedPart={selectedPart}
+          showFlow={selectedPart !== null}
+        />
+        
+        {/* Assembly sequence visualization */}
+        <AssemblySequenceVisualization 
+          step={animationSequence.currentStep}
+          totalSteps={6}
+        />
+        
         {/* Main Car Body - More realistic EV sedan shape with smooth curves */}
-        <group onClick={() => handlePartClick('body')}>
+        <ExplodedGroupWrapper 
+          explodeDirection={[0, 1, 0]} 
+          explodeDistance={1.5}
+          explodeFactor={modelControls.explodeFactor}
+          systemType="body"
+        >
+          <group onClick={() => handlePartClick('body')}>
           {/* Main chassis - lower and more streamlined */}
           <RoundedBox
             position={[0, -0.1, 0]}
@@ -212,13 +269,69 @@ const ModernEVModel = ({ onPartClick, selectedPart }) => {
             smoothness={4}
             material={bodyMaterial}
           />
+          
+          {/* Inventory status indicators for body components */}
+          <InventoryStatusIndicator 
+            componentId="body-panel-front"
+            position={[2.0, 0.1, 0]}
+            visible={selectedPart === 'body'}
+          />
+          <InventoryStatusIndicator 
+            componentId="windshield-glass"
+            position={[1.0, 0.8, 0]}
+            visible={selectedPart === 'body'}
+          />
+          <InventoryStatusIndicator 
+            componentId="led-headlight"
+            position={[2.2, 0.15, 1.0]}
+            visible={selectedPart === 'body'}
+          />
         </group>
+        </ExplodedGroupWrapper>
 
         {/* Enhanced Battery System - Comprehensive with individual cells and BMS */}
-        <BatterySystem selectedPart={selectedPart} onPartClick={handlePartClick} />
+        <ExplodedGroupWrapper 
+          explodeDirection={[0, -1, 0]} 
+          explodeDistance={2.0}
+          explodeFactor={modelControls.explodeFactor}
+          systemType="battery"
+        >
+          <BatterySystem selectedPart={selectedPart} onPartClick={handlePartClick} />
+          
+          {/* Inventory indicators for battery components */}
+          <InventoryStatusIndicator 
+            componentId="battery-pack-main"
+            position={[0, -0.8, 0]}
+            visible={selectedPart === 'battery'}
+          />
+          <InventoryStatusIndicator 
+            componentId="bms-controller"
+            position={[0.5, -0.8, 0]}
+            visible={selectedPart === 'battery'}
+          />
+        </ExplodedGroupWrapper>
 
         {/* Advanced Motor System - Detailed dual motor setup with stator, rotor, magnets */}
-        <MotorSystem selectedPart={selectedPart} onPartClick={handlePartClick} />
+        <ExplodedGroupWrapper 
+          explodeDirection={[0, 0.5, 0]} 
+          explodeDistance={1.5}
+          explodeFactor={modelControls.explodeFactor}
+          systemType="motor"
+        >
+          <MotorSystem selectedPart={selectedPart} onPartClick={handlePartClick} />
+          
+          {/* Inventory indicators for motor components */}
+          <InventoryStatusIndicator 
+            componentId="motor-front"
+            position={[1.8, -0.2, 0]}
+            visible={selectedPart === 'motor'}
+          />
+          <InventoryStatusIndicator 
+            componentId="motor-rear"
+            position={[-1.8, -0.2, 0]}
+            visible={selectedPart === 'motor'}
+          />
+        </ExplodedGroupWrapper>
 
         {/* Advanced Charging Port */}
         <group onClick={() => handlePartClick('charging-port')}>
@@ -297,7 +410,26 @@ const ModernEVModel = ({ onPartClick, selectedPart }) => {
         </group>
 
         {/* Comprehensive Chassis & Suspension System */}
-        <ChassisSystem selectedPart={selectedPart} onPartClick={handlePartClick} />
+        <ExplodedGroupWrapper 
+          explodeDirection={[0, -0.5, 0]} 
+          explodeDistance={1.0}
+          explodeFactor={modelControls.explodeFactor}
+          systemType="chassis"
+        >
+          <ChassisSystem selectedPart={selectedPart} onPartClick={handlePartClick} />
+          
+          {/* Inventory indicators for chassis components */}
+          <InventoryStatusIndicator 
+            componentId="chassis-frame"
+            position={[0, -0.5, 0]}
+            visible={selectedPart === 'chassis'}
+          />
+          <InventoryStatusIndicator 
+            componentId="suspension-strut"
+            position={[1.6, -1.0, 1.0]}
+            visible={selectedPart === 'suspension'}
+          />
+        </ExplodedGroupWrapper>
 
         {/* Enhanced Wheels with realistic rims and better proportions */}
         {[[-1.7, -1.25, 1.15], [1.7, -1.25, 1.15], [-1.7, -1.25, -1.15], [1.7, -1.25, -1.15]].map((position, index) => (
@@ -723,6 +855,44 @@ const ModernEVModel = ({ onPartClick, selectedPart }) => {
 };
 
 const EVModel = ({ onPartSelect, selectedPart }) => {
+  const cameraRef = useRef();
+  const controlsRef = useRef();
+  
+  // Interactive controls
+  const modelControls = useModelInteraction();
+  const { animateToPreset } = useCameraControls(cameraRef, controlsRef);
+  const animationSequence = useAnimationSequence();
+  
+  // Handle control panel actions
+  const handleViewModeChange = (mode) => {
+    console.log('View mode changed to:', mode);
+  };
+
+  const handleCameraPreset = (preset) => {
+    animateToPreset(preset);
+  };
+
+  const handleAnimationControl = (type) => {
+    if (type === 'assembly') {
+      animationSequence.playSequence(AnimationSequences.assemblySequence, (step) => {
+        console.log('Assembly step:', step);
+      });
+    } else if (type === 'disassembly') {
+      animationSequence.playSequence(AnimationSequences.disassemblySequence, (step) => {
+        console.log('Disassembly step:', step);
+      });
+    }
+  };
+
+  const handleExport = (type) => {
+    if (type === 'screenshot') {
+      // TODO: Implement screenshot functionality
+      console.log('Taking screenshot...');
+    } else if (type === 'share') {
+      // TODO: Implement share functionality
+      console.log('Sharing model...');
+    }
+  };
   // Helper function for part descriptions
   const getPartLabel = (partId) => {
     if (!partId) return "Interactive EV Model - Click any part to explore";
@@ -776,6 +946,7 @@ const EVModel = ({ onPartSelect, selectedPart }) => {
       
       {/* 3D Scene - Enhanced Setup */}
       <Canvas 
+        ref={cameraRef}
         camera={{ position: [8, 6, 8], fov: 50 }}
         gl={{ 
           antialias: true, 
@@ -799,6 +970,8 @@ const EVModel = ({ onPartSelect, selectedPart }) => {
           console.log("✅ 3D Canvas initialized successfully");
           // Setup advanced environment mapping for realistic reflections
           advancedMaterials.setupEnvironmentMapping(state.scene, state.gl);
+          // Store camera reference
+          cameraRef.current = state.camera;
         }}
         onError={(error) => {
           console.error("❌ Canvas error:", error);
@@ -864,6 +1037,7 @@ const EVModel = ({ onPartSelect, selectedPart }) => {
 
         {/* Enhanced Orbit Controls */}
         <OrbitControls
+          ref={controlsRef}
           enablePan={true}
           enableZoom={true}
           enableRotate={true}
@@ -877,6 +1051,17 @@ const EVModel = ({ onPartSelect, selectedPart }) => {
           enableDamping={true}
         />
       </Canvas>
+
+      {/* Interactive Control Panel - Optional for enhanced interactions */}
+      {process.env.NODE_ENV !== 'test' && (
+        <ModelControlPanel
+          controls={modelControls}
+          onViewModeChange={handleViewModeChange}
+          onCameraPreset={handleCameraPreset}
+          onAnimationControl={handleAnimationControl}
+          onExport={handleExport}
+        />
+      )}
 
       {/* UI Overlay - Enhanced and Responsive */}
       <div className="absolute top-4 left-4 right-4 flex justify-between items-start pointer-events-none">
@@ -941,6 +1126,73 @@ const EVModel = ({ onPartSelect, selectedPart }) => {
 
       {/* Selected Part Information Panel */}
       {selectedPart && (
+        <motion.div 
+          className="absolute top-20 right-4 bg-white/95 backdrop-blur-md rounded-2xl p-6 shadow-xl border border-white/20 pointer-events-auto max-w-md"
+          initial={{ opacity: 0, scale: 0.9, x: 20 }}
+          animate={{ opacity: 1, scale: 1, x: 0 }}
+          exit={{ opacity: 0, scale: 0.9, x: 20 }}
+        >
+          <div className="flex items-start justify-between mb-4">
+            <div>
+              <h4 className="text-lg font-bold text-gray-900 capitalize">
+                {selectedPart.replace('-', ' ')}
+              </h4>
+              <p className="text-sm text-gray-600 mt-1">
+                {getPartLabel(selectedPart)}
+              </p>
+            </div>
+            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+              <span className="text-white text-sm font-bold">!</span>
+            </div>
+          </div>
+          
+          {/* Inventory Information */}
+          <div className="space-y-3">
+            <div className="flex justify-between py-2 border-b border-gray-100">
+              <span className="text-sm text-gray-600">Status</span>
+              <span className="text-sm font-medium text-green-600">Operational</span>
+            </div>
+            <div className="flex justify-between py-2 border-b border-gray-100">
+              <span className="text-sm text-gray-600">Efficiency</span>
+              <span className="text-sm font-medium text-blue-600">98.5%</span>
+            </div>
+            <div className="flex justify-between py-2 border-b border-gray-100">
+              <span className="text-sm text-gray-600">Stock Level</span>
+              <span className="text-sm font-medium text-green-600">In Stock</span>
+            </div>
+            <div className="flex justify-between py-2">
+              <span className="text-sm text-gray-600">Last Maintenance</span>
+              <span className="text-sm font-medium text-gray-700">2 days ago</span>
+            </div>
+          </div>
+          
+          {/* Component Details */}
+          <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+            <h5 className="text-sm font-semibold text-gray-800 mb-2">Component Details</h5>
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <div>
+                <span className="text-gray-500">ID:</span>
+                <span className="ml-1 font-mono">EV-{selectedPart.toUpperCase()}-001</span>
+              </div>
+              <div>
+                <span className="text-gray-500">Quality:</span>
+                <span className="ml-1 text-green-600 font-medium">Grade A</span>
+              </div>
+              <div>
+                <span className="text-gray-500">Supplier:</span>
+                <span className="ml-1">TechCorp Ltd</span>
+              </div>
+              <div>
+                <span className="text-gray-500">Cost:</span>
+                <span className="ml-1 font-medium">$2,450</span>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Original Selected Part Information Panel - Keep for compatibility */}
+      {false && selectedPart && (
         <motion.div 
           className="absolute top-20 right-4 bg-white/95 backdrop-blur-md rounded-2xl p-6 shadow-xl border border-white/20 pointer-events-auto max-w-md"
           initial={{ opacity: 0, scale: 0.9, x: 20 }}
