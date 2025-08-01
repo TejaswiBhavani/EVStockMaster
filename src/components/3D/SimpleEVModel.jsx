@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Box, Sphere, Cylinder } from '@react-three/drei';
+import { OrbitControls, Box, RoundedBox, Sphere, Cylinder, Torus } from '@react-three/drei';
 import { motion } from 'framer-motion';
 import * as THREE from 'three';
 
@@ -21,36 +21,57 @@ const SimpleCar = ({ onPartClick, selectedPart }) => {
 
   return (
     <group ref={groupRef} scale={[1, 1, 1]} position={[0, 0, 0]}>
-      {/* Car Body */}
-      <Box
+      {/* Car Body - Modern EV design with smooth curves */}
+      <RoundedBox
         position={[0, 0, 0]}
-        scale={[3, 1, 1.5]}
+        args={[2.8, 0.8, 1.4]}
+        radius={0.1}
+        smoothness={8}
         onClick={() => handlePartClick('body')}
       >
         <meshStandardMaterial 
           color={selectedPart === 'body' ? '#ff6b6b' : '#4facfe'} 
-          metalness={0.5}
+          metalness={0.6}
           roughness={0.2}
         />
-      </Box>
+      </RoundedBox>
 
-      {/* Car Roof */}
-      <Box
-        position={[0, 0.7, 0]}
-        scale={[2, 0.3, 1.3]}
+      {/* Car Roof - Sleeker profile */}
+      <RoundedBox
+        position={[0, 0.55, 0]}
+        args={[1.8, 0.2, 1.2]}
+        radius={0.08}
+        smoothness={6}
         onClick={() => handlePartClick('body')}
       >
         <meshStandardMaterial 
           color={selectedPart === 'body' ? '#ff6b6b' : '#4facfe'} 
-          metalness={0.5}
+          metalness={0.6}
           roughness={0.2}
         />
-      </Box>
+      </RoundedBox>
 
-      {/* Battery Pack */}
-      <Box
-        position={[0, -0.8, 0]}
-        scale={[2.8, 0.3, 1.3]}
+      {/* Hood section */}
+      <RoundedBox
+        position={[1.0, 0.05, 0]}
+        args={[0.8, 0.15, 1.3]}
+        radius={0.06}
+        smoothness={6}
+        onClick={() => handlePartClick('body')}
+      >
+        <meshStandardMaterial 
+          color={selectedPart === 'body' ? '#ff6b6b' : '#4facfe'} 
+          metalness={0.6}
+          roughness={0.2}
+        />
+      </RoundedBox>
+
+      {/* Battery Pack - Realistic flat design */}
+      <RoundedBox
+        position={[0, -0.6, 0]}
+        args={[2.5, 0.2, 1.2]}
+        radius={0.04}
+        smoothness={6}
         onClick={() => handlePartClick('battery')}
       >
         <meshStandardMaterial 
@@ -60,12 +81,12 @@ const SimpleCar = ({ onPartClick, selectedPart }) => {
           emissive={selectedPart === 'battery' ? '#ff9f43' : '#004d5c'}
           emissiveIntensity={selectedPart === 'battery' ? 0.3 : 0.1}
         />
-      </Box>
+      </RoundedBox>
 
-      {/* Motors */}
+      {/* Electric Motors - Front and Rear */}
       <Cylinder
-        position={[1, -0.3, 0]}
-        args={[0.3, 0.3, 0.5, 16]}
+        position={[0.8, -0.25, 0]}
+        args={[0.25, 0.25, 0.4, 12]}
         onClick={() => handlePartClick('motor')}
       >
         <meshStandardMaterial 
@@ -76,8 +97,8 @@ const SimpleCar = ({ onPartClick, selectedPart }) => {
       </Cylinder>
 
       <Cylinder
-        position={[-1, -0.3, 0]}
-        args={[0.3, 0.3, 0.5, 16]}
+        position={[-0.8, -0.25, 0]}
+        args={[0.25, 0.25, 0.4, 12]}
         onClick={() => handlePartClick('motor')}
       >
         <meshStandardMaterial 
@@ -87,45 +108,99 @@ const SimpleCar = ({ onPartClick, selectedPart }) => {
         />
       </Cylinder>
 
-      {/* Wheels */}
-      {[[-1.2, -0.8, 0.8], [1.2, -0.8, 0.8], [-1.2, -0.8, -0.8], [1.2, -0.8, -0.8]].map((position, index) => (
-        <Cylinder
-          key={index}
-          position={position}
-          args={[0.4, 0.4, 0.3, 16]}
-          rotation={[Math.PI / 2, 0, 0]}
-        >
-          <meshStandardMaterial color="#2c3e50" metalness={0.3} roughness={0.7} />
-        </Cylinder>
+      {/* Wheels - More realistic with rims */}
+      {[[-1.0, -0.65, 0.7], [1.0, -0.65, 0.7], [-1.0, -0.65, -0.7], [1.0, -0.65, -0.7]].map((position, index) => (
+        <group key={`wheel-${index}`} position={position}>
+          {/* Tire */}
+          <Cylinder
+            args={[0.35, 0.35, 0.25, 16]}
+            rotation={[Math.PI / 2, 0, 0]}
+          >
+            <meshStandardMaterial color="#2c3e50" metalness={0.3} roughness={0.7} />
+          </Cylinder>
+          
+          {/* Rim */}
+          <Cylinder
+            args={[0.25, 0.25, 0.27, 12]}
+            rotation={[Math.PI / 2, 0, 0]}
+          >
+            <meshStandardMaterial color="#9ca3af" metalness={0.8} roughness={0.2} />
+          </Cylinder>
+          
+          {/* Center cap */}
+          <Cylinder
+            args={[0.08, 0.08, 0.28, 8]}
+            rotation={[Math.PI / 2, 0, 0]}
+          >
+            <meshStandardMaterial 
+              color="#00f2fe" 
+              metalness={0.9} 
+              emissive="#004d5c"
+              emissiveIntensity={0.2}
+            />
+          </Cylinder>
+        </group>
       ))}
 
-      {/* Headlights */}
-      <Sphere
-        position={[1.5, 0, 0.4]}
-        args={[0.1, 16, 16]}
+      {/* Modern LED Headlights */}
+      <RoundedBox
+        position={[1.4, 0.1, 0.35]}
+        args={[0.08, 0.08, 0.06]}
+        radius={0.02}
       >
         <meshStandardMaterial 
           color="#ffffff" 
           emissive="#60a5fa" 
-          emissiveIntensity={0.5}
+          emissiveIntensity={0.6}
+          metalness={0.1}
+          roughness={0.1}
         />
-      </Sphere>
+      </RoundedBox>
 
-      <Sphere
-        position={[1.5, 0, -0.4]}
-        args={[0.1, 16, 16]}
+      <RoundedBox
+        position={[1.4, 0.1, -0.35]}
+        args={[0.08, 0.08, 0.06]}
+        radius={0.02}
       >
         <meshStandardMaterial 
           color="#ffffff" 
           emissive="#60a5fa" 
-          emissiveIntensity={0.5}
+          emissiveIntensity={0.6}
+          metalness={0.1}
+          roughness={0.1}
         />
-      </Sphere>
+      </RoundedBox>
 
-      {/* Charging Port */}
-      <Box
-        position={[-1.5, 0.2, 0.7]}
-        scale={[0.1, 0.2, 0.2]}
+      {/* Sleek Taillights */}
+      <RoundedBox
+        position={[-1.4, 0.1, 0.35]}
+        args={[0.06, 0.06, 0.04]}
+        radius={0.02}
+      >
+        <meshStandardMaterial 
+          color="#dc2626" 
+          emissive="#ef4444" 
+          emissiveIntensity={0.7}
+        />
+      </RoundedBox>
+
+      <RoundedBox
+        position={[-1.4, 0.1, -0.35]}
+        args={[0.06, 0.06, 0.04]}
+        radius={0.02}
+      >
+        <meshStandardMaterial 
+          color="#dc2626" 
+          emissive="#ef4444" 
+          emissiveIntensity={0.7}
+        />
+      </RoundedBox>
+
+      {/* Charging Port - Modern design */}
+      <RoundedBox
+        position={[-1.2, 0.15, 0.6]}
+        args={[0.08, 0.15, 0.15]}
+        radius={0.02}
         onClick={() => handlePartClick('charging-port')}
       >
         <meshStandardMaterial 
@@ -135,7 +210,52 @@ const SimpleCar = ({ onPartClick, selectedPart }) => {
           emissive={selectedPart === 'charging-port' ? '#a855f7' : '#5b21b6'}
           emissiveIntensity={selectedPart === 'charging-port' ? 0.4 : 0.2}
         />
-      </Box>
+      </RoundedBox>
+
+      {/* Side Windows */}
+      <RoundedBox
+        position={[0.2, 0.45, 0.72]}
+        args={[1.2, 0.3, 0.02]}
+        radius={0.03}
+      >
+        <meshStandardMaterial 
+          color="#60a5fa" 
+          transparent={true} 
+          opacity={0.4} 
+          metalness={0.1} 
+          roughness={0.05}
+        />
+      </RoundedBox>
+
+      <RoundedBox
+        position={[0.2, 0.45, -0.72]}
+        args={[1.2, 0.3, 0.02]}
+        radius={0.03}
+      >
+        <meshStandardMaterial 
+          color="#60a5fa" 
+          transparent={true} 
+          opacity={0.4} 
+          metalness={0.1} 
+          roughness={0.05}
+        />
+      </RoundedBox>
+
+      {/* Windshield */}
+      <RoundedBox
+        position={[0.6, 0.45, 0]}
+        args={[0.4, 0.5, 1.3]}
+        radius={0.05}
+        rotation={[0, 0, -0.1]}
+      >
+        <meshStandardMaterial 
+          color="#60a5fa" 
+          transparent={true} 
+          opacity={0.3} 
+          metalness={0.1} 
+          roughness={0.05}
+        />
+      </RoundedBox>
     </group>
   );
 };

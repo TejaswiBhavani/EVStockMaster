@@ -1,6 +1,6 @@
 import React, { useRef, useMemo, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Box, Sphere, Cylinder, PresentationControls, Float } from '@react-three/drei';
+import { OrbitControls, Box, RoundedBox, Sphere, Cylinder, Torus, PresentationControls, Float } from '@react-three/drei';
 import { motion } from 'framer-motion';
 import * as THREE from 'three';
 
@@ -123,107 +123,269 @@ const ModernEVModel = ({ onPartClick, selectedPart }) => {
     <Float speed={1.5} rotationIntensity={0.1} floatIntensity={0.3}>
       <group ref={groupRef} scale={[1.2, 1.2, 1.2]} position={[0, -0.8, 0]}>
         
-        {/* Main Car Body - More realistic EV sedan shape */}
+        {/* Main Car Body - More realistic EV sedan shape with smooth curves */}
         <group onClick={() => handlePartClick('body')}>
-          {/* Main chassis */}
-          <Box
-            position={[0, 0, 0]}
-            scale={[4.5, 1.2, 2.2]}
+          {/* Main chassis - lower and more streamlined */}
+          <RoundedBox
+            position={[0, -0.1, 0]}
+            args={[4.8, 1.0, 2.1]}
+            radius={0.15}
+            smoothness={10}
             material={bodyMaterial}
           />
           
-          {/* Car hood - slightly raised */}
-          <Box
-            position={[1.8, 0.15, 0]}
-            scale={[1.0, 0.2, 2.0]}
+          {/* Car hood - sleek and aerodynamic */}
+          <RoundedBox
+            position={[1.9, 0.05, 0]}
+            args={[1.2, 0.18, 2.0]}
+            radius={0.08}
+            smoothness={8}
             material={bodyMaterial}
           />
           
-          {/* Car roof - sleek sedan profile */}
-          <Box
-            position={[0.2, 1.0, 0]}
-            scale={[2.8, 0.3, 1.9]}
+          {/* Car roof - curved sedan profile */}
+          <RoundedBox
+            position={[0.1, 0.85, 0]}
+            args={[2.6, 0.25, 1.8]}
+            radius={0.12}
+            smoothness={10}
             material={bodyMaterial}
           />
           
-          {/* Rear section */}
-          <Box
-            position={[-1.5, 0.2, 0]}
-            scale={[1.2, 0.8, 2.0]}
+          {/* A-pillar curves */}
+          <RoundedBox
+            position={[1.0, 0.6, 0.85]}
+            args={[0.6, 0.4, 0.08]}
+            radius={0.04}
+            smoothness={6}
+            material={bodyMaterial}
+          />
+          <RoundedBox
+            position={[1.0, 0.6, -0.85]}
+            args={[0.6, 0.4, 0.08]}
+            radius={0.04}
+            smoothness={6}
             material={bodyMaterial}
           />
           
-          {/* Front bumper */}
-          <Box
-            position={[2.3, -0.3, 0]}
-            scale={[0.2, 0.6, 2.1]}
+          {/* Rear section - streamlined trunk */}
+          <RoundedBox
+            position={[-1.6, 0.1, 0]}
+            args={[1.4, 0.7, 1.9]}
+            radius={0.1}
+            smoothness={8}
             material={bodyMaterial}
           />
           
-          {/* Rear bumper */}
-          <Box
-            position={[-2.3, -0.3, 0]}
-            scale={[0.2, 0.6, 2.1]}
+          {/* Front bumper - curved and aerodynamic */}
+          <RoundedBox
+            position={[2.45, -0.35, 0]}
+            args={[0.15, 0.5, 2.0]}
+            radius={0.08}
+            smoothness={6}
+            material={bodyMaterial}
+          />
+          
+          {/* Rear bumper - sleek design */}
+          <RoundedBox
+            position={[-2.45, -0.35, 0]}
+            args={[0.15, 0.5, 2.0]}
+            radius={0.08}
+            smoothness={6}
+            material={bodyMaterial}
+          />
+          
+          {/* Side skirts for aerodynamics */}
+          <RoundedBox
+            position={[0, -0.65, 1.15]}
+            args={[3.5, 0.15, 0.1]}
+            radius={0.05}
+            smoothness={4}
+            material={bodyMaterial}
+          />
+          <RoundedBox
+            position={[0, -0.65, -1.15]}
+            args={[3.5, 0.15, 0.1]}
+            radius={0.05}
+            smoothness={4}
+            material={bodyMaterial}
+          />
+          
+          {/* Front air intake - realistic grille */}
+          <RoundedBox
+            position={[2.35, -0.1, 0]}
+            args={[0.05, 0.3, 1.2]}
+            radius={0.02}
+            smoothness={4}
+          >
+            <meshStandardMaterial 
+              color="#1a1a1a" 
+              metalness={0.8} 
+              roughness={0.2}
+            />
+          </RoundedBox>
+          
+          {/* Rear spoiler for aerodynamics */}
+          <RoundedBox
+            position={[-2.2, 0.95, 0]}
+            args={[0.2, 0.08, 1.4]}
+            radius={0.04}
+            smoothness={4}
             material={bodyMaterial}
           />
         </group>
 
-        {/* Enhanced Battery Pack - Tesla-style flat pack */}
+        {/* Enhanced Battery Pack - Tesla-style flat pack with realistic structure */}
         <group onClick={() => handlePartClick('battery')}>
-          <Box
+          {/* Main battery pack housing */}
+          <RoundedBox
             position={[0, -1.0, 0]}
-            scale={[4.2, 0.3, 2.0]}
+            args={[4.0, 0.25, 1.8]}
+            radius={0.05}
+            smoothness={6}
             material={batteryMaterial}
           />
           
-          {/* Battery cells simulation */}
-          {[-1.8, -0.6, 0.6, 1.8].map((x, index) => (
-            <Box
-              key={`battery-cell-${index}`}
-              position={[x, -1.2, 0]}
-              scale={[0.7, 0.15, 1.8]}
+          {/* Battery cell modules - realistic layout */}
+          {[-1.5, -0.5, 0.5, 1.5].map((x, index) => (
+            <RoundedBox
+              key={`battery-module-${index}`}
+              position={[x, -1.18, 0]}
+              args={[0.6, 0.12, 1.6]}
+              radius={0.02}
+              smoothness={4}
               material={batteryMaterial}
             />
           ))}
           
-          {/* Battery cooling plates */}
+          {/* Battery cooling plates - thermal management */}
           {[-1.0, 0, 1.0].map((x, index) => (
-            <Box
+            <RoundedBox
               key={`cooling-plate-${index}`}
-              position={[x, -1.35, 0]}
-              scale={[0.8, 0.05, 1.9]}
+              position={[x, -1.3, 0]}
+              args={[0.7, 0.03, 1.7]}
+              radius={0.01}
+              smoothness={3}
               material={coolingMaterial}
             />
           ))}
+          
+          {/* Battery management system */}
+          <RoundedBox
+            position={[0, -0.85, 0]}
+            args={[0.8, 0.08, 0.4]}
+            radius={0.02}
+            smoothness={4}
+          >
+            <meshStandardMaterial 
+              color="#2563eb" 
+              metalness={0.7} 
+              roughness={0.3}
+              emissive="#1e40af"
+              emissiveIntensity={0.1}
+            />
+          </RoundedBox>
+          
+          {/* Protective armor plating */}
+          <RoundedBox
+            position={[0, -1.35, 0]}
+            args={[4.2, 0.05, 2.0]}
+            radius={0.02}
+            smoothness={4}
+          >
+            <meshStandardMaterial 
+              color="#374151" 
+              metalness={0.8} 
+              roughness={0.2}
+            />
+          </RoundedBox>
         </group>
 
-        {/* Dual Motor Setup - Front and Rear */}
+        {/* Dual Motor Setup - Realistic electric motor design */}
         <group onClick={() => handlePartClick('motor')}>
-          {/* Front motor */}
-          <Cylinder
-            position={[1.8, -0.4, 0]}
-            args={[0.4, 0.4, 0.6, 16]}
-            material={motorMaterial}
-          />
+          {/* Front motor assembly */}
+          <group position={[1.8, -0.4, 0]}>
+            {/* Motor housing */}
+            <Cylinder
+              args={[0.35, 0.45, 0.7, 16]}
+              material={motorMaterial}
+            />
+            {/* Motor cooling fins */}
+            {[0, 1, 2, 3, 4, 5].map((i) => (
+              <RoundedBox
+                key={`front-fin-${i}`}
+                position={[0, 0, 0]}
+                args={[0.02, 0.4, 0.8]}
+                radius={0.01}
+                rotation={[0, (i * Math.PI) / 3, 0]}
+                material={motorMaterial}
+              />
+            ))}
+            {/* Motor mount */}
+            <RoundedBox
+              position={[0, -0.45, 0]}
+              args={[0.6, 0.1, 0.6]}
+              radius={0.02}
+              material={motorMaterial}
+            />
+          </group>
           
-          {/* Rear motor */}
-          <Cylinder
-            position={[-1.8, -0.4, 0]}
-            args={[0.4, 0.4, 0.6, 16]}
-            material={motorMaterial}
-          />
+          {/* Rear motor assembly */}
+          <group position={[-1.8, -0.4, 0]}>
+            {/* Motor housing */}
+            <Cylinder
+              args={[0.35, 0.45, 0.7, 16]}
+              material={motorMaterial}
+            />
+            {/* Motor cooling fins */}
+            {[0, 1, 2, 3, 4, 5].map((i) => (
+              <RoundedBox
+                key={`rear-fin-${i}`}
+                position={[0, 0, 0]}
+                args={[0.02, 0.4, 0.8]}
+                radius={0.01}
+                rotation={[0, (i * Math.PI) / 3, 0]}
+                material={motorMaterial}
+              />
+            ))}
+            {/* Motor mount */}
+            <RoundedBox
+              position={[0, -0.45, 0]}
+              args={[0.6, 0.1, 0.6]}
+              radius={0.02}
+              material={motorMaterial}
+            />
+          </group>
           
-          {/* Motor housing details */}
-          <Box
-            position={[1.8, -0.4, 0]}
-            scale={[0.6, 0.6, 0.8]}
-            material={motorMaterial}
-          />
-          <Box
-            position={[-1.8, -0.4, 0]}
-            scale={[0.6, 0.6, 0.8]}
-            material={motorMaterial}
-          />
+          {/* Drive shafts */}
+          <Cylinder
+            position={[1.8, -0.4, 1.0]}
+            args={[0.05, 0.05, 0.4, 8]}
+            rotation={[0, 0, Math.PI / 2]}
+          >
+            <meshStandardMaterial color="#4b5563" metalness={0.9} roughness={0.1} />
+          </Cylinder>
+          <Cylinder
+            position={[1.8, -0.4, -1.0]}
+            args={[0.05, 0.05, 0.4, 8]}
+            rotation={[0, 0, Math.PI / 2]}
+          >
+            <meshStandardMaterial color="#4b5563" metalness={0.9} roughness={0.1} />
+          </Cylinder>
+          <Cylinder
+            position={[-1.8, -0.4, 1.0]}
+            args={[0.05, 0.05, 0.4, 8]}
+            rotation={[0, 0, Math.PI / 2]}
+          >
+            <meshStandardMaterial color="#4b5563" metalness={0.9} roughness={0.1} />
+          </Cylinder>
+          <Cylinder
+            position={[-1.8, -0.4, -1.0]}
+            args={[0.05, 0.05, 0.4, 8]}
+            rotation={[0, 0, Math.PI / 2]}
+          >
+            <meshStandardMaterial color="#4b5563" metalness={0.9} roughness={0.1} />
+          </Cylinder>
         </group>
 
         {/* Advanced Charging Port */}
@@ -319,171 +481,402 @@ const ModernEVModel = ({ onPartClick, selectedPart }) => {
           ))}
         </group>
 
-        {/* Enhanced Wheels with detailed rims */}
-        {[[-1.6, -1.3, 1.2], [1.6, -1.3, 1.2], [-1.6, -1.3, -1.2], [1.6, -1.3, -1.2]].map((position, index) => (
+        {/* Enhanced Wheels with realistic rims and better proportions */}
+        {[[-1.7, -1.25, 1.15], [1.7, -1.25, 1.15], [-1.7, -1.25, -1.15], [1.7, -1.25, -1.15]].map((position, index) => (
           <group key={`wheel-${index}`} position={position}>
-            {/* Tire */}
+            {/* Main tire - more realistic proportions */}
             <Cylinder
               ref={(el) => (wheelRefs.current[index] = el)}
-              args={[0.7, 0.7, 0.4, 32]}
+              args={[0.65, 0.65, 0.35, 32]}
               rotation={[Math.PI / 2, 0, 0]}
               material={wheelMaterial}
             />
             
-            {/* Rim */}
+            {/* Tire sidewall details */}
+            <Torus
+              args={[0.65, 0.05, 8, 32]}
+              position={[0, 0, 0.15]}
+              rotation={[Math.PI / 2, 0, 0]}
+            >
+              <meshStandardMaterial color="#2d3748" metalness={0.1} roughness={0.9} />
+            </Torus>
+            <Torus
+              args={[0.65, 0.05, 8, 32]}
+              position={[0, 0, -0.15]}
+              rotation={[Math.PI / 2, 0, 0]}
+            >
+              <meshStandardMaterial color="#2d3748" metalness={0.1} roughness={0.9} />
+            </Torus>
+            
+            {/* Main rim */}
             <Cylinder
-              args={[0.5, 0.5, 0.45, 16]}
+              args={[0.45, 0.45, 0.38, 16]}
               rotation={[Math.PI / 2, 0, 0]}
               material={rimMaterial}
             />
             
-            {/* Rim spokes */}
+            {/* Rim spokes - modern 5-spoke design */}
             {[0, 1, 2, 3, 4].map((spoke) => (
-              <Box
+              <RoundedBox
                 key={`spoke-${index}-${spoke}`}
                 position={[0, 0, 0]}
-                scale={[0.05, 0.4, 0.05]}
-                rotation={[0, 0, (spoke * Math.PI) / 2.5]}
+                args={[0.04, 0.35, 0.04]}
+                radius={0.02}
+                rotation={[0, 0, (spoke * Math.PI * 2) / 5]}
                 material={rimMaterial}
               />
             ))}
             
-            {/* Center cap */}
+            {/* Inner rim detail */}
             <Cylinder
-              args={[0.15, 0.15, 0.5, 16]}
+              args={[0.35, 0.35, 0.4, 16]}
+              rotation={[Math.PI / 2, 0, 0]}
+            >
+              <meshStandardMaterial 
+                color="#9ca3af" 
+                metalness={0.7} 
+                roughness={0.3}
+              />
+            </Cylinder>
+            
+            {/* Center cap with EV logo */}
+            <Cylinder
+              args={[0.12, 0.12, 0.42, 16]}
               rotation={[Math.PI / 2, 0, 0]}
               material={new THREE.MeshStandardMaterial({ 
                 color: '#00f2fe', 
                 metalness: 0.9, 
                 emissive: '#004d5c',
+                emissiveIntensity: 0.3
+              })}
+            />
+            
+            {/* Brake disc behind rim */}
+            <Cylinder
+              args={[0.28, 0.28, 0.02, 32]}
+              position={[0, 0, 0]}
+              rotation={[Math.PI / 2, 0, 0]}
+            >
+              <meshStandardMaterial 
+                color="#4a5568" 
+                metalness={0.8} 
+                roughness={0.4}
+              />
+            </Cylinder>
+            
+            {/* Brake caliper */}
+            <RoundedBox
+              position={[0, -0.4, 0]}
+              args={[0.15, 0.08, 0.25]}
+              radius={0.02}
+            >
+              <meshStandardMaterial 
+                color="#dc2626" 
+                metalness={0.6} 
+                roughness={0.3}
+              />
+            </RoundedBox>
+          </group>
+        ))}
+
+        {/* Enhanced Glass Elements with realistic curvature */}
+        <group>
+          {/* Windshield - curved and realistic */}
+          <RoundedBox
+            position={[1.0, 0.75, 0]}
+            args={[0.75, 0.9, 1.7]}
+            radius={0.1}
+            rotation={[0, 0, -0.15]}
+            material={glassMaterial}
+          />
+          
+          {/* Rear window - curved */}
+          <RoundedBox
+            position={[-1.3, 0.75, 0]}
+            args={[0.55, 0.7, 1.7]}
+            radius={0.08}
+            rotation={[0, 0, 0.12]}
+            material={glassMaterial}
+          />
+          
+          {/* Side windows - curved for aerodynamics */}
+          <RoundedBox
+            position={[0.3, 0.85, 1.08]}
+            args={[1.8, 0.55, 0.03]}
+            radius={0.05}
+            material={glassMaterial}
+          />
+          <RoundedBox
+            position={[0.3, 0.85, -1.08]}
+            args={[1.8, 0.55, 0.03]}
+            radius={0.05}
+            material={glassMaterial}
+          />
+          
+          {/* Quarter windows */}
+          <RoundedBox
+            position={[-0.8, 0.85, 1.08]}
+            args={[0.6, 0.4, 0.03]}
+            radius={0.04}
+            material={glassMaterial}
+          />
+          <RoundedBox
+            position={[-0.8, 0.85, -1.08]}
+            args={[0.6, 0.4, 0.03]}
+            radius={0.04}
+            material={glassMaterial}
+          />
+          
+          {/* Sunroof */}
+          <RoundedBox
+            position={[0.2, 1.08, 0]}
+            args={[1.2, 0.03, 0.8]}
+            radius={0.02}
+          >
+            <meshStandardMaterial 
+              color="#60a5fa" 
+              transparent={true} 
+              opacity={0.3} 
+              metalness={0.1} 
+              roughness={0.05}
+            />
+          </RoundedBox>
+        </group>
+
+        {/* Interior Details - Modern EV cabin */}
+        <group>
+          {/* Dashboard - futuristic design */}
+          <RoundedBox
+            position={[1.1, 0.15, 0]}
+            args={[0.7, 0.25, 1.5]}
+            radius={0.05}
+            material={interiorMaterial}
+          />
+          
+          {/* Center console with touchscreen */}
+          <RoundedBox
+            position={[0.8, 0.3, 0]}
+            args={[0.02, 0.4, 0.6]}
+            radius={0.01}
+          >
+            <meshStandardMaterial 
+              color="#1f2937" 
+              metalness={0.1} 
+              roughness={0.1}
+              emissive="#60a5fa"
+              emissiveIntensity={0.1}
+            />
+          </RoundedBox>
+          
+          {/* Modern bucket seats */}
+          {[[0.4, 0.05, 0.35], [0.4, 0.05, -0.35], [-0.4, 0.05, 0.35], [-0.4, 0.05, -0.35]].map((position, index) => (
+            <group key={`seat-${index}`} position={position}>
+              {/* Seat base */}
+              <RoundedBox
+                args={[0.35, 0.25, 0.35]}
+                radius={0.02}
+                material={interiorMaterial}
+              />
+              {/* Seat back */}
+              <RoundedBox
+                position={[0, 0.3, -0.05]}
+                args={[0.35, 0.5, 0.08]}
+                radius={0.02}
+                material={interiorMaterial}
+              />
+              {/* Headrest */}
+              <RoundedBox
+                position={[0, 0.65, 0]}
+                args={[0.25, 0.15, 0.08]}
+                radius={0.02}
+                material={interiorMaterial}
+              />
+            </group>
+          ))}
+          
+          {/* Steering wheel - modern design */}
+          <group position={[0.9, 0.35, 0.35]}>
+            <Torus
+              args={[0.18, 0.03, 8, 16]}
+              rotation={[0, 0, Math.PI / 2]}
+              material={interiorMaterial}
+            />
+            {/* Steering wheel center */}
+            <Cylinder
+              args={[0.08, 0.08, 0.02, 16]}
+              rotation={[0, 0, Math.PI / 2]}
+              material={new THREE.MeshStandardMaterial({
+                color: '#00f2fe',
+                emissive: '#004d5c',
                 emissiveIntensity: 0.2
               })}
             />
           </group>
-        ))}
-
-        {/* Enhanced Glass Elements */}
-        <group>
-          {/* Windshield */}
-          <Box
-            position={[1.0, 0.8, 0]}
-            scale={[0.8, 1.0, 1.8]}
-            rotation={[0, 0, -0.2]}
-            material={glassMaterial}
-          />
           
-          {/* Rear window */}
-          <Box
-            position={[-1.2, 0.8, 0]}
-            scale={[0.6, 0.8, 1.8]}
-            rotation={[0, 0, 0.15]}
-            material={glassMaterial}
-          />
-          
-          {/* Side windows */}
-          <Box
-            position={[0.3, 0.9, 1.15]}
-            scale={[2.0, 0.6, 0.05]}
-            material={glassMaterial}
-          />
-          <Box
-            position={[0.3, 0.9, -1.15]}
-            scale={[2.0, 0.6, 0.05]}
-            material={glassMaterial}
-          />
-        </group>
-
-        {/* Interior Details */}
-        <group>
-          {/* Dashboard */}
-          <Box
-            position={[1.2, 0.2, 0]}
-            scale={[0.8, 0.3, 1.6]}
-            material={interiorMaterial}
-          />
-          
-          {/* Seats */}
-          {[[0.5, 0.1, 0.4], [0.5, 0.1, -0.4], [-0.5, 0.1, 0.4], [-0.5, 0.1, -0.4]].map((position, index) => (
-            <Box
-              key={`seat-${index}`}
-              position={position}
-              scale={[0.4, 0.3, 0.4]}
-              material={interiorMaterial}
-            />
-          ))}
-          
-          {/* Steering wheel */}
-          <Cylinder
-            position={[1.0, 0.4, 0.4]}
-            args={[0.2, 0.2, 0.05, 16]}
-            rotation={[0, 0, Math.PI / 2]}
+          {/* Center armrest */}
+          <RoundedBox
+            position={[0, 0.1, 0]}
+            args={[0.8, 0.08, 0.15]}
+            radius={0.02}
             material={interiorMaterial}
           />
         </group>
 
-        {/* Enhanced LED Lighting */}
+        {/* Enhanced LED Lighting System */}
         <group>
-          {/* Front headlights - more realistic */}
-          {[[-0.3, 0.2, 2.25], [0.3, 0.2, 2.25]].map((position, index) => (
+          {/* Modern LED headlights - sleek design */}
+          {[[-0.4, 0.15, 2.35], [0.4, 0.15, 2.35]].map((position, index) => (
             <group key={`headlight-${index}`} position={position}>
-              <Sphere
-                args={[0.15, 16, 16]}
+              {/* Main headlight housing */}
+              <RoundedBox
+                args={[0.25, 0.12, 0.08]}
+                radius={0.02}
                 material={new THREE.MeshStandardMaterial({ 
-                  color: '#ffffff',
+                  color: '#f8fafc',
                   emissive: '#60a5fa',
-                  emissiveIntensity: 0.8,
+                  emissiveIntensity: 0.6,
                   metalness: 0.1,
                   roughness: 0.1
                 })}
               />
-              <Cylinder
-                position={[0, 0, -0.1]}
-                args={[0.12, 0.12, 0.1, 16]}
+              {/* LED strips */}
+              <RoundedBox
+                position={[0, 0.08, 0.05]}
+                args={[0.2, 0.02, 0.01]}
+                radius={0.005}
                 material={new THREE.MeshStandardMaterial({ 
-                  color: '#1e40af',
+                  color: '#ffffff',
+                  emissive: '#60a5fa',
+                  emissiveIntensity: 1.0
+                })}
+              />
+              {/* Inner lens */}
+              <Sphere
+                args={[0.08, 12, 12]}
+                position={[0, 0, 0.04]}
+                material={new THREE.MeshStandardMaterial({ 
+                  color: '#e0f2fe',
                   emissive: '#3b82f6',
-                  emissiveIntensity: 0.5
+                  emissiveIntensity: 0.4,
+                  transparent: true,
+                  opacity: 0.8
                 })}
               />
             </group>
           ))}
           
-          {/* Rear lights */}
-          {[[-0.4, 0.2, -2.25], [0.4, 0.2, -2.25]].map((position, index) => (
-            <Box
-              key={`taillight-${index}`}
+          {/* Sleek LED taillights */}
+          {[[-0.5, 0.15, -2.35], [0.5, 0.15, -2.35]].map((position, index) => (
+            <group key={`taillight-${index}`} position={position}>
+              {/* Main taillight */}
+              <RoundedBox
+                args={[0.2, 0.08, 0.05]}
+                radius={0.02}
+                material={new THREE.MeshStandardMaterial({ 
+                  color: '#dc2626',
+                  emissive: '#ef4444',
+                  emissiveIntensity: 0.7,
+                  metalness: 0.2,
+                  roughness: 0.1
+                })}
+              />
+              {/* LED accent strip */}
+              <RoundedBox
+                position={[0, 0.05, 0.03]}
+                args={[0.15, 0.01, 0.01]}
+                radius={0.005}
+                material={new THREE.MeshStandardMaterial({ 
+                  color: '#ffffff',
+                  emissive: '#ef4444',
+                  emissiveIntensity: 1.2
+                })}
+              />
+            </group>
+          ))}
+          
+          {/* Side marker lights */}
+          {[[1.8, 0.3, 1.1], [1.8, 0.3, -1.1], [-1.8, 0.3, 1.1], [-1.8, 0.3, -1.1]].map((position, index) => (
+            <Sphere
+              key={`marker-${index}`}
               position={position}
-              scale={[0.15, 0.1, 0.05]}
+              args={[0.03, 8, 8]}
               material={new THREE.MeshStandardMaterial({ 
-                color: '#dc2626',
-                emissive: '#ef4444',
-                emissiveIntensity: 0.6
+                color: index < 2 ? '#fbbf24' : '#dc2626',
+                emissive: index < 2 ? '#f59e0b' : '#ef4444',
+                emissiveIntensity: 0.8
               })}
             />
           ))}
           
-          {/* Side mirrors */}
-          {[[0.8, 0.8, 1.3], [0.8, 0.8, -1.3]].map((position, index) => (
-            <Box
-              key={`mirror-${index}`}
-              position={position}
-              scale={[0.2, 0.15, 0.1]}
-              material={bodyMaterial}
-            />
+          {/* Modern side mirrors with integrated turn signals */}
+          {[[0.8, 0.75, 1.25], [0.8, 0.75, -1.25]].map((position, index) => (
+            <group key={`mirror-${index}`} position={position}>
+              {/* Mirror housing */}
+              <RoundedBox
+                args={[0.18, 0.12, 0.08]}
+                radius={0.02}
+                material={bodyMaterial}
+              />
+              {/* Mirror glass */}
+              <RoundedBox
+                position={[0.05, 0, 0]}
+                args={[0.02, 0.1, 0.06]}
+                radius={0.01}
+                material={new THREE.MeshStandardMaterial({
+                  color: '#374151',
+                  metalness: 0.9,
+                  roughness: 0.1
+                })}
+              />
+              {/* Turn signal */}
+              <Sphere
+                position={[0, 0.08, 0]}
+                args={[0.02, 8, 8]}
+                material={new THREE.MeshStandardMaterial({ 
+                  color: '#fbbf24',
+                  emissive: '#f59e0b',
+                  emissiveIntensity: 0.6
+                })}
+              />
+            </group>
           ))}
         </group>
 
-        {/* Door Handles and Details */}
+        {/* Door Handles and Details - Modern flush design */}
         <group onClick={() => handlePartClick('doors')}>
-          {[[0.5, 0.3, 1.15], [0.5, 0.3, -1.15], [-0.5, 0.3, 1.15], [-0.5, 0.3, -1.15]].map((position, index) => (
-            <Box
-              key={`door-handle-${index}`}
+          {[[0.5, 0.25, 1.12], [0.5, 0.25, -1.12], [-0.5, 0.25, 1.12], [-0.5, 0.25, -1.12]].map((position, index) => (
+            <group key={`door-handle-${index}`} position={position}>
+              {/* Modern flush door handle */}
+              <RoundedBox
+                args={[0.12, 0.04, 0.03]}
+                radius={0.01}
+                material={new THREE.MeshStandardMaterial({ 
+                  color: '#6b7280',
+                  metalness: 0.8,
+                  roughness: 0.2
+                })}
+              />
+              {/* Door handle recess */}
+              <RoundedBox
+                position={[0, 0, -0.02]}
+                args={[0.14, 0.06, 0.01]}
+                radius={0.01}
+                material={bodyMaterial}
+              />
+            </group>
+          ))}
+          
+          {/* Door frames */}
+          {[[0.8, 0.6, 1.13], [0.8, 0.6, -1.13], [-0.3, 0.6, 1.13], [-0.3, 0.6, -1.13]].map((position, index) => (
+            <RoundedBox
+              key={`door-frame-${index}`}
               position={position}
-              scale={[0.15, 0.05, 0.05]}
-              material={new THREE.MeshStandardMaterial({ 
-                color: '#6b7280',
-                metalness: 0.8,
-                roughness: 0.2
+              args={[1.2, 0.8, 0.02]}
+              radius={0.05}
+              material={new THREE.MeshStandardMaterial({
+                color: '#1f2937',
+                metalness: 0.7,
+                roughness: 0.3
               })}
             />
           ))}
