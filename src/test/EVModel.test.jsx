@@ -32,6 +32,31 @@ vi.mock('three', () => ({
       Object.assign(this, props);
     }
   },
+  TextureLoader: class {
+    constructor() {}
+  },
+  CubeTextureLoader: class {
+    constructor() {}
+  },
+  PMREMGenerator: class {
+    constructor() {}
+    compileEquirectangularShader() {}
+    fromScene() { return { texture: {} }; }
+    dispose() {}
+  },
+  Scene: class {
+    constructor() {
+      this.background = null;
+    }
+  },
+  Color: class {
+    constructor(color) {
+      this.color = color;
+    }
+    multiplyScalar(scalar) {
+      return new this.constructor(this.color);
+    }
+  },
   ACESFilmicToneMapping: 'ACESFilmicToneMapping',
 }));
 
