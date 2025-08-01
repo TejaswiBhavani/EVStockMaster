@@ -20,16 +20,57 @@ vi.mock('@react-three/drei', () => ({
   Float: ({ children }) => <div data-testid="float">{children}</div>,
 }));
 
+vi.mock('lucide-react', () => ({
+  Eye: ({ className, ...props }) => <div data-testid="eye-icon" className={className} {...props} />,
+  Layers: ({ className, ...props }) => <div data-testid="layers-icon" className={className} {...props} />,
+  RotateCcw: ({ className, ...props }) => <div data-testid="rotate-icon" className={className} {...props} />,
+  Zap: ({ className, ...props }) => <div data-testid="zap-icon" className={className} {...props} />,
+  Settings: ({ className, ...props }) => <div data-testid="settings-icon" className={className} {...props} />,
+  Play: ({ className, ...props }) => <div data-testid="play-icon" className={className} {...props} />,
+  Pause: ({ className, ...props }) => <div data-testid="pause-icon" className={className} {...props} />,
+  SkipForward: ({ className, ...props }) => <div data-testid="skip-forward-icon" className={className} {...props} />,
+  Camera: ({ className, ...props }) => <div data-testid="camera-icon" className={className} {...props} />,
+  Maximize: ({ className, ...props }) => <div data-testid="maximize-icon" className={className} {...props} />,
+  Download: ({ className, ...props }) => <div data-testid="download-icon" className={className} {...props} />,
+  Share2: ({ className, ...props }) => <div data-testid="share2-icon" className={className} {...props} />,
+}));
+
 vi.mock('framer-motion', () => ({
   motion: {
     div: ({ children, ...props }) => <div {...props}>{children}</div>,
   },
+  AnimatePresence: ({ children }) => <div>{children}</div>,
 }));
 
 vi.mock('three', () => ({
   MeshStandardMaterial: class {
     constructor(props) {
       Object.assign(this, props);
+    }
+  },
+  TextureLoader: class {
+    constructor() {}
+  },
+  CubeTextureLoader: class {
+    constructor() {}
+  },
+  PMREMGenerator: class {
+    constructor() {}
+    compileEquirectangularShader() {}
+    fromScene() { return { texture: {} }; }
+    dispose() {}
+  },
+  Scene: class {
+    constructor() {
+      this.background = null;
+    }
+  },
+  Color: class {
+    constructor(color) {
+      this.color = color;
+    }
+    multiplyScalar(scalar) {
+      return new this.constructor(this.color);
     }
   },
   ACESFilmicToneMapping: 'ACESFilmicToneMapping',

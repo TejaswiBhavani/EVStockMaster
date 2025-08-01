@@ -4,9 +4,47 @@ import { OrbitControls, Box, RoundedBox, Sphere, Cylinder, Torus, PresentationCo
 import { motion } from 'framer-motion';
 import * as THREE from 'three';
 
+// Import enhanced component systems
+import BatterySystem from './components/BatterySystem';
+import MotorSystem from './components/MotorSystem';
+import ChassisSystem from './components/ChassisSystem';
+import BrakingSystem from './components/BrakingSystem';
+import { advancedMaterials } from './materials/AdvancedMaterials';
+
+// Import interactive controls and features
+import { 
+  useModelInteraction, 
+  ExplodedGroupWrapper, 
+  CrossSectionPlane,
+  useCameraControls,
+  useAnimationSequence,
+  AnimationSequences,
+  PerformanceOptimizer
+} from './controls/InteractiveControls';
+import ModelControlPanel from './controls/ModelControlPanel';
+import { 
+  useInventoryVisualization,
+  InventoryStatusIndicator,
+  SupplyChainVisualization,
+  AssemblySequenceVisualization,
+  QualityMetricsVisualization,
+  CostAnalysisVisualization
+} from './integration/InventoryIntegration';
+
 const ModernEVModel = ({ onPartClick, selectedPart }) => {
   const groupRef = useRef();
   const wheelRefs = useRef([]);
+  const cameraRef = useRef();
+  const controlsRef = useRef();
+
+  // Interactive controls integration
+  const modelControls = useModelInteraction();
+  const { animateToPreset } = useCameraControls(cameraRef, controlsRef);
+  const animationSequence = useAnimationSequence();
+  const performanceOptimizer = PerformanceOptimizer();
+  
+  // Inventory integration
+  const inventoryData = useInventoryVisualization(selectedPart);
 
   useFrame((state) => {
     if (groupRef.current) {
@@ -46,85 +84,83 @@ const ModernEVModel = ({ onPartClick, selectedPart }) => {
     return partLabels[selectedPart] || "EV Component Selected";
   };
 
-  // Enhanced materials with better performance and realism
-  const bodyMaterial = useMemo(() => new THREE.MeshStandardMaterial({ 
-    color: selectedPart === 'body' ? '#2563eb' : '#4facfe',
-    metalness: 0.6,
-    roughness: 0.3,
-  }), [selectedPart]);
+  // Enhanced materials with advanced PBR properties
+  const bodyMaterial = useMemo(() => advancedMaterials.createAutomotivePaint(
+    selectedPart === 'body' ? '#2563eb' : '#4facfe',
+    selectedPart === 'body',
+    { metallic: true, clearcoat: true }
+  ), [selectedPart]);
   
-  const batteryMaterial = useMemo(() => new THREE.MeshStandardMaterial({ 
-    color: selectedPart === 'battery' ? '#0ea5e9' : '#00f2fe',
-    metalness: 0.5,
-    roughness: 0.4,
-    emissive: selectedPart === 'battery' ? '#0ea5e9' : '#004d5c',
-    emissiveIntensity: selectedPart === 'battery' ? 0.2 : 0.05,
-  }), [selectedPart]);
+  const batteryMaterial = useMemo(() => advancedMaterials.createBatteryCellMaterial(
+    selectedPart === 'battery'
+  ), [selectedPart]);
 
-  const motorMaterial = useMemo(() => new THREE.MeshStandardMaterial({ 
-    color: selectedPart === 'motor' ? '#059669' : '#2dd4bf',
-    metalness: 0.7,
-    roughness: 0.2,
-    emissive: selectedPart === 'motor' ? '#065f46' : '#0f766e',
-    emissiveIntensity: selectedPart === 'motor' ? 0.15 : 0.03,
-  }), [selectedPart]);
+  const motorMaterial = useMemo(() => advancedMaterials.createMetallicMaterial(
+    selectedPart === 'motor' ? '#059669' : '#2dd4bf',
+    0.2,
+    selectedPart === 'motor'
+  ), [selectedPart]);
 
-  const chargingMaterial = useMemo(() => new THREE.MeshStandardMaterial({ 
-    color: selectedPart === 'charging-port' ? '#7c3aed' : '#a855f7',
-    metalness: 0.6,
-    roughness: 0.3,
-    emissive: selectedPart === 'charging-port' ? '#5b21b6' : '#7c3aed',
-    emissiveIntensity: selectedPart === 'charging-port' ? 0.3 : 0.1,
-  }), [selectedPart]);
+  const chargingMaterial = useMemo(() => advancedMaterials.createPlasticMaterial(
+    selectedPart === 'charging-port' ? '#7c3aed' : '#a855f7',
+    'gloss',
+    selectedPart === 'charging-port'
+  ), [selectedPart]);
 
-  const controlMaterial = useMemo(() => new THREE.MeshStandardMaterial({ 
-    color: selectedPart === 'control-unit' ? '#dc2626' : '#ef4444',
-    metalness: 0.4,
-    roughness: 0.5,
-    emissive: selectedPart === 'control-unit' ? '#991b1b' : '#dc2626',
-    emissiveIntensity: selectedPart === 'control-unit' ? 0.15 : 0.03,
-  }), [selectedPart]);
+  const controlMaterial = useMemo(() => advancedMaterials.createCircuitBoardMaterial(
+    selectedPart === 'control-unit'
+  ), [selectedPart]);
 
-  const coolingMaterial = useMemo(() => new THREE.MeshStandardMaterial({
-    color: selectedPart === 'cooling-system' ? '#0284c7' : '#38bdf8',
-    metalness: 0.5,
-    roughness: 0.4,
-    emissive: selectedPart === 'cooling-system' ? '#0369a1' : '#0ea5e9',
-    emissiveIntensity: selectedPart === 'cooling-system' ? 0.15 : 0.05,
-  }), [selectedPart]);
+  const coolingMaterial = useMemo(() => advancedMaterials.createMetallicMaterial(
+    selectedPart === 'cooling-system' ? '#0284c7' : '#38bdf8',
+    0.4,
+    selectedPart === 'cooling-system'
+  ), [selectedPart]);
 
-  const wheelMaterial = useMemo(() => new THREE.MeshStandardMaterial({ 
-    color: '#1f2937',
-    metalness: 0.3,
-    roughness: 0.7,
-  }), []);
+  const glassMaterial = useMemo(() => advancedMaterials.createGlassMaterial(
+    '#60a5fa', 0.4, false
+  ), []);
 
-  const rimMaterial = useMemo(() => new THREE.MeshStandardMaterial({ 
-    color: '#9ca3af',
-    metalness: 0.8,
-    roughness: 0.2,
-  }), []);
+  const interiorMaterial = useMemo(() => advancedMaterials.createLeatherMaterial(
+    '#374151', false
+  ), []);
 
-  const glassMaterial = useMemo(() => new THREE.MeshStandardMaterial({ 
-    color: '#60a5fa',
-    transparent: true,
-    opacity: 0.4,
-    metalness: 0.1,
-    roughness: 0.05,
-  }), []);
+  const wheelMaterial = useMemo(() => advancedMaterials.createRubberMaterial(), []);
 
-  const interiorMaterial = useMemo(() => new THREE.MeshStandardMaterial({ 
-    color: '#374151',
-    metalness: 0.1,
-    roughness: 0.8,
-  }), []);
+  const rimMaterial = useMemo(() => advancedMaterials.createMetallicMaterial('#9ca3af', 0.2), []);
 
   return (
     <Float speed={1.5} rotationIntensity={0.1} floatIntensity={0.3}>
       <group ref={groupRef} scale={[1.2, 1.2, 1.2]} position={[0, -0.8, 0]}>
         
+        {/* Cross-section plane for cross-section view */}
+        {modelControls.viewMode === 'cross-section' && (
+          <CrossSectionPlane 
+            plane={modelControls.crossSectionPlane} 
+            axis="x" 
+          />
+        )}
+        
+        {/* Supply chain visualization */}
+        <SupplyChainVisualization 
+          selectedPart={selectedPart}
+          showFlow={selectedPart !== null}
+        />
+        
+        {/* Assembly sequence visualization */}
+        <AssemblySequenceVisualization 
+          step={animationSequence.currentStep}
+          totalSteps={6}
+        />
+        
         {/* Main Car Body - More realistic EV sedan shape with smooth curves */}
-        <group onClick={() => handlePartClick('body')}>
+        <ExplodedGroupWrapper 
+          explodeDirection={[0, 1, 0]} 
+          explodeDistance={1.5}
+          explodeFactor={modelControls.explodeFactor}
+          systemType="body"
+        >
+          <group onClick={() => handlePartClick('body')}>
           {/* Main chassis - lower and more streamlined */}
           <RoundedBox
             position={[0, -0.1, 0]}
@@ -233,160 +269,69 @@ const ModernEVModel = ({ onPartClick, selectedPart }) => {
             smoothness={4}
             material={bodyMaterial}
           />
-        </group>
-
-        {/* Enhanced Battery Pack - Tesla-style flat pack with realistic structure */}
-        <group onClick={() => handlePartClick('battery')}>
-          {/* Main battery pack housing */}
-          <RoundedBox
-            position={[0, -1.0, 0]}
-            args={[4.0, 0.25, 1.8]}
-            radius={0.05}
-            smoothness={6}
-            material={batteryMaterial}
+          
+          {/* Inventory status indicators for body components */}
+          <InventoryStatusIndicator 
+            componentId="body-panel-front"
+            position={[2.0, 0.1, 0]}
+            visible={selectedPart === 'body'}
           />
-          
-          {/* Battery cell modules - realistic layout */}
-          {[-1.5, -0.5, 0.5, 1.5].map((x, index) => (
-            <RoundedBox
-              key={`battery-module-${index}`}
-              position={[x, -1.18, 0]}
-              args={[0.6, 0.12, 1.6]}
-              radius={0.02}
-              smoothness={4}
-              material={batteryMaterial}
-            />
-          ))}
-          
-          {/* Battery cooling plates - thermal management */}
-          {[-1.0, 0, 1.0].map((x, index) => (
-            <RoundedBox
-              key={`cooling-plate-${index}`}
-              position={[x, -1.3, 0]}
-              args={[0.7, 0.03, 1.7]}
-              radius={0.01}
-              smoothness={3}
-              material={coolingMaterial}
-            />
-          ))}
-          
-          {/* Battery management system */}
-          <RoundedBox
-            position={[0, -0.85, 0]}
-            args={[0.8, 0.08, 0.4]}
-            radius={0.02}
-            smoothness={4}
-          >
-            <meshStandardMaterial 
-              color="#2563eb" 
-              metalness={0.7} 
-              roughness={0.3}
-              emissive="#1e40af"
-              emissiveIntensity={0.1}
-            />
-          </RoundedBox>
-          
-          {/* Protective armor plating */}
-          <RoundedBox
-            position={[0, -1.35, 0]}
-            args={[4.2, 0.05, 2.0]}
-            radius={0.02}
-            smoothness={4}
-          >
-            <meshStandardMaterial 
-              color="#374151" 
-              metalness={0.8} 
-              roughness={0.2}
-            />
-          </RoundedBox>
+          <InventoryStatusIndicator 
+            componentId="windshield-glass"
+            position={[1.0, 0.8, 0]}
+            visible={selectedPart === 'body'}
+          />
+          <InventoryStatusIndicator 
+            componentId="led-headlight"
+            position={[2.2, 0.15, 1.0]}
+            visible={selectedPart === 'body'}
+          />
         </group>
+        </ExplodedGroupWrapper>
 
-        {/* Dual Motor Setup - Realistic electric motor design */}
-        <group onClick={() => handlePartClick('motor')}>
-          {/* Front motor assembly */}
-          <group position={[1.8, -0.4, 0]}>
-            {/* Motor housing */}
-            <Cylinder
-              args={[0.35, 0.45, 0.7, 16]}
-              material={motorMaterial}
-            />
-            {/* Motor cooling fins */}
-            {[0, 1, 2, 3, 4, 5].map((i) => (
-              <RoundedBox
-                key={`front-fin-${i}`}
-                position={[0, 0, 0]}
-                args={[0.02, 0.4, 0.8]}
-                radius={0.01}
-                rotation={[0, (i * Math.PI) / 3, 0]}
-                material={motorMaterial}
-              />
-            ))}
-            {/* Motor mount */}
-            <RoundedBox
-              position={[0, -0.45, 0]}
-              args={[0.6, 0.1, 0.6]}
-              radius={0.02}
-              material={motorMaterial}
-            />
-          </group>
+        {/* Enhanced Battery System - Comprehensive with individual cells and BMS */}
+        <ExplodedGroupWrapper 
+          explodeDirection={[0, -1, 0]} 
+          explodeDistance={2.0}
+          explodeFactor={modelControls.explodeFactor}
+          systemType="battery"
+        >
+          <BatterySystem selectedPart={selectedPart} onPartClick={handlePartClick} />
           
-          {/* Rear motor assembly */}
-          <group position={[-1.8, -0.4, 0]}>
-            {/* Motor housing */}
-            <Cylinder
-              args={[0.35, 0.45, 0.7, 16]}
-              material={motorMaterial}
-            />
-            {/* Motor cooling fins */}
-            {[0, 1, 2, 3, 4, 5].map((i) => (
-              <RoundedBox
-                key={`rear-fin-${i}`}
-                position={[0, 0, 0]}
-                args={[0.02, 0.4, 0.8]}
-                radius={0.01}
-                rotation={[0, (i * Math.PI) / 3, 0]}
-                material={motorMaterial}
-              />
-            ))}
-            {/* Motor mount */}
-            <RoundedBox
-              position={[0, -0.45, 0]}
-              args={[0.6, 0.1, 0.6]}
-              radius={0.02}
-              material={motorMaterial}
-            />
-          </group>
+          {/* Inventory indicators for battery components */}
+          <InventoryStatusIndicator 
+            componentId="battery-pack-main"
+            position={[0, -0.8, 0]}
+            visible={selectedPart === 'battery'}
+          />
+          <InventoryStatusIndicator 
+            componentId="bms-controller"
+            position={[0.5, -0.8, 0]}
+            visible={selectedPart === 'battery'}
+          />
+        </ExplodedGroupWrapper>
+
+        {/* Advanced Motor System - Detailed dual motor setup with stator, rotor, magnets */}
+        <ExplodedGroupWrapper 
+          explodeDirection={[0, 0.5, 0]} 
+          explodeDistance={1.5}
+          explodeFactor={modelControls.explodeFactor}
+          systemType="motor"
+        >
+          <MotorSystem selectedPart={selectedPart} onPartClick={handlePartClick} />
           
-          {/* Drive shafts */}
-          <Cylinder
-            position={[1.8, -0.4, 1.0]}
-            args={[0.05, 0.05, 0.4, 8]}
-            rotation={[0, 0, Math.PI / 2]}
-          >
-            <meshStandardMaterial color="#4b5563" metalness={0.9} roughness={0.1} />
-          </Cylinder>
-          <Cylinder
-            position={[1.8, -0.4, -1.0]}
-            args={[0.05, 0.05, 0.4, 8]}
-            rotation={[0, 0, Math.PI / 2]}
-          >
-            <meshStandardMaterial color="#4b5563" metalness={0.9} roughness={0.1} />
-          </Cylinder>
-          <Cylinder
-            position={[-1.8, -0.4, 1.0]}
-            args={[0.05, 0.05, 0.4, 8]}
-            rotation={[0, 0, Math.PI / 2]}
-          >
-            <meshStandardMaterial color="#4b5563" metalness={0.9} roughness={0.1} />
-          </Cylinder>
-          <Cylinder
-            position={[-1.8, -0.4, -1.0]}
-            args={[0.05, 0.05, 0.4, 8]}
-            rotation={[0, 0, Math.PI / 2]}
-          >
-            <meshStandardMaterial color="#4b5563" metalness={0.9} roughness={0.1} />
-          </Cylinder>
-        </group>
+          {/* Inventory indicators for motor components */}
+          <InventoryStatusIndicator 
+            componentId="motor-front"
+            position={[1.8, -0.2, 0]}
+            visible={selectedPart === 'motor'}
+          />
+          <InventoryStatusIndicator 
+            componentId="motor-rear"
+            position={[-1.8, -0.2, 0]}
+            visible={selectedPart === 'motor'}
+          />
+        </ExplodedGroupWrapper>
 
         {/* Advanced Charging Port */}
         <group onClick={() => handlePartClick('charging-port')}>
@@ -464,22 +409,27 @@ const ModernEVModel = ({ onPartClick, selectedPart }) => {
           />
         </group>
 
-        {/* Suspension System */}
-        <group onClick={() => handlePartClick('suspension')}>
-          {[[-1.6, -1.2, 1.0], [1.6, -1.2, 1.0], [-1.6, -1.2, -1.0], [1.6, -1.2, -1.0]].map((position, index) => (
-            <group key={`suspension-${index}`} position={position}>
-              <Cylinder
-                args={[0.08, 0.12, 0.6, 8]}
-                material={new THREE.MeshStandardMaterial({ color: '#6b7280', metalness: 0.8 })}
-              />
-              <Sphere
-                position={[0, 0.3, 0]}
-                args={[0.1, 8, 8]}
-                material={new THREE.MeshStandardMaterial({ color: '#374151', metalness: 0.7 })}
-              />
-            </group>
-          ))}
-        </group>
+        {/* Comprehensive Chassis & Suspension System */}
+        <ExplodedGroupWrapper 
+          explodeDirection={[0, -0.5, 0]} 
+          explodeDistance={1.0}
+          explodeFactor={modelControls.explodeFactor}
+          systemType="chassis"
+        >
+          <ChassisSystem selectedPart={selectedPart} onPartClick={handlePartClick} />
+          
+          {/* Inventory indicators for chassis components */}
+          <InventoryStatusIndicator 
+            componentId="chassis-frame"
+            position={[0, -0.5, 0]}
+            visible={selectedPart === 'chassis'}
+          />
+          <InventoryStatusIndicator 
+            componentId="suspension-strut"
+            position={[1.6, -1.0, 1.0]}
+            visible={selectedPart === 'suspension'}
+          />
+        </ExplodedGroupWrapper>
 
         {/* Enhanced Wheels with realistic rims and better proportions */}
         {[[-1.7, -1.25, 1.15], [1.7, -1.25, 1.15], [-1.7, -1.25, -1.15], [1.7, -1.25, -1.15]].map((position, index) => (
@@ -550,6 +500,9 @@ const ModernEVModel = ({ onPartClick, selectedPart }) => {
                 emissiveIntensity: 0.3
               })}
             />
+            
+            {/* Advanced Braking System with regenerative braking */}
+            <BrakingSystem selectedPart={selectedPart} onPartClick={handlePartClick} />
             
             {/* Brake disc behind rim */}
             <Cylinder
@@ -902,6 +855,44 @@ const ModernEVModel = ({ onPartClick, selectedPart }) => {
 };
 
 const EVModel = ({ onPartSelect, selectedPart }) => {
+  const cameraRef = useRef();
+  const controlsRef = useRef();
+  
+  // Interactive controls
+  const modelControls = useModelInteraction();
+  const { animateToPreset } = useCameraControls(cameraRef, controlsRef);
+  const animationSequence = useAnimationSequence();
+  
+  // Handle control panel actions
+  const handleViewModeChange = (mode) => {
+    console.log('View mode changed to:', mode);
+  };
+
+  const handleCameraPreset = (preset) => {
+    animateToPreset(preset);
+  };
+
+  const handleAnimationControl = (type) => {
+    if (type === 'assembly') {
+      animationSequence.playSequence(AnimationSequences.assemblySequence, (step) => {
+        console.log('Assembly step:', step);
+      });
+    } else if (type === 'disassembly') {
+      animationSequence.playSequence(AnimationSequences.disassemblySequence, (step) => {
+        console.log('Disassembly step:', step);
+      });
+    }
+  };
+
+  const handleExport = (type) => {
+    if (type === 'screenshot') {
+      // TODO: Implement screenshot functionality
+      console.log('Taking screenshot...');
+    } else if (type === 'share') {
+      // TODO: Implement share functionality
+      console.log('Sharing model...');
+    }
+  };
   // Helper function for part descriptions
   const getPartLabel = (partId) => {
     if (!partId) return "Interactive EV Model - Click any part to explore";
@@ -955,6 +946,7 @@ const EVModel = ({ onPartSelect, selectedPart }) => {
       
       {/* 3D Scene - Enhanced Setup */}
       <Canvas 
+        ref={cameraRef}
         camera={{ position: [8, 6, 8], fov: 50 }}
         gl={{ 
           antialias: true, 
@@ -976,6 +968,10 @@ const EVModel = ({ onPartSelect, selectedPart }) => {
         }}
         onCreated={(state) => {
           console.log("✅ 3D Canvas initialized successfully");
+          // Setup advanced environment mapping for realistic reflections
+          advancedMaterials.setupEnvironmentMapping(state.scene, state.gl);
+          // Store camera reference
+          cameraRef.current = state.camera;
         }}
         onError={(error) => {
           console.error("❌ Canvas error:", error);
@@ -1041,6 +1037,7 @@ const EVModel = ({ onPartSelect, selectedPart }) => {
 
         {/* Enhanced Orbit Controls */}
         <OrbitControls
+          ref={controlsRef}
           enablePan={true}
           enableZoom={true}
           enableRotate={true}
@@ -1054,6 +1051,17 @@ const EVModel = ({ onPartSelect, selectedPart }) => {
           enableDamping={true}
         />
       </Canvas>
+
+      {/* Interactive Control Panel - Optional for enhanced interactions */}
+      {process.env.NODE_ENV !== 'test' && (
+        <ModelControlPanel
+          controls={modelControls}
+          onViewModeChange={handleViewModeChange}
+          onCameraPreset={handleCameraPreset}
+          onAnimationControl={handleAnimationControl}
+          onExport={handleExport}
+        />
+      )}
 
       {/* UI Overlay - Enhanced and Responsive */}
       <div className="absolute top-4 left-4 right-4 flex justify-between items-start pointer-events-none">
@@ -1118,6 +1126,73 @@ const EVModel = ({ onPartSelect, selectedPart }) => {
 
       {/* Selected Part Information Panel */}
       {selectedPart && (
+        <motion.div 
+          className="absolute top-20 right-4 bg-white/95 backdrop-blur-md rounded-2xl p-6 shadow-xl border border-white/20 pointer-events-auto max-w-md"
+          initial={{ opacity: 0, scale: 0.9, x: 20 }}
+          animate={{ opacity: 1, scale: 1, x: 0 }}
+          exit={{ opacity: 0, scale: 0.9, x: 20 }}
+        >
+          <div className="flex items-start justify-between mb-4">
+            <div>
+              <h4 className="text-lg font-bold text-gray-900 capitalize">
+                {selectedPart.replace('-', ' ')}
+              </h4>
+              <p className="text-sm text-gray-600 mt-1">
+                {getPartLabel(selectedPart)}
+              </p>
+            </div>
+            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+              <span className="text-white text-sm font-bold">!</span>
+            </div>
+          </div>
+          
+          {/* Inventory Information */}
+          <div className="space-y-3">
+            <div className="flex justify-between py-2 border-b border-gray-100">
+              <span className="text-sm text-gray-600">Status</span>
+              <span className="text-sm font-medium text-green-600">Operational</span>
+            </div>
+            <div className="flex justify-between py-2 border-b border-gray-100">
+              <span className="text-sm text-gray-600">Efficiency</span>
+              <span className="text-sm font-medium text-blue-600">98.5%</span>
+            </div>
+            <div className="flex justify-between py-2 border-b border-gray-100">
+              <span className="text-sm text-gray-600">Stock Level</span>
+              <span className="text-sm font-medium text-green-600">In Stock</span>
+            </div>
+            <div className="flex justify-between py-2">
+              <span className="text-sm text-gray-600">Last Maintenance</span>
+              <span className="text-sm font-medium text-gray-700">2 days ago</span>
+            </div>
+          </div>
+          
+          {/* Component Details */}
+          <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+            <h5 className="text-sm font-semibold text-gray-800 mb-2">Component Details</h5>
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <div>
+                <span className="text-gray-500">ID:</span>
+                <span className="ml-1 font-mono">EV-{selectedPart.toUpperCase()}-001</span>
+              </div>
+              <div>
+                <span className="text-gray-500">Quality:</span>
+                <span className="ml-1 text-green-600 font-medium">Grade A</span>
+              </div>
+              <div>
+                <span className="text-gray-500">Supplier:</span>
+                <span className="ml-1">TechCorp Ltd</span>
+              </div>
+              <div>
+                <span className="text-gray-500">Cost:</span>
+                <span className="ml-1 font-medium">$2,450</span>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Original Selected Part Information Panel - Keep for compatibility */}
+      {false && selectedPart && (
         <motion.div 
           className="absolute top-20 right-4 bg-white/95 backdrop-blur-md rounded-2xl p-6 shadow-xl border border-white/20 pointer-events-auto max-w-md"
           initial={{ opacity: 0, scale: 0.9, x: 20 }}
