@@ -95,11 +95,8 @@ const EVModel = ({ onPartSelect, selectedPart }) => {
           console.error("❌ Canvas error:", error);
         }}
       >
-        {/* Enhanced Lighting Setup with Environment */}
-        <ambientLight intensity={0.4} color="#f8fafc" />
-        
-        {/* HDRI Environment for realistic reflections - Optional for dev */}
-        {process.env.NODE_ENV !== 'test' && <Environment preset="city" background={false} />}
+        {/* Enhanced Lighting Setup */}
+        <ambientLight intensity={0.6} color="#f8fafc" />
         
         {/* Main directional light */}
         <directionalLight 
