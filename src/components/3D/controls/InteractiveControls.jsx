@@ -7,19 +7,35 @@ import * as THREE from 'three';
  * Provides exploded views, cross-sections, and advanced camera controls
  */
 
-// State-only hook for external use (no R3F hooks)
-export const useModelInteractionState = () => {
+export const useModelInteraction = () => {
   const [viewMode, setViewMode] = useState('assembled'); // assembled, exploded, cross-section
   const [selectedSystem, setSelectedSystem] = useState(null);
   const [explodeFactor, setExplodeFactor] = useState(0);
   const [crossSectionPlane, setCrossSectionPlane] = useState(0);
   const [animationSpeed, setAnimationSpeed] = useState(1.0);
+  const animationProgress = useRef(0);
+
+  // Animation frame handler
+  useFrame((state, delta) => {
+    if (viewMode === 'exploded') {
+      // Smooth animation for exploded view
+      animationProgress.current += delta * animationSpeed;
+      const progress = Math.min(animationProgress.current, 1.0);
+      setExplodeFactor(progress);
+    } else if (viewMode === 'assembled') {
+      // Smooth animation back to assembled
+      animationProgress.current -= delta * animationSpeed;
+      const progress = Math.max(animationProgress.current, 0);
+      setExplodeFactor(progress);
+    }
+  });
 
   const toggleExplodedView = () => {
     if (viewMode === 'exploded') {
       setViewMode('assembled');
     } else {
       setViewMode('exploded');
+      animationProgress.current = 0;
     }
   };
 
@@ -40,39 +56,8 @@ export const useModelInteractionState = () => {
     toggleCrossSectionView,
     focusOnSystem,
     setAnimationSpeed,
-    setCrossSectionPlane,
-    setExplodeFactor
+    setCrossSectionPlane
   };
-};
-
-// Canvas-internal hook that handles R3F animations
-export const useModelInteraction = (controlState) => {
-  const animationProgress = useRef(0);
-
-  // Animation frame handler - only used inside Canvas
-  useFrame((state, delta) => {
-    if (controlState.viewMode === 'exploded') {
-      // Smooth animation for exploded view
-      animationProgress.current += delta * controlState.animationSpeed;
-      const progress = Math.min(animationProgress.current, 1.0);
-      controlState.setExplodeFactor(progress);
-    } else if (controlState.viewMode === 'assembled') {
-      // Smooth animation back to assembled
-      animationProgress.current -= delta * controlState.animationSpeed;
-      const progress = Math.max(animationProgress.current, 0);
-      controlState.setExplodeFactor(progress);
-    }
-  });
-
-  return {
-    animationProgress
-  };
-};
-
-//  Canvas-internal animation handler component
-export const ModelAnimationHandler = ({ controlState }) => {
-  const animationControls = useModelInteraction(controlState);
-  return null; // This component just handles animations, no visual output
 };
 
 export const ExplodedGroupWrapper = ({ 
@@ -241,7 +226,6 @@ export const useAnimationSequence = () => {
   };
 };
 
-// Canvas-internal performance optimizer
 export const PerformanceOptimizer = () => {
   const [lodLevel, setLodLevel] = useState(0); // 0: high, 1: medium, 2: low
   const frameCount = useRef(0);
@@ -267,12 +251,4 @@ export const PerformanceOptimizer = () => {
   });
 
   return { lodLevel, fps: fps.current };
-};
-
-// State-only performance tracker for external use
-export const usePerformanceTracker = () => {
-  const [lodLevel, setLodLevel] = useState(0);
-  const [fps, setFps] = useState(60);
-  
-  return { lodLevel, fps };
 };

@@ -13,14 +13,13 @@ import { advancedMaterials } from './materials/AdvancedMaterials';
 
 // Import interactive controls and features
 import { 
-  useModelInteractionState, 
-  ModelAnimationHandler,
+  useModelInteraction, 
   ExplodedGroupWrapper, 
   CrossSectionPlane,
   useCameraControls,
   useAnimationSequence,
   AnimationSequences,
-  usePerformanceTracker
+  PerformanceOptimizer
 } from './controls/InteractiveControls';
 import ModelControlPanel from './controls/ModelControlPanel';
 import { 
@@ -32,12 +31,18 @@ import {
   CostAnalysisVisualization
 } from './integration/InventoryIntegration';
 
-const ModernEVModel = ({ onPartClick, selectedPart, modelControls, animationSequence }) => {
+const ModernEVModel = ({ onPartClick, selectedPart }) => {
   const groupRef = useRef();
   const wheelRefs = useRef([]);
   const cameraRef = useRef();
   const controlsRef = useRef();
 
+  // Interactive controls integration
+  const modelControls = useModelInteraction();
+  const { animateToPreset } = useCameraControls(cameraRef, controlsRef);
+  const animationSequence = useAnimationSequence();
+  const performanceOptimizer = PerformanceOptimizer();
+  
   // Inventory integration
   const inventoryData = useInventoryVisualization(selectedPart);
 
@@ -127,9 +132,6 @@ const ModernEVModel = ({ onPartClick, selectedPart, modelControls, animationSequ
   return (
     <Float speed={1.5} rotationIntensity={0.1} floatIntensity={0.3}>
       <group ref={groupRef} scale={[1.2, 1.2, 1.2]} position={[0, -0.8, 0]}>
-        
-        {/* Animation handler - handles all R3F animations */}
-        <ModelAnimationHandler controlState={modelControls} />
         
         {/* Cross-section plane for cross-section view */}
         {modelControls.viewMode === 'cross-section' && (
@@ -856,11 +858,10 @@ const EVModel = ({ onPartSelect, selectedPart }) => {
   const cameraRef = useRef();
   const controlsRef = useRef();
   
-  // Interactive controls - state only (no R3F hooks)
-  const modelControls = useModelInteractionState();
+  // Interactive controls
+  const modelControls = useModelInteraction();
   const { animateToPreset } = useCameraControls(cameraRef, controlsRef);
   const animationSequence = useAnimationSequence();
-  const performanceTracker = usePerformanceTracker();
   
   // Handle control panel actions
   const handleViewModeChange = (mode) => {
@@ -1031,7 +1032,7 @@ const EVModel = ({ onPartSelect, selectedPart }) => {
           polar={[-Math.PI / 3, Math.PI / 3]}
           azimuth={[-Math.PI / 1.4, Math.PI / 1.4]}
         >
-          <ModernEVModel onPartClick={onPartSelect} selectedPart={selectedPart} modelControls={modelControls} animationSequence={animationSequence} />
+          <ModernEVModel onPartClick={onPartSelect} selectedPart={selectedPart} />
         </PresentationControls>
 
         {/* Enhanced Orbit Controls */}
