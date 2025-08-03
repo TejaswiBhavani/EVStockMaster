@@ -18,6 +18,8 @@ vi.mock('@react-three/drei', () => ({
   Torus: ({ children, ...props }) => <div data-testid="torus" {...props}>{children}</div>,
   PresentationControls: ({ children }) => <div data-testid="presentation-controls">{children}</div>,
   Float: ({ children }) => <div data-testid="float">{children}</div>,
+  Environment: ({ children, ...props }) => <div data-testid="environment" {...props}>{children}</div>,
+  Stats: () => <div data-testid="stats" />,
 }));
 
 vi.mock('framer-motion', () => ({
@@ -32,6 +34,23 @@ vi.mock('three', () => ({
       Object.assign(this, props);
     }
   },
+  BufferGeometry: class {
+    constructor() {
+      this.attributes = {};
+    }
+    setAttribute(name, attribute) {
+      this.attributes[name] = attribute;
+    }
+  },
+  BufferAttribute: class {
+    constructor(array, itemSize) {
+      this.array = array;
+      this.itemSize = itemSize;
+      this.needsUpdate = false;
+    }
+  },
+  Float32Array: Float32Array,
+  AdditiveBlending: 'AdditiveBlending',
   ACESFilmicToneMapping: 'ACESFilmicToneMapping',
 }));
 
