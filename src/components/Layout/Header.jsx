@@ -78,7 +78,6 @@ const Header = ({ onMenuClick, activeTab, isMobile, onNavigate }) => {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       className="glass-card border-b border-white/20 dark:border-dark-700/30 backdrop-blur-xl px-4 sm:px-6 py-4 flex items-center justify-between shadow-lg relative overflow-hidden z-header"
-      style={{ zIndex: 20 }}
     >
       {/* Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-r from-primary-500/5 via-secondary-500/5 to-electric-500/5 dark:from-primary-400/10 dark:via-secondary-400/10 dark:to-electric-400/10"></div>
@@ -205,7 +204,6 @@ const Header = ({ onMenuClick, activeTab, isMobile, onNavigate }) => {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.95 }}
               className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-dark-800 rounded-xl shadow-2xl border border-gray-200 dark:border-dark-700 py-2 z-dropdown"
-              style={{ zIndex: 50 }} // Ensure it appears above notification overlay
             >
               <div className="px-4 py-3 border-b border-gray-100 dark:border-dark-700">
                 <p className="text-sm font-bold text-gray-900 dark:text-white">{getUserDisplayName()}</p>
