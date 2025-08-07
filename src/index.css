@@ -143,23 +143,23 @@
   }
   
   .z-dropdown {
-    z-index: 40;
-  }
-  
-  .z-notification-overlay {
-    z-index: 45;
-  }
-  
-  .z-notification {
     z-index: 50;
   }
   
-  .z-modal {
+  .z-notification-overlay {
     z-index: 60;
   }
   
-  .z-tooltip {
+  .z-notification {
     z-index: 70;
+  }
+  
+  .z-modal {
+    z-index: 80;
+  }
+  
+  .z-tooltip {
+    z-index: 90;
   }
   
   .z-topmost {
@@ -168,16 +168,16 @@
 
   /* Notification Panel Positioning */
   .notification-panel {
-    top: 4.5rem; /* Mobile: closer to header */
+    top: 5rem; /* Mobile: position below header */
     bottom: 0.5rem;
-    max-height: calc(100vh - 5rem);
+    max-height: calc(100vh - 5.5rem);
   }
   
   @media (min-width: 640px) {
     .notification-panel {
-      top: 5rem; /* Desktop: more space from header */
+      top: 5.5rem; /* Desktop: more space from header */
       bottom: 1rem;
-      max-height: calc(100vh - 6rem);
+      max-height: calc(100vh - 6.5rem);
     }
   }
 

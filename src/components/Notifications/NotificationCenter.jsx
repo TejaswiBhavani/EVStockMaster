@@ -158,25 +158,29 @@ const NotificationCenter = ({ isOpen, onClose, onNavigate }) => {
 
   return (
     <>
-      {/* Overlay - Modified to not block header interactions */}
+      {/* Overlay - Positioned to not interfere with header */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         className="fixed inset-0 bg-black/30 backdrop-blur-sm z-notification-overlay"
         style={{ 
-          top: '5rem' // Start below header to preserve header interactions
+          top: '5.5rem' // Start below header to preserve all header interactions
         }}
         onClick={onClose}
       />
 
-      {/* Notification Panel - Improved positioning and mobile responsiveness */}
+      {/* Notification Panel - Enhanced mobile and desktop positioning */}
       <motion.div
         initial={{ opacity: 0, x: 400, scale: 0.95 }}
         animate={{ opacity: 1, x: 0, scale: 1 }}
         exit={{ opacity: 0, x: 400, scale: 0.95 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
         className="fixed right-2 sm:right-4 w-full max-w-sm sm:max-w-md modern-card flex flex-col z-notification shadow-2xl border-0 notification-panel"
+        style={{
+          top: '5.5rem', // Consistent with overlay positioning
+          maxHeight: 'calc(100vh - 6.5rem)' // Account for header height and spacing
+        }}
       >
         {/* Header - Consistent with app design */}
         <div className="p-6 border-b border-gray-200 dark:border-dark-700 bg-gradient-to-r from-primary-50 to-electric-50 dark:from-primary-900/20 dark:to-electric-900/20 rounded-t-2xl">
