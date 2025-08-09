@@ -8,6 +8,7 @@ import Homepage from './components/Homepage/Homepage';
 import ChatBot from './components/Chat/ChatBot';
 import Sidebar from './components/Layout/Sidebar';
 import Header from './components/Layout/Header';
+import ImmersiveDashboard from './components/Layout/ImmersiveDashboard';
 import EVModel from './components/3D/EVModel';
 import StatsCards from './components/Dashboard/StatsCards';
 import PersonalizedWelcome from './components/Dashboard/PersonalizedWelcome';
@@ -22,10 +23,11 @@ function App() {
   const [user, loading] = useAuthState(auth);
   const [showApp, setShowApp] = useState(false);
   const [demoMode, setDemoMode] = useState(false);
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeTab, setActiveTab] = useState('immersive-dashboard'); // Start with immersive dashboard
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [selectedPart, setSelectedPart] = useState(null);
   const [infoPanelOpen, setInfoPanelOpen] = useState(false);
+  const [showImmersive, setShowImmersive] = useState(true); // New state for immersive mode
   const { isMobile } = useResponsive();
 
   // Show loading while checking auth state (only if not in demo mode)
@@ -50,7 +52,23 @@ function App() {
           onEnterApp={() => {
             setShowApp(true);
             setDemoMode(true);
+            setShowImmersive(true); // Start in immersive mode
           }} 
+        />
+        <ChatBot />
+      </ThemeProvider>
+    );
+  }
+
+  // Show immersive dashboard if enabled
+  if (showImmersive) {
+    return (
+      <ThemeProvider>
+        <ImmersiveDashboard 
+          onReturnToMenu={() => {
+            setShowImmersive(false);
+            setActiveTab('dashboard');
+          }}
         />
         <ChatBot />
       </ThemeProvider>
@@ -106,6 +124,23 @@ function App() {
                   <motion.button
                     whileHover={{ scale: 1.03, x: 5 }}
                     whileTap={{ scale: 0.97 }}
+                    onClick={() => setShowImmersive(true)}
+                    className="w-full p-4 text-left modern-card border-0 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 group"
+                  >
+                    <div className="flex items-center space-x-4">
+                      <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <Box className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <div className="font-bold text-gray-900 group-hover:text-primary-700">Immersive 3D View</div>
+                        <div className="text-sm text-gray-500">Full-screen 3D dashboard</div>
+                      </div>
+                    </div>
+                  </motion.button>
+                  
+                  <motion.button
+                    whileHover={{ scale: 1.03, x: 5 }}
+                    whileTap={{ scale: 0.97 }}
                     onClick={() => setActiveTab('3d-model')}
                     className="w-full p-4 text-left modern-card border-0 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 group"
                   >
@@ -114,7 +149,7 @@ function App() {
                         <Box className="w-6 h-6 text-white" />
                       </div>
                       <div>
-                        <div className="font-bold text-gray-900 group-hover:text-primary-700">View 3D Model</div>
+                        <div className="font-bold text-gray-900 group-hover:text-primary-700">3D Model Viewer</div>
                         <div className="text-sm text-gray-500">Interactive EV visualization</div>
                       </div>
                     </div>
