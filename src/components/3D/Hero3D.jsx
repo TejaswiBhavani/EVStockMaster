@@ -1,7 +1,6 @@
 import React, { Suspense, useState, useRef, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { 
-  Environment, 
   OrbitControls, 
   PresentationControls,
   useProgress,
@@ -191,7 +190,7 @@ const Hero3D = ({
         className="w-full h-full"
       >
         {/* Enhanced Lighting */}
-        <ambientLight intensity={0.6} color="#f8fafc" />
+        <ambientLight intensity={0.8} color="#f8fafc" />
         <directionalLight 
           position={[10, 10, 5]} 
           intensity={1.5} 
@@ -206,8 +205,22 @@ const Hero3D = ({
           shadow-camera-bottom={-20}
         />
         
-        {/* Environment for reflections - using simple preset instead of external HDRI */}
-        <Environment preset="dawn" background={false} />
+        {/* Additional fill lights for better visibility */}
+        <pointLight 
+          position={[-8, 6, -8]} 
+          intensity={0.8} 
+          color="#60a5fa"
+          distance={20}
+          decay={2}
+        />
+        
+        <pointLight 
+          position={[8, 6, 8]} 
+          intensity={0.8} 
+          color="#34d399"
+          distance={20}
+          decay={2}
+        />
         
         {/* Ground plane for shadows */}
         <mesh receiveShadow position={[0, -2, 0]} rotation={[-Math.PI / 2, 0, 0]}>
