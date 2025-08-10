@@ -16,6 +16,8 @@ import InventoryTable from './components/Inventory/InventoryTable'
 import AISummary from './components/InfoPanel/AISummary'
 import InfoPanel from './components/InfoPanel/InfoPanel'
 import SettingsPage from './components/Settings/SettingsPage'
+import AnalyticsPage from './pages/AnalyticsPage'
+import PolicyCalendar from './pages/PolicyCalendar'
 import useResponsive from './hooks/useResponsive'
 
 function App() {
@@ -195,6 +197,20 @@ function App() {
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
               <AISummary />
             </div>
+          </motion.div>
+        )
+
+      case 'analytics':
+        return (
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+            <AnalyticsPage />
+          </motion.div>
+        )
+
+      case 'policy':
+        return (
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+            <PolicyCalendar />
           </motion.div>
         )
 
