@@ -165,7 +165,7 @@ const NotificationCenter = ({ isOpen, onClose, onNavigate }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black/30 backdrop-blur-sm z-notification-overlay"
+        className="fixed inset-0 bg-black/30 backdrop-blur-sm z-topmost"
         style={{
           top: '5.5rem', // Start below header to preserve all header interactions
         }}
@@ -178,7 +178,7 @@ const NotificationCenter = ({ isOpen, onClose, onNavigate }) => {
         animate={{ opacity: 1, x: 0, scale: 1 }}
         exit={{ opacity: 0, x: 400, scale: 0.95 }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-        className="fixed right-2 sm:right-4 w-full max-w-sm sm:max-w-md modern-card flex flex-col z-notification shadow-2xl border-0 notification-panel"
+        className="fixed right-2 sm:right-4 w-full max-w-sm sm:max-w-md modern-card flex flex-col z-topmost shadow-2xl border-0 notification-panel"
         style={{
           top: '5.5rem', // Consistent with overlay positioning
           maxHeight: 'calc(100vh - 6.5rem)', // Account for header height and spacing
