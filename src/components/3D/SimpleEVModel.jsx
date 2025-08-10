@@ -1,23 +1,23 @@
-import React, { useRef } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Box, RoundedBox, Sphere, Cylinder, Torus } from '@react-three/drei';
-import { motion } from 'framer-motion';
-import * as THREE from 'three';
+import React, { useRef } from 'react'
+import { Canvas, useFrame } from '@react-three/fiber'
+import { OrbitControls, Box, RoundedBox, Sphere, Cylinder, Torus } from '@react-three/drei'
+import { motion } from 'framer-motion'
+import * as THREE from 'three'
 
 const SimpleCar = ({ onPartClick, selectedPart }) => {
-  const groupRef = useRef();
+  const groupRef = useRef()
 
   useFrame(() => {
     if (groupRef.current) {
-      groupRef.current.rotation.y += 0.01; // Slow rotation
+      groupRef.current.rotation.y += 0.01 // Slow rotation
     }
-  });
+  })
 
   const handlePartClick = (partId) => {
     if (onPartClick) {
-      onPartClick(partId);
+      onPartClick(partId)
     }
-  };
+  }
 
   return (
     <group ref={groupRef} scale={[1, 1, 1]} position={[0, 0, 0]}>
@@ -29,8 +29,8 @@ const SimpleCar = ({ onPartClick, selectedPart }) => {
         smoothness={8}
         onClick={() => handlePartClick('body')}
       >
-        <meshStandardMaterial 
-          color={selectedPart === 'body' ? '#ff6b6b' : '#4facfe'} 
+        <meshStandardMaterial
+          color={selectedPart === 'body' ? '#ff6b6b' : '#4facfe'}
           metalness={0.6}
           roughness={0.2}
         />
@@ -44,8 +44,8 @@ const SimpleCar = ({ onPartClick, selectedPart }) => {
         smoothness={6}
         onClick={() => handlePartClick('body')}
       >
-        <meshStandardMaterial 
-          color={selectedPart === 'body' ? '#ff6b6b' : '#4facfe'} 
+        <meshStandardMaterial
+          color={selectedPart === 'body' ? '#ff6b6b' : '#4facfe'}
           metalness={0.6}
           roughness={0.2}
         />
@@ -59,8 +59,8 @@ const SimpleCar = ({ onPartClick, selectedPart }) => {
         smoothness={6}
         onClick={() => handlePartClick('body')}
       >
-        <meshStandardMaterial 
-          color={selectedPart === 'body' ? '#ff6b6b' : '#4facfe'} 
+        <meshStandardMaterial
+          color={selectedPart === 'body' ? '#ff6b6b' : '#4facfe'}
           metalness={0.6}
           roughness={0.2}
         />
@@ -74,8 +74,8 @@ const SimpleCar = ({ onPartClick, selectedPart }) => {
         smoothness={6}
         onClick={() => handlePartClick('battery')}
       >
-        <meshStandardMaterial 
-          color={selectedPart === 'battery' ? '#ff9f43' : '#00f2fe'} 
+        <meshStandardMaterial
+          color={selectedPart === 'battery' ? '#ff9f43' : '#00f2fe'}
           metalness={0.7}
           roughness={0.1}
           emissive={selectedPart === 'battery' ? '#ff9f43' : '#004d5c'}
@@ -89,8 +89,8 @@ const SimpleCar = ({ onPartClick, selectedPart }) => {
         args={[0.25, 0.25, 0.4, 12]}
         onClick={() => handlePartClick('motor')}
       >
-        <meshStandardMaterial 
-          color={selectedPart === 'motor' ? '#26de81' : '#2dd4bf'} 
+        <meshStandardMaterial
+          color={selectedPart === 'motor' ? '#26de81' : '#2dd4bf'}
           metalness={0.8}
           roughness={0.2}
         />
@@ -101,40 +101,36 @@ const SimpleCar = ({ onPartClick, selectedPart }) => {
         args={[0.25, 0.25, 0.4, 12]}
         onClick={() => handlePartClick('motor')}
       >
-        <meshStandardMaterial 
-          color={selectedPart === 'motor' ? '#26de81' : '#2dd4bf'} 
+        <meshStandardMaterial
+          color={selectedPart === 'motor' ? '#26de81' : '#2dd4bf'}
           metalness={0.8}
           roughness={0.2}
         />
       </Cylinder>
 
       {/* Wheels - More realistic with rims */}
-      {[[-1.0, -0.65, 0.7], [1.0, -0.65, 0.7], [-1.0, -0.65, -0.7], [1.0, -0.65, -0.7]].map((position, index) => (
+      {[
+        [-1.0, -0.65, 0.7],
+        [1.0, -0.65, 0.7],
+        [-1.0, -0.65, -0.7],
+        [1.0, -0.65, -0.7],
+      ].map((position, index) => (
         <group key={`wheel-${index}`} position={position}>
           {/* Tire */}
-          <Cylinder
-            args={[0.35, 0.35, 0.25, 16]}
-            rotation={[Math.PI / 2, 0, 0]}
-          >
+          <Cylinder args={[0.35, 0.35, 0.25, 16]} rotation={[Math.PI / 2, 0, 0]}>
             <meshStandardMaterial color="#2c3e50" metalness={0.3} roughness={0.7} />
           </Cylinder>
-          
+
           {/* Rim */}
-          <Cylinder
-            args={[0.25, 0.25, 0.27, 12]}
-            rotation={[Math.PI / 2, 0, 0]}
-          >
+          <Cylinder args={[0.25, 0.25, 0.27, 12]} rotation={[Math.PI / 2, 0, 0]}>
             <meshStandardMaterial color="#9ca3af" metalness={0.8} roughness={0.2} />
           </Cylinder>
-          
+
           {/* Center cap */}
-          <Cylinder
-            args={[0.08, 0.08, 0.28, 8]}
-            rotation={[Math.PI / 2, 0, 0]}
-          >
-            <meshStandardMaterial 
-              color="#00f2fe" 
-              metalness={0.9} 
+          <Cylinder args={[0.08, 0.08, 0.28, 8]} rotation={[Math.PI / 2, 0, 0]}>
+            <meshStandardMaterial
+              color="#00f2fe"
+              metalness={0.9}
               emissive="#004d5c"
               emissiveIntensity={0.2}
             />
@@ -143,28 +139,20 @@ const SimpleCar = ({ onPartClick, selectedPart }) => {
       ))}
 
       {/* Modern LED Headlights */}
-      <RoundedBox
-        position={[1.4, 0.1, 0.35]}
-        args={[0.08, 0.08, 0.06]}
-        radius={0.02}
-      >
-        <meshStandardMaterial 
-          color="#ffffff" 
-          emissive="#60a5fa" 
+      <RoundedBox position={[1.4, 0.1, 0.35]} args={[0.08, 0.08, 0.06]} radius={0.02}>
+        <meshStandardMaterial
+          color="#ffffff"
+          emissive="#60a5fa"
           emissiveIntensity={0.6}
           metalness={0.1}
           roughness={0.1}
         />
       </RoundedBox>
 
-      <RoundedBox
-        position={[1.4, 0.1, -0.35]}
-        args={[0.08, 0.08, 0.06]}
-        radius={0.02}
-      >
-        <meshStandardMaterial 
-          color="#ffffff" 
-          emissive="#60a5fa" 
+      <RoundedBox position={[1.4, 0.1, -0.35]} args={[0.08, 0.08, 0.06]} radius={0.02}>
+        <meshStandardMaterial
+          color="#ffffff"
+          emissive="#60a5fa"
           emissiveIntensity={0.6}
           metalness={0.1}
           roughness={0.1}
@@ -172,28 +160,12 @@ const SimpleCar = ({ onPartClick, selectedPart }) => {
       </RoundedBox>
 
       {/* Sleek Taillights */}
-      <RoundedBox
-        position={[-1.4, 0.1, 0.35]}
-        args={[0.06, 0.06, 0.04]}
-        radius={0.02}
-      >
-        <meshStandardMaterial 
-          color="#dc2626" 
-          emissive="#ef4444" 
-          emissiveIntensity={0.7}
-        />
+      <RoundedBox position={[-1.4, 0.1, 0.35]} args={[0.06, 0.06, 0.04]} radius={0.02}>
+        <meshStandardMaterial color="#dc2626" emissive="#ef4444" emissiveIntensity={0.7} />
       </RoundedBox>
 
-      <RoundedBox
-        position={[-1.4, 0.1, -0.35]}
-        args={[0.06, 0.06, 0.04]}
-        radius={0.02}
-      >
-        <meshStandardMaterial 
-          color="#dc2626" 
-          emissive="#ef4444" 
-          emissiveIntensity={0.7}
-        />
+      <RoundedBox position={[-1.4, 0.1, -0.35]} args={[0.06, 0.06, 0.04]} radius={0.02}>
+        <meshStandardMaterial color="#dc2626" emissive="#ef4444" emissiveIntensity={0.7} />
       </RoundedBox>
 
       {/* Charging Port - Modern design */}
@@ -203,8 +175,8 @@ const SimpleCar = ({ onPartClick, selectedPart }) => {
         radius={0.02}
         onClick={() => handlePartClick('charging-port')}
       >
-        <meshStandardMaterial 
-          color={selectedPart === 'charging-port' ? '#a855f7' : '#7c3aed'} 
+        <meshStandardMaterial
+          color={selectedPart === 'charging-port' ? '#a855f7' : '#7c3aed'}
           metalness={0.8}
           roughness={0.1}
           emissive={selectedPart === 'charging-port' ? '#a855f7' : '#5b21b6'}
@@ -213,30 +185,22 @@ const SimpleCar = ({ onPartClick, selectedPart }) => {
       </RoundedBox>
 
       {/* Side Windows */}
-      <RoundedBox
-        position={[0.2, 0.45, 0.72]}
-        args={[1.2, 0.3, 0.02]}
-        radius={0.03}
-      >
-        <meshStandardMaterial 
-          color="#60a5fa" 
-          transparent={true} 
-          opacity={0.4} 
-          metalness={0.1} 
+      <RoundedBox position={[0.2, 0.45, 0.72]} args={[1.2, 0.3, 0.02]} radius={0.03}>
+        <meshStandardMaterial
+          color="#60a5fa"
+          transparent={true}
+          opacity={0.4}
+          metalness={0.1}
           roughness={0.05}
         />
       </RoundedBox>
 
-      <RoundedBox
-        position={[0.2, 0.45, -0.72]}
-        args={[1.2, 0.3, 0.02]}
-        radius={0.03}
-      >
-        <meshStandardMaterial 
-          color="#60a5fa" 
-          transparent={true} 
-          opacity={0.4} 
-          metalness={0.1} 
+      <RoundedBox position={[0.2, 0.45, -0.72]} args={[1.2, 0.3, 0.02]} radius={0.03}>
+        <meshStandardMaterial
+          color="#60a5fa"
+          transparent={true}
+          opacity={0.4}
+          metalness={0.1}
           roughness={0.05}
         />
       </RoundedBox>
@@ -248,17 +212,17 @@ const SimpleCar = ({ onPartClick, selectedPart }) => {
         radius={0.05}
         rotation={[0, 0, -0.1]}
       >
-        <meshStandardMaterial 
-          color="#60a5fa" 
-          transparent={true} 
-          opacity={0.3} 
-          metalness={0.1} 
+        <meshStandardMaterial
+          color="#60a5fa"
+          transparent={true}
+          opacity={0.3}
+          metalness={0.1}
           roughness={0.05}
         />
       </RoundedBox>
     </group>
-  );
-};
+  )
+}
 
 const SimpleEVModel = ({ onPartSelect, selectedPart }) => {
   return (
@@ -268,10 +232,7 @@ const SimpleEVModel = ({ onPartSelect, selectedPart }) => {
       transition={{ duration: 1 }}
       className="h-full w-full bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl overflow-hidden relative"
     >
-      <Canvas 
-        camera={{ position: [5, 3, 5], fov: 60 }}
-        gl={{ antialias: true }}
-      >
+      <Canvas camera={{ position: [5, 3, 5], fov: 60 }} gl={{ antialias: true }}>
         {/* Lighting */}
         <ambientLight intensity={0.6} />
         <directionalLight position={[10, 10, 5]} intensity={1} />
@@ -290,7 +251,7 @@ const SimpleEVModel = ({ onPartSelect, selectedPart }) => {
         />
       </Canvas>
     </motion.div>
-  );
-};
+  )
+}
 
-export default SimpleEVModel;
+export default SimpleEVModel

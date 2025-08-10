@@ -1,48 +1,49 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Bell, 
-  Filter, 
-  Search, 
-  CheckCircle, 
-  Trash2, 
+import React, { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import {
+  Bell,
+  Filter,
+  Search,
+  CheckCircle,
+  Trash2,
   X,
   AlertTriangle,
   Info,
   Settings,
-  Clock
-} from 'lucide-react';
-import NotificationItem from './NotificationItem';
+  Clock,
+} from 'lucide-react'
+import NotificationItem from './NotificationItem'
 
 const NotificationCenter = ({ isOpen, onClose, onNavigate }) => {
-  const [notifications, setNotifications] = useState([]);
-  const [filter, setFilter] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [notifications, setNotifications] = useState([])
+  const [filter, setFilter] = useState('all')
+  const [searchTerm, setSearchTerm] = useState('')
 
   // Load notifications from localStorage or use mock data
   useEffect(() => {
     const loadNotifications = () => {
       try {
-        const saved = localStorage.getItem('invenai-notifications');
+        const saved = localStorage.getItem('invenai-notifications')
         if (saved) {
-          const parsedNotifications = JSON.parse(saved);
+          const parsedNotifications = JSON.parse(saved)
           // Validate and set notifications
           if (Array.isArray(parsedNotifications)) {
-            setNotifications(parsedNotifications);
-            return;
+            setNotifications(parsedNotifications)
+            return
           }
         }
       } catch (error) {
-        console.warn('Failed to load notifications from localStorage:', error);
+        console.warn('Failed to load notifications from localStorage:', error)
       }
-      
+
       // Fallback to mock notifications
       const mockNotifications = [
         {
           id: '1',
           type: 'critical',
           title: 'Critical Stock Alert',
-          message: 'Battery pack inventory is critically low (5 units remaining). Immediate reorder required.',
+          message:
+            'Battery pack inventory is critically low (5 units remaining). Immediate reorder required.',
           category: 'inventory',
           timestamp: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
           isRead: false,
@@ -52,7 +53,8 @@ const NotificationCenter = ({ isOpen, onClose, onNavigate }) => {
           id: '2',
           type: 'warning',
           title: 'AI Insight Available',
-          message: 'New demand forecast suggests 25% increase in motor requirements for next quarter.',
+          message:
+            'New demand forecast suggests 25% increase in motor requirements for next quarter.',
           category: 'ai',
           timestamp: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
           isRead: false,
@@ -87,74 +89,74 @@ const NotificationCenter = ({ isOpen, onClose, onNavigate }) => {
           timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
           isRead: true,
           itemId: 'cooling-system-components',
-        }
-      ];
-      setNotifications(mockNotifications);
+        },
+      ]
+      setNotifications(mockNotifications)
       // Save to localStorage
-      localStorage.setItem('invenai-notifications', JSON.stringify(mockNotifications));
-    };
-    
-    loadNotifications();
-  }, []);
+      localStorage.setItem('invenai-notifications', JSON.stringify(mockNotifications))
+    }
+
+    loadNotifications()
+  }, [])
 
   // Save notifications to localStorage whenever they change
   useEffect(() => {
     if (notifications.length > 0) {
       try {
-        localStorage.setItem('invenai-notifications', JSON.stringify(notifications));
+        localStorage.setItem('invenai-notifications', JSON.stringify(notifications))
       } catch (error) {
-        console.warn('Failed to save notifications to localStorage:', error);
+        console.warn('Failed to save notifications to localStorage:', error)
       }
     }
-  }, [notifications]);
+  }, [notifications])
 
-  const filteredNotifications = notifications.filter(notification => {
-    const matchesFilter = filter === 'all' || 
+  const filteredNotifications = notifications.filter((notification) => {
+    const matchesFilter =
+      filter === 'all' ||
       (filter === 'unread' && !notification.isRead) ||
       (filter === 'critical' && notification.type === 'critical') ||
-      (filter === notification.category);
-    
-    const matchesSearch = searchTerm === '' || 
-      notification.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      notification.message.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    return matchesFilter && matchesSearch;
-  });
+      filter === notification.category
 
-  const unreadCount = notifications.filter(n => !n.isRead).length;
+    const matchesSearch =
+      searchTerm === '' ||
+      notification.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      notification.message.toLowerCase().includes(searchTerm.toLowerCase())
+
+    return matchesFilter && matchesSearch
+  })
+
+  const unreadCount = notifications.filter((n) => !n.isRead).length
 
   const handleMarkAsRead = (id) => {
-    setNotifications(prev => 
-      prev.map(notification => 
-        notification.id === id ? { ...notification, isRead: true } : notification
-      )
-    );
-  };
+    setNotifications((prev) =>
+      prev.map((notification) =>
+        notification.id === id ? { ...notification, isRead: true } : notification,
+      ),
+    )
+  }
 
   const handleDelete = (id) => {
-    setNotifications(prev => prev.filter(notification => notification.id !== id));
-  };
+    setNotifications((prev) => prev.filter((notification) => notification.id !== id))
+  }
 
   const handleMarkAllAsRead = () => {
-    setNotifications(prev => 
-      prev.map(notification => ({ ...notification, isRead: true }))
-    );
-  };
+    setNotifications((prev) => prev.map((notification) => ({ ...notification, isRead: true })))
+  }
 
   const handleNavigate = (tab, itemId = null) => {
     if (onNavigate) {
-      onNavigate(tab, itemId);
-      onClose(); // Close notification panel after navigation
+      onNavigate(tab, itemId)
+      onClose() // Close notification panel after navigation
     }
-  };
+  }
 
   const handleClearAll = () => {
     if (window.confirm('Are you sure you want to delete all notifications?')) {
-      setNotifications([]);
+      setNotifications([])
     }
-  };
+  }
 
-  if (!isOpen) return null;
+  if (!isOpen) return null
 
   return (
     <>
@@ -164,8 +166,8 @@ const NotificationCenter = ({ isOpen, onClose, onNavigate }) => {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         className="fixed inset-0 bg-black/30 backdrop-blur-sm z-notification-overlay"
-        style={{ 
-          top: '5.5rem' // Start below header to preserve all header interactions
+        style={{
+          top: '5.5rem', // Start below header to preserve all header interactions
         }}
         onClick={onClose}
       />
@@ -175,11 +177,11 @@ const NotificationCenter = ({ isOpen, onClose, onNavigate }) => {
         initial={{ opacity: 0, x: 400, scale: 0.95 }}
         animate={{ opacity: 1, x: 0, scale: 1 }}
         exit={{ opacity: 0, x: 400, scale: 0.95 }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
         className="fixed right-2 sm:right-4 w-full max-w-sm sm:max-w-md modern-card flex flex-col z-notification shadow-2xl border-0 notification-panel"
         style={{
           top: '5.5rem', // Consistent with overlay positioning
-          maxHeight: 'calc(100vh - 6.5rem)' // Account for header height and spacing
+          maxHeight: 'calc(100vh - 6.5rem)', // Account for header height and spacing
         }}
       >
         {/* Header - Consistent with app design */}
@@ -223,8 +225,16 @@ const NotificationCenter = ({ isOpen, onClose, onNavigate }) => {
             {[
               { key: 'all', label: 'All', count: notifications.length },
               { key: 'unread', label: 'Unread', count: unreadCount },
-              { key: 'critical', label: 'Critical', count: notifications.filter(n => n.type === 'critical').length },
-              { key: 'inventory', label: 'Inventory', count: notifications.filter(n => n.category === 'inventory').length }
+              {
+                key: 'critical',
+                label: 'Critical',
+                count: notifications.filter((n) => n.type === 'critical').length,
+              },
+              {
+                key: 'inventory',
+                label: 'Inventory',
+                count: notifications.filter((n) => n.category === 'inventory').length,
+              },
             ].map(({ key, label, count }) => (
               <motion.button
                 key={key}
@@ -239,11 +249,13 @@ const NotificationCenter = ({ isOpen, onClose, onNavigate }) => {
               >
                 {label}
                 {count > 0 && (
-                  <span className={`ml-1.5 px-1.5 py-0.5 text-xs rounded-full ${
-                    filter === key 
-                      ? 'bg-white/20 text-white' 
-                      : 'bg-gray-200 dark:bg-dark-600 text-gray-600 dark:text-gray-300'
-                  }`}>
+                  <span
+                    className={`ml-1.5 px-1.5 py-0.5 text-xs rounded-full ${
+                      filter === key
+                        ? 'bg-white/20 text-white'
+                        : 'bg-gray-200 dark:bg-dark-600 text-gray-600 dark:text-gray-300'
+                    }`}
+                  >
                     {count}
                   </span>
                 )}
@@ -265,7 +277,7 @@ const NotificationCenter = ({ isOpen, onClose, onNavigate }) => {
               <CheckCircle className="w-4 h-4" />
               <span>Mark all read</span>
             </motion.button>
-            
+
             <div className="flex items-center space-x-2">
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -275,7 +287,7 @@ const NotificationCenter = ({ isOpen, onClose, onNavigate }) => {
               >
                 <Settings className="w-4 h-4" />
               </motion.button>
-              
+
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -320,22 +332,20 @@ const NotificationCenter = ({ isOpen, onClose, onNavigate }) => {
                   <Bell className="w-8 h-8 text-gray-400 dark:text-gray-500" />
                 </div>
                 <p className="text-gray-500 dark:text-gray-400 font-medium mb-2 text-lg">
-                  {searchTerm || filter !== 'all' 
-                    ? 'No notifications match your filters' 
-                    : 'No notifications'
-                  }
+                  {searchTerm || filter !== 'all'
+                    ? 'No notifications match your filters'
+                    : 'No notifications'}
                 </p>
                 <p className="text-sm text-gray-400 dark:text-gray-500 mb-4">
-                  {searchTerm || filter !== 'all' 
-                    ? 'Try adjusting your search or filter criteria' 
-                    : 'You\'re all caught up! New notifications will appear here.'
-                  }
+                  {searchTerm || filter !== 'all'
+                    ? 'Try adjusting your search or filter criteria'
+                    : "You're all caught up! New notifications will appear here."}
                 </p>
                 {(searchTerm || filter !== 'all') && (
                   <motion.button
                     onClick={() => {
-                      setSearchTerm('');
-                      setFilter('all');
+                      setSearchTerm('')
+                      setFilter('all')
                     }}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -356,11 +366,16 @@ const NotificationCenter = ({ isOpen, onClose, onNavigate }) => {
               <div className="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
                 <div className="flex items-center space-x-2">
                   <div className="w-2 h-2 bg-primary-500 rounded-full"></div>
-                  <span>{filteredNotifications.length} of {notifications.length}</span>
+                  <span>
+                    {filteredNotifications.length} of {notifications.length}
+                  </span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Clock className="w-3 h-3" />
-                  <span>Last updated: {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                  <span>
+                    Last updated:{' '}
+                    {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </span>
                 </div>
               </div>
               {unreadCount > 0 && (
@@ -376,7 +391,7 @@ const NotificationCenter = ({ isOpen, onClose, onNavigate }) => {
         )}
       </motion.div>
     </>
-  );
-};
+  )
+}
 
-export default NotificationCenter;
+export default NotificationCenter

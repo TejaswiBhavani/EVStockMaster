@@ -1,20 +1,20 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { 
-  Package, 
-  MapPin, 
-  DollarSign, 
-  Calendar, 
+import React from 'react'
+import { motion } from 'framer-motion'
+import {
+  Package,
+  MapPin,
+  DollarSign,
+  Calendar,
   Truck,
   AlertTriangle,
   CheckCircle,
   TrendingUp,
-  Info
-} from 'lucide-react';
-import { evParts } from '../../data/mockData';
+  Info,
+} from 'lucide-react'
+import { evParts } from '../../data/mockData'
 
 const PartDetails = ({ partId }) => {
-  const part = evParts.find(p => p.id === partId);
+  const part = evParts.find((p) => p.id === partId)
 
   if (!part) {
     return (
@@ -24,41 +24,44 @@ const PartDetails = ({ partId }) => {
           <p className="text-gray-500">Select a part to view details</p>
         </div>
       </div>
-    );
+    )
   }
 
   const getHealthIcon = (health) => {
     const icons = {
-      'excellent': CheckCircle,
-      'good': CheckCircle,
-      'warning': AlertTriangle,
-      'critical': AlertTriangle
-    };
-    return icons[health] || CheckCircle;
-  };
+      excellent: CheckCircle,
+      good: CheckCircle,
+      warning: AlertTriangle,
+      critical: AlertTriangle,
+    }
+    return icons[health] || CheckCircle
+  }
 
   const getHealthColor = (health) => {
     const colors = {
-      'excellent': 'text-green-600 bg-green-100',
-      'good': 'text-blue-600 bg-blue-100',
-      'warning': 'text-yellow-600 bg-yellow-100',
-      'critical': 'text-red-600 bg-red-100'
-    };
-    return colors[health] || 'text-gray-600 bg-gray-100';
-  };
+      excellent: 'text-green-600 bg-green-100',
+      good: 'text-blue-600 bg-blue-100',
+      warning: 'text-yellow-600 bg-yellow-100',
+      critical: 'text-red-600 bg-red-100',
+    }
+    return colors[health] || 'text-gray-600 bg-gray-100'
+  }
 
   const getStockStatus = () => {
-    if (part.currentStock <= part.minimumStock * 0.5) return { status: 'Critical', color: 'text-red-600 bg-red-100' };
-    if (part.currentStock <= part.minimumStock) return { status: 'Low', color: 'text-yellow-600 bg-yellow-100' };
+    if (part.currentStock <= part.minimumStock * 0.5)
+      return { status: 'Critical', color: 'text-red-600 bg-red-100' }
+    if (part.currentStock <= part.minimumStock)
+      return { status: 'Low', color: 'text-yellow-600 bg-yellow-100' }
     // Estimate maxStock since mockData doesn't have it
-    const estimatedMaxStock = part.minimumStock * 3;
-    if (part.currentStock >= estimatedMaxStock * 0.8) return { status: 'High', color: 'text-blue-600 bg-blue-100' };
-    return { status: 'Normal', color: 'text-green-600 bg-green-100' };
-  };
+    const estimatedMaxStock = part.minimumStock * 3
+    if (part.currentStock >= estimatedMaxStock * 0.8)
+      return { status: 'High', color: 'text-blue-600 bg-blue-100' }
+    return { status: 'Normal', color: 'text-green-600 bg-green-100' }
+  }
 
-  const stockStatus = getStockStatus();
-  const estimatedMaxStock = part.minimumStock * 3;
-  const stockPercentage = (part.currentStock / estimatedMaxStock) * 100;
+  const stockStatus = getStockStatus()
+  const estimatedMaxStock = part.minimumStock * 3
+  const stockPercentage = (part.currentStock / estimatedMaxStock) * 100
 
   return (
     <motion.div
@@ -86,7 +89,7 @@ const PartDetails = ({ partId }) => {
           </div>
           <div className="text-2xl font-bold text-gray-900">{part.currentStock}</div>
           <div className="text-sm text-gray-500">of {estimatedMaxStock} estimated max</div>
-          
+
           {/* Stock Progress Bar */}
           <div className="mt-3">
             <div className="w-full bg-gray-200 rounded-full h-2">
@@ -95,9 +98,11 @@ const PartDetails = ({ partId }) => {
                 animate={{ width: `${stockPercentage}%` }}
                 transition={{ delay: 0.3, duration: 0.8 }}
                 className={`h-2 rounded-full ${
-                  stockPercentage <= 25 ? 'bg-red-500' :
-                  stockPercentage <= 50 ? 'bg-yellow-500' :
-                  'bg-green-500'
+                  stockPercentage <= 25
+                    ? 'bg-red-500'
+                    : stockPercentage <= 50
+                      ? 'bg-yellow-500'
+                      : 'bg-green-500'
                 }`}
               />
             </div>
@@ -113,8 +118,7 @@ const PartDetails = ({ partId }) => {
             </div>
           </div>
           <div className="text-2xl font-bold text-gray-900">
-            {part.status === 'In Stock' ? '100%' :
-             part.status === 'Low Stock' ? '65%' : '30%'}
+            {part.status === 'In Stock' ? '100%' : part.status === 'Low Stock' ? '65%' : '30%'}
           </div>
           <div className="text-sm text-gray-500">Availability score</div>
         </div>
@@ -199,7 +203,7 @@ const PartDetails = ({ partId }) => {
         </motion.button>
       </div>
     </motion.div>
-  );
-};
+  )
+}
 
-export default PartDetails;
+export default PartDetails

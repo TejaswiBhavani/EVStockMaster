@@ -1,37 +1,37 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Calendar, Clock, Users, CheckCircle, AlertCircle, PlayCircle } from 'lucide-react';
-import { productionSchedule } from '../../data/mockData';
+import React from 'react'
+import { motion } from 'framer-motion'
+import { Calendar, Clock, Users, CheckCircle, AlertCircle, PlayCircle } from 'lucide-react'
+import { productionSchedule } from '../../data/mockData'
 
 const ProductionSchedule = () => {
   const getStatusIcon = (status) => {
     const icons = {
-      'scheduled': PlayCircle,
+      scheduled: PlayCircle,
       'in-progress': Clock,
-      'planned': Calendar,
-      'completed': CheckCircle
-    };
-    return icons[status] || Calendar;
-  };
+      planned: Calendar,
+      completed: CheckCircle,
+    }
+    return icons[status] || Calendar
+  }
 
   const getStatusColor = (status) => {
     const colors = {
-      'scheduled': 'text-blue-600 bg-blue-100',
+      scheduled: 'text-blue-600 bg-blue-100',
       'in-progress': 'text-yellow-600 bg-yellow-100',
-      'planned': 'text-gray-600 bg-gray-100',
-      'completed': 'text-green-600 bg-green-100'
-    };
-    return colors[status] || 'text-gray-600 bg-gray-100';
-  };
+      planned: 'text-gray-600 bg-gray-100',
+      completed: 'text-green-600 bg-green-100',
+    }
+    return colors[status] || 'text-gray-600 bg-gray-100'
+  }
 
   const getPriorityColor = (priority) => {
     const colors = {
-      'high': 'border-l-red-500 bg-red-50',
-      'medium': 'border-l-yellow-500 bg-yellow-50',
-      'low': 'border-l-green-500 bg-green-50'
-    };
-    return colors[priority] || 'border-l-gray-500 bg-gray-50';
-  };
+      high: 'border-l-red-500 bg-red-50',
+      medium: 'border-l-yellow-500 bg-yellow-50',
+      low: 'border-l-green-500 bg-green-50',
+    }
+    return colors[priority] || 'border-l-gray-500 bg-gray-50'
+  }
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
@@ -51,10 +51,10 @@ const ProductionSchedule = () => {
 
       <div className="space-y-4">
         {productionSchedule.map((item, index) => {
-          const StatusIcon = getStatusIcon(item.status);
-          const statusColor = getStatusColor(item.status);
-          const priorityColor = getPriorityColor(item.priority);
-          
+          const StatusIcon = getStatusIcon(item.status)
+          const statusColor = getStatusColor(item.status)
+          const priorityColor = getPriorityColor(item.priority)
+
           return (
             <motion.div
               key={item.id}
@@ -73,7 +73,9 @@ const ProductionSchedule = () => {
                     <p className="text-sm text-gray-500">Quantity: {item.quantity} units</p>
                   </div>
                 </div>
-                <div className={`px-3 py-1 rounded-full text-xs font-medium capitalize ${statusColor}`}>
+                <div
+                  className={`px-3 py-1 rounded-full text-xs font-medium capitalize ${statusColor}`}
+                >
                   {item.status.replace('-', ' ')}
                 </div>
               </div>
@@ -110,10 +112,15 @@ const ProductionSchedule = () => {
               {/* Priority indicator */}
               <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
                 <div className="flex items-center space-x-2">
-                  <AlertCircle className={`w-4 h-4 ${
-                    item.priority === 'high' ? 'text-red-500' : 
-                    item.priority === 'medium' ? 'text-yellow-500' : 'text-green-500'
-                  }`} />
+                  <AlertCircle
+                    className={`w-4 h-4 ${
+                      item.priority === 'high'
+                        ? 'text-red-500'
+                        : item.priority === 'medium'
+                          ? 'text-yellow-500'
+                          : 'text-green-500'
+                    }`}
+                  />
                   <span className="text-xs font-medium text-gray-600 capitalize">
                     {item.priority} Priority
                   </span>
@@ -124,7 +131,7 @@ const ProductionSchedule = () => {
                 </div>
               </div>
             </motion.div>
-          );
+          )
         })}
       </div>
 
@@ -151,7 +158,7 @@ const ProductionSchedule = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ProductionSchedule;
+export default ProductionSchedule

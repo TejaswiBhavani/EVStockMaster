@@ -15,7 +15,7 @@
 ### ✨ Key Features
 
 - **🎯 Interactive 3D EV Model Viewer** - Click on parts to view detailed information
-- **📊 Real-time Dashboard** - Live inventory metrics and production schedules  
+- **📊 Real-time Dashboard** - Live inventory metrics and production schedules
 - **🤖 AI-Powered Analytics** - Smart insights and recommendations
 - **📱 Responsive Design** - Optimized for desktop, tablet, and mobile
 - **⚡ Real-time Updates** - Live data synchronization
@@ -24,21 +24,25 @@
 ## 🛠 Tech Stack
 
 ### Frontend
+
 - **React 18** - Modern React with hooks and functional components
 - **Vite** - Fast build tool and development server
 - **Tailwind CSS** - Utility-first CSS framework
 - **Framer Motion** - Smooth animations and transitions
 
 ### 3D Visualization
+
 - **Three.js** - 3D graphics library
 - **@react-three/fiber** - React renderer for Three.js
 - **@react-three/drei** - Useful helpers for React Three Fiber
 
 ### Backend & Database
+
 - **Firebase** - Authentication, Firestore database, hosting
 - **Firebase Analytics** - User behavior tracking
 
 ### UI/UX
+
 - **Lucide React** - Beautiful icon library
 - **Custom Design System** - Consistent styling and components
 
@@ -54,12 +58,14 @@
 ### Installation
 
 #### 1. Clone the Repository
+
 ```bash
 git clone https://github.com/TejaswiBhavani/EVStockMaster.git
 cd EVStockMaster
 ```
 
 #### 2. Install Frontend Dependencies
+
 ```bash
 # Install Node.js dependencies
 npm install --legacy-peer-deps
@@ -69,6 +75,7 @@ yarn install
 ```
 
 #### 3. Install Backend Dependencies
+
 ```bash
 # Install Python dependencies
 pip install -r requirements.txt
@@ -80,6 +87,7 @@ pip install -r requirements.txt
 ```
 
 #### 4. Environment Configuration
+
 ```bash
 # Copy environment template
 cp .env.example .env
@@ -89,7 +97,9 @@ cp .env.example .env
 ```
 
 #### 5. Firebase Setup (Required)
+
 Follow our comprehensive [Firebase Setup Guide](./FIREBASE_DOMAIN_FIX.md) to:
+
 - Create a Firebase project
 - Enable Authentication and Firestore
 - Configure authorized domains
@@ -98,12 +108,14 @@ Follow our comprehensive [Firebase Setup Guide](./FIREBASE_DOMAIN_FIX.md) to:
 #### 6. Run the Applications
 
 **Frontend (React) - Terminal 1:**
+
 ```bash
 npm run dev
 # App will be available at http://localhost:5173
 ```
 
 **Backend (Streamlit) - Terminal 2:**
+
 ```bash
 npm run streamlit
 # Or directly: streamlit run app.py
@@ -173,30 +185,35 @@ EVStockMaster/
 ## 🎨 Features Deep Dive
 
 ### 1. Interactive 3D Model Viewer
+
 - **Clickable EV Parts**: Battery, Motor, Chassis, Wheels, Dashboard, Seats
 - **Smooth Animations**: Hover effects and selection highlighting
 - **Orbital Controls**: Rotate, zoom, and pan the 3D model
 - **Real-time Updates**: Part status reflected in 3D visualization
 
 ### 2. Smart Dashboard
+
 - **Key Metrics**: Total parts, low stock alerts, inventory value
 - **Production Schedule**: Upcoming manufacturing plans
 - **Quick Actions**: Navigate to different sections
 - **Real-time Data**: Live updates every 15 minutes
 
 ### 3. AI-Powered Analytics
+
 - **Confidence Scoring**: 94% analysis accuracy
 - **Smart Recommendations**: Automated inventory suggestions
 - **Trend Analysis**: 30-day performance tracking
 - **Predictive Insights**: Future demand forecasting
 
 ### 4. Advanced Inventory Management
+
 - **Sortable Tables**: Sort by name, stock, cost, supplier
 - **Health Indicators**: Excellent, Good, Warning, Critical
 - **Search & Filter**: Find parts quickly
 - **Supplier Management**: Track supplier information
 
 ### 5. Responsive Info Panel
+
 - **Part Details**: Specifications, location, cost
 - **AI Summary**: Intelligent analysis and recommendations
 - **Mobile Optimized**: Smooth animations and touch-friendly
@@ -204,20 +221,22 @@ EVStockMaster/
 ## 🔧 Configuration
 
 ### Firebase Setup
+
 Update `src/config/firebase.js` with your Firebase configuration:
 
 ```javascript
 const firebaseConfig = {
-  apiKey: "your-api-key",
-  authDomain: "your-project.firebaseapp.com",
-  projectId: "your-project-id",
-  storageBucket: "your-project.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "your-app-id"
-};
+  apiKey: 'your-api-key',
+  authDomain: 'your-project.firebaseapp.com',
+  projectId: 'your-project-id',
+  storageBucket: 'your-project.appspot.com',
+  messagingSenderId: '123456789',
+  appId: 'your-app-id',
+}
 ```
 
 ### Environment Variables
+
 Create a `.env` file in the root directory:
 
 ```env
@@ -231,7 +250,7 @@ VITE_FIREBASE_PROJECT_ID=your-project-id
 EVStockMaster is built with a mobile-first approach:
 
 - **Desktop (1024px+)**: Full sidebar, multi-column layouts
-- **Tablet (768px-1023px)**: Collapsible sidebar, adapted layouts  
+- **Tablet (768px-1023px)**: Collapsible sidebar, adapted layouts
 - **Mobile (<768px)**: Hamburger menu, stacked layouts, touch-optimized
 
 ## 🚀 Deployment
@@ -239,10 +258,12 @@ EVStockMaster is built with a mobile-first approach:
 ### Firebase Hosting (Recommended)
 
 #### Prerequisites
+
 - Firebase CLI installed: `npm install -g firebase-tools`
 - Firebase project configured (see Firebase Setup Guide)
 
 #### Deploy Steps
+
 ```bash
 # 1. Login to Firebase
 firebase login
@@ -262,9 +283,11 @@ firebase deploy
 ### Vercel Deployment
 
 #### One-Click Deploy
+
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/TejaswiBhavani/EVStockMaster)
 
 #### Manual Deploy
+
 ```bash
 # 1. Install Vercel CLI
 npm i -g vercel
@@ -282,11 +305,13 @@ vercel --prod
 ### Netlify Deployment
 
 #### Drag & Drop Deploy
+
 1. Build the project: `npm run build`
 2. Go to [Netlify](https://netlify.com)
 3. Drag the `dist` folder to deploy
 
 #### Git Integration
+
 1. Connect your GitHub repository
 2. Set build command: `npm run build`
 3. Set publish directory: `dist`
@@ -295,6 +320,7 @@ vercel --prod
 ### Docker Deployment
 
 #### Frontend Container
+
 ```dockerfile
 # Dockerfile
 FROM node:18-alpine as build
@@ -311,6 +337,7 @@ CMD ["nginx", "-g", "daemon off;"]
 ```
 
 #### Backend Container
+
 ```dockerfile
 # Dockerfile.streamlit
 FROM python:3.11-slim
@@ -323,6 +350,7 @@ CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0
 ```
 
 #### Docker Compose
+
 ```yaml
 # docker-compose.yml
 version: '3.8'
@@ -330,16 +358,16 @@ services:
   frontend:
     build: .
     ports:
-      - "80:80"
+      - '80:80'
     environment:
       - NODE_ENV=production
-    
+
   backend:
     build:
       context: .
       dockerfile: Dockerfile.streamlit
     ports:
-      - "8501:8501"
+      - '8501:8501'
     environment:
       - STREAMLIT_SERVER_PORT=8501
 ```
@@ -347,6 +375,7 @@ services:
 ### Environment Variables for Production
 
 Create `.env.production` with:
+
 ```env
 # Firebase Production Config
 VITE_FIREBASE_API_KEY=your-production-api-key
@@ -363,6 +392,7 @@ VITE_API_BASE_URL=https://your-api-domain.com
 ```
 
 ### Production Checklist
+
 - [ ] Firebase project configured for production
 - [ ] Environment variables set correctly
 - [ ] Firestore security rules configured
@@ -378,6 +408,7 @@ VITE_API_BASE_URL=https://your-api-domain.com
 EVStockMaster includes a comprehensive testing setup using Vitest and React Testing Library.
 
 ### Running Tests
+
 ```bash
 # Run unit tests
 npm test
@@ -393,6 +424,7 @@ npm test -- --watch
 ```
 
 ### Test Structure
+
 ```
 src/test/
 ├── setup.js           # Test configuration and mocks
@@ -404,6 +436,7 @@ src/test/
 ```
 
 ### Testing Features
+
 - ✅ **Unit Tests**: Component and function testing
 - ✅ **Integration Tests**: Multi-component interactions
 - ✅ **Mocked Dependencies**: Firebase, Three.js, and external APIs
@@ -411,6 +444,7 @@ src/test/
 - ✅ **Responsive Testing**: Mobile and desktop viewports
 
 ### Writing Tests
+
 ```javascript
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'

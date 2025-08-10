@@ -1,9 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   darkMode: 'class', // Enable class-based dark mode
   theme: {
     extend: {
@@ -51,7 +48,7 @@ export default {
           200: '#99f6e4',
           300: '#5eead4',
           400: '#00f2fe', // Match favicon primary color
-          500: '#4facfe', // Match favicon secondary color  
+          500: '#4facfe', // Match favicon secondary color
           600: '#14b8a6',
           700: '#0f766e',
           800: '#115e59',
@@ -80,7 +77,7 @@ export default {
           700: '#334155',
           800: '#1e293b',
           900: '#0f172a',
-        }
+        },
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
@@ -90,10 +87,10 @@ export default {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'bounce-slow': 'bounce 2s infinite',
         'spin-slow': 'spin 3s linear infinite',
-        'fadeIn': 'fadeIn 0.5s ease-in-out',
-        'slideIn': 'slideIn 0.3s ease-out',
-        'scaleIn': 'scaleIn 0.2s ease-out',
-        'glow': 'glow 2s ease-in-out infinite alternate',
+        fadeIn: 'fadeIn 0.5s ease-in-out',
+        slideIn: 'slideIn 0.3s ease-out',
+        scaleIn: 'scaleIn 0.2s ease-out',
+        glow: 'glow 2s ease-in-out infinite alternate',
       },
       keyframes: {
         fadeIn: {
@@ -116,16 +113,14 @@ export default {
       backdropBlur: {
         xs: '2px',
       },
-      boxShadow: {
-        'glow': '0 0 20px rgba(59, 130, 246, 0.3)',
+      boxShadow: ({ theme }) => ({
+        glow: '0 0 20px rgba(59, 130, 246, 0.3)',
         'glow-lg': '0 0 30px rgba(59, 130, 246, 0.5)',
-        'neon': '0 0 5px theme(colors.electric.400), 0 0 20px theme(colors.electric.400), 0 0 35px theme(colors.electric.400)',
-        'card': '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+        neon: `0 0 5px ${theme('colors.electric.400')}, 0 0 20px ${theme('colors.electric.400')}, 0 0 35px ${theme('colors.electric.400')}`,
+        card: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
         'card-hover': '0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-      }
+      }),
     },
   },
-  plugins: [
-    require('@tailwindcss/forms'),
-  ],
+  plugins: [require('@tailwindcss/forms')],
 }

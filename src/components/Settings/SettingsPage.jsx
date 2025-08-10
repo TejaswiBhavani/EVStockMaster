@@ -1,88 +1,94 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../../config/firebase';
-import { useTheme } from '../../hooks/useTheme';
-import { 
-  User, 
-  Mail, 
-  Shield, 
-  Bell, 
-  Palette, 
-  Clock, 
-  Ruler, 
-  Eye, 
+import React, { useState } from 'react'
+import { motion } from 'framer-motion'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth } from '../../config/firebase'
+import { useTheme } from '../../hooks/useTheme'
+import {
+  User,
+  Mail,
+  Shield,
+  Bell,
+  Palette,
+  Clock,
+  Ruler,
+  Eye,
   Zap,
   Trash2,
   Save,
   RefreshCw,
   Moon,
   Sun,
-  Monitor
-} from 'lucide-react';
+  Monitor,
+} from 'lucide-react'
 
 const SettingsPage = () => {
-  const [user] = useAuthState(auth);
-  const { theme, changeTheme, isDark } = useTheme();
+  const [user] = useAuthState(auth)
+  const { theme, changeTheme, isDark } = useTheme()
   const [settings, setSettings] = useState({
     // Application Preferences
     notifications: {
       lowStock: true,
       aiInsights: true,
       productionUpdates: true,
-      systemAnnouncements: true
+      systemAnnouncements: true,
     },
     dataRefreshInterval: 15,
     units: 'metric',
-    
+
     // 3D Model Preferences
     defaultView: 'perspective',
     animationSpeed: 1,
     highlightColor: '#00f2fe',
-    
+
     // AI Assistant Preferences
     aiVerbosity: 'standard',
-    aiConfidenceThreshold: 0.7
-  });
+    aiConfidenceThreshold: 0.7,
+  })
 
   const handleSettingChange = (category, key, value) => {
     if (category) {
-      setSettings(prev => ({
+      setSettings((prev) => ({
         ...prev,
         [category]: {
           ...prev[category],
-          [key]: value
-        }
-      }));
+          [key]: value,
+        },
+      }))
     } else {
-      setSettings(prev => ({
+      setSettings((prev) => ({
         ...prev,
-        [key]: value
-      }));
+        [key]: value,
+      }))
     }
-  };
+  }
 
   const handleSaveSettings = () => {
     // Here you would typically save to Firebase or your backend
-    console.log('Saving settings:', settings);
+    console.log('Saving settings:', settings)
     // Show success notification
-  };
+  }
 
   const handleDeleteAccount = () => {
-    if (window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+    if (
+      window.confirm('Are you sure you want to delete your account? This action cannot be undone.')
+    ) {
       // Handle account deletion
-      console.log('Account deletion requested');
+      console.log('Account deletion requested')
     }
-  };
+  }
 
   const getThemeIcon = (themeType) => {
     switch (themeType) {
-      case 'light': return Sun;
-      case 'dark': return Moon;
-      case 'system': return Monitor;
-      default: return Monitor;
+      case 'light':
+        return Sun
+      case 'dark':
+        return Moon
+      case 'system':
+        return Monitor
+      default:
+        return Monitor
     }
-  };
+  }
 
   return (
     <motion.div
@@ -97,7 +103,7 @@ const SettingsPage = () => {
       </div>
 
       {/* User Profile Management */}
-      <motion.div 
+      <motion.div
         className="modern-card p-6 dark:bg-dark-800 dark:border-dark-700"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -107,10 +113,12 @@ const SettingsPage = () => {
           <User className="w-5 h-5 mr-3 text-primary-600 dark:text-primary-400" />
           User Profile Management
         </h2>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Display Name</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Display Name
+            </label>
             <input
               type="text"
               className="input-modern w-full dark:bg-dark-700 dark:border-dark-600 dark:text-white"
@@ -118,9 +126,11 @@ const SettingsPage = () => {
               defaultValue={user?.displayName || ''}
             />
           </div>
-          
+
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email Address</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Email Address
+            </label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
@@ -131,17 +141,21 @@ const SettingsPage = () => {
               />
             </div>
           </div>
-          
+
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Password</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Password
+            </label>
             <button className="btn-secondary flex items-center space-x-2">
               <Shield className="w-4 h-4" />
               <span>Change Password</span>
             </button>
           </div>
-          
+
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Profile Picture</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Profile Picture
+            </label>
             <div className="flex items-center space-x-4">
               <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-xl flex items-center justify-center">
                 <User className="w-6 h-6 text-white" />
@@ -164,7 +178,7 @@ const SettingsPage = () => {
       </motion.div>
 
       {/* Application Preferences */}
-      <motion.div 
+      <motion.div
         className="modern-card p-6 dark:bg-dark-800 dark:border-dark-700"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -174,17 +188,19 @@ const SettingsPage = () => {
           <Palette className="w-5 h-5 mr-3 text-secondary-600 dark:text-secondary-400" />
           Application Preferences
         </h2>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Theme Selection */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Theme Selection</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+              Theme Selection
+            </label>
             <div className="space-y-3">
               {['light', 'dark', 'system'].map((themeOption) => {
-                const IconComponent = getThemeIcon(themeOption);
+                const IconComponent = getThemeIcon(themeOption)
                 return (
-                  <motion.label 
-                    key={themeOption} 
+                  <motion.label
+                    key={themeOption}
                     className="flex items-center space-x-3 cursor-pointer p-3 rounded-xl border border-gray-200 dark:border-dark-600 hover:bg-gray-50 dark:hover:bg-dark-700 transition-colors"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
@@ -199,10 +215,15 @@ const SettingsPage = () => {
                     />
                     <IconComponent className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                     <div>
-                      <span className="text-sm text-gray-700 dark:text-gray-300 font-medium capitalize">{themeOption} Mode</span>
+                      <span className="text-sm text-gray-700 dark:text-gray-300 font-medium capitalize">
+                        {themeOption} Mode
+                      </span>
                       <p className="text-xs text-gray-500 dark:text-gray-400">
-                        {themeOption === 'system' ? 'Follow system preference' : 
-                         themeOption === 'light' ? 'Light appearance' : 'Dark appearance'}
+                        {themeOption === 'system'
+                          ? 'Follow system preference'
+                          : themeOption === 'light'
+                            ? 'Light appearance'
+                            : 'Dark appearance'}
                       </p>
                     </div>
                     {theme === themeOption && (
@@ -213,7 +234,7 @@ const SettingsPage = () => {
                       />
                     )}
                   </motion.label>
-                );
+                )
               })}
             </div>
           </div>
@@ -227,11 +248,14 @@ const SettingsPage = () => {
             <div className="space-y-3">
               {Object.entries({
                 lowStock: 'Low Stock Alerts',
-                aiInsights: 'AI Insight Updates', 
+                aiInsights: 'AI Insight Updates',
                 productionUpdates: 'Production Schedule Changes',
-                systemAnnouncements: 'System Announcements'
+                systemAnnouncements: 'System Announcements',
               }).map(([key, label]) => (
-                <label key={key} className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-dark-700">
+                <label
+                  key={key}
+                  className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-dark-700"
+                >
                   <span className="text-sm text-gray-700 dark:text-gray-300">{label}</span>
                   <input
                     type="checkbox"
@@ -252,7 +276,9 @@ const SettingsPage = () => {
             </label>
             <select
               value={settings.dataRefreshInterval}
-              onChange={(e) => handleSettingChange(null, 'dataRefreshInterval', parseInt(e.target.value))}
+              onChange={(e) =>
+                handleSettingChange(null, 'dataRefreshInterval', parseInt(e.target.value))
+              }
               className="input-modern w-full dark:bg-dark-700 dark:border-dark-600 dark:text-white"
             >
               <option value={5}>Every 5 minutes</option>
@@ -279,7 +305,9 @@ const SettingsPage = () => {
                     onChange={(e) => handleSettingChange(null, 'units', e.target.value)}
                     className="w-4 h-4 text-primary-600"
                   />
-                  <span className="text-sm text-gray-700 dark:text-gray-300 capitalize">{unit}</span>
+                  <span className="text-sm text-gray-700 dark:text-gray-300 capitalize">
+                    {unit}
+                  </span>
                 </label>
               ))}
             </div>
@@ -288,7 +316,7 @@ const SettingsPage = () => {
       </motion.div>
 
       {/* 3D Model Preferences */}
-      <motion.div 
+      <motion.div
         className="modern-card p-6"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -298,7 +326,7 @@ const SettingsPage = () => {
           <Eye className="w-5 h-5 mr-3 text-electric-600" />
           3D Model Preferences
         </h2>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Default View */}
           <div>
@@ -326,7 +354,9 @@ const SettingsPage = () => {
               max="2"
               step="0.1"
               value={settings.animationSpeed}
-              onChange={(e) => handleSettingChange(null, 'animationSpeed', parseFloat(e.target.value))}
+              onChange={(e) =>
+                handleSettingChange(null, 'animationSpeed', parseFloat(e.target.value))
+              }
               className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
             />
           </div>
@@ -348,7 +378,7 @@ const SettingsPage = () => {
       </motion.div>
 
       {/* AI Assistant Preferences */}
-      <motion.div 
+      <motion.div
         className="modern-card p-6"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -358,11 +388,13 @@ const SettingsPage = () => {
           <Zap className="w-5 h-5 mr-3 text-accent-600" />
           AI Assistant Preferences
         </h2>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* AI Response Verbosity */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">AI Response Verbosity</label>
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              AI Response Verbosity
+            </label>
             <div className="space-y-2">
               {['concise', 'standard', 'detailed'].map((verbosity) => (
                 <label key={verbosity} className="flex items-center space-x-3 cursor-pointer">
@@ -391,7 +423,9 @@ const SettingsPage = () => {
               max="0.9"
               step="0.1"
               value={settings.aiConfidenceThreshold}
-              onChange={(e) => handleSettingChange(null, 'aiConfidenceThreshold', parseFloat(e.target.value))}
+              onChange={(e) =>
+                handleSettingChange(null, 'aiConfidenceThreshold', parseFloat(e.target.value))
+              }
               className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
             />
             <div className="flex justify-between text-xs text-gray-500 mt-1">
@@ -403,7 +437,7 @@ const SettingsPage = () => {
       </motion.div>
 
       {/* Save Button */}
-      <motion.div 
+      <motion.div
         className="flex justify-center"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -418,7 +452,7 @@ const SettingsPage = () => {
         </button>
       </motion.div>
     </motion.div>
-  );
-};
+  )
+}
 
-export default SettingsPage;
+export default SettingsPage

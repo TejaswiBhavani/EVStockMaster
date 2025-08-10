@@ -1,60 +1,60 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, Package, Brain, ChevronLeft, ChevronRight } from 'lucide-react';
-import PartDetails from './PartDetails';
-import AISummary from './AISummary';
+import React, { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { X, Package, Brain, ChevronLeft, ChevronRight } from 'lucide-react'
+import PartDetails from './PartDetails'
+import AISummary from './AISummary'
 
 const InfoPanel = ({ isOpen, onClose, selectedPart, isMobile }) => {
-  const [activeTab, setActiveTab] = useState('details');
+  const [activeTab, setActiveTab] = useState('details')
 
   const panelVariants = {
     open: {
       x: 0,
       opacity: 1,
       transition: {
-        type: "spring",
+        type: 'spring',
         stiffness: 300,
-        damping: 30
-      }
+        damping: 30,
+      },
     },
     closed: {
-      x: "100%",
+      x: '100%',
       opacity: 0,
       transition: {
-        type: "spring",
+        type: 'spring',
         stiffness: 300,
-        damping: 30
-      }
-    }
-  };
+        damping: 30,
+      },
+    },
+  }
 
   const overlayVariants = {
     open: {
       opacity: 1,
-      transition: { duration: 0.2 }
+      transition: { duration: 0.2 },
     },
     closed: {
       opacity: 0,
-      transition: { duration: 0.2 }
-    }
-  };
+      transition: { duration: 0.2 },
+    },
+  }
 
   const tabs = [
     {
       id: 'details',
       label: 'Part Details',
       icon: Package,
-      component: PartDetails
+      component: PartDetails,
     },
     {
       id: 'ai-summary',
       label: 'AI Summary',
       icon: Brain,
-      component: AISummary
-    }
-  ];
+      component: AISummary,
+    },
+  ]
 
-  const ActiveComponent = tabs.find(tab => tab.id === activeTab)?.component || PartDetails;
+  const ActiveComponent = tabs.find((tab) => tab.id === activeTab)?.component || PartDetails
 
   return (
     <AnimatePresence>
@@ -97,7 +97,7 @@ const InfoPanel = ({ isOpen, onClose, selectedPart, isMobile }) => {
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center space-x-2">
                   {!isMobile && (
                     <motion.button
@@ -108,7 +108,7 @@ const InfoPanel = ({ isOpen, onClose, selectedPart, isMobile }) => {
                       <ChevronRight className="w-4 h-4 text-gray-600" />
                     </motion.button>
                   )}
-                  
+
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -123,18 +123,19 @@ const InfoPanel = ({ isOpen, onClose, selectedPart, isMobile }) => {
               {/* Tabs */}
               <div className="flex border-b border-gray-200 bg-gray-50">
                 {tabs.map((tab) => {
-                  const Icon = tab.icon;
-                  const isActive = activeTab === tab.id;
-                  
+                  const Icon = tab.icon
+                  const isActive = activeTab === tab.id
+
                   return (
                     <motion.button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
                       className={`
                         flex-1 flex items-center justify-center space-x-2 py-3 px-4 text-sm font-medium transition-all
-                        ${isActive 
-                          ? 'text-primary-600 bg-white border-b-2 border-primary-600' 
-                          : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
+                        ${
+                          isActive
+                            ? 'text-primary-600 bg-white border-b-2 border-primary-600'
+                            : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
                         }
                       `}
                       whileHover={{ y: -1 }}
@@ -143,7 +144,7 @@ const InfoPanel = ({ isOpen, onClose, selectedPart, isMobile }) => {
                       <Icon className="w-4 h-4" />
                       <span>{tab.label}</span>
                     </motion.button>
-                  );
+                  )
                 })}
               </div>
 
@@ -176,7 +177,7 @@ const InfoPanel = ({ isOpen, onClose, selectedPart, isMobile }) => {
         </>
       )}
     </AnimatePresence>
-  );
-};
+  )
+}
 
-export default InfoPanel;
+export default InfoPanel

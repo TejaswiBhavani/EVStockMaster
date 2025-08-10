@@ -24,7 +24,7 @@ describe('Mock Data', () => {
 
 describe('Data Validation', () => {
   it('should have valid stock numbers', () => {
-    evParts.forEach(item => {
+    evParts.forEach((item) => {
       if (item.currentStock !== undefined) {
         expect(typeof item.currentStock).toBe('number')
         expect(item.currentStock).toBeGreaterThanOrEqual(0)
@@ -33,7 +33,7 @@ describe('Data Validation', () => {
   })
 
   it('should have valid minimum stock levels', () => {
-    evParts.forEach(item => {
+    evParts.forEach((item) => {
       if (item.minimumStock !== undefined) {
         expect(typeof item.minimumStock).toBe('number')
         expect(item.minimumStock).toBeGreaterThanOrEqual(0)

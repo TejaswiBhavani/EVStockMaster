@@ -8,8 +8,8 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production --legacy-peer-deps
+# Install dependencies (include devDependencies for build)
+RUN npm ci --legacy-peer-deps
 
 # Copy source code
 COPY . .

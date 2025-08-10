@@ -5,6 +5,7 @@
 ### 1. Frontend (React App) Testing
 
 1. **Start the development server:**
+
    ```bash
    npm run dev
    ```
@@ -30,6 +31,7 @@
 ### 2. Backend (Streamlit App) Testing
 
 1. **Start the Streamlit server:**
+
    ```bash
    streamlit run app.py
    ```
@@ -97,25 +99,28 @@
 ### Mock Data Verification
 
 1. **EV Parts Data:**
+
    ```javascript
    // Verify in browser console
-   console.log(evParts.length); // Should show 6 parts
-   console.log(evParts.map(p => p.name)); // List all part names
+   console.log(evParts.length) // Should show 6 parts
+   console.log(evParts.map((p) => p.name)) // List all part names
    ```
 
 2. **Production Schedule:**
+
    ```javascript
-   console.log(productionSchedule.length); // Should show 3 schedules
+   console.log(productionSchedule.length) // Should show 3 schedules
    ```
 
 3. **AI Insights:**
    ```javascript
-   console.log(aiInsights.overall.confidence); // Should show 94
+   console.log(aiInsights.overall.confidence) // Should show 94
    ```
 
 ### Python Data Generation
 
 1. **Test data generation:**
+
    ```bash
    python -c "
    from modules.data_generator import generate_all_parts_data
@@ -165,6 +170,7 @@
    - Target: Performance > 80, Accessibility > 90
 
 2. **Bundle Size Analysis:**
+
    ```bash
    npm run build
    # Check dist/ folder sizes
@@ -212,6 +218,7 @@
 ### Production Build
 
 1. **React Production:**
+
    ```bash
    npm run build
    # Test the built files
@@ -251,6 +258,7 @@
 ### Debug Mode
 
 1. **React Debug:**
+
    ```bash
    npm run dev -- --debug
    ```
@@ -280,7 +288,7 @@ pip install pytest pytest-cov
 # React tests
 npm test
 
-# Python tests  
+# Python tests
 pytest tests/ -v --cov=modules/
 ```
 

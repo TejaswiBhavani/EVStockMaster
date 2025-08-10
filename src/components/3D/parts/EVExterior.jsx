@@ -1,12 +1,12 @@
-import React from 'react';
-import { RoundedBox } from '@react-three/drei';
+import React from 'react'
+import { RoundedBox } from '@react-three/drei'
 
 const EVExterior = ({ selectedPart, onPartClick }) => {
   const handlePartClick = (partId) => {
     if (onPartClick) {
-      onPartClick(partId);
+      onPartClick(partId)
     }
-  };
+  }
 
   return (
     <group name="ev-exterior">
@@ -17,9 +17,9 @@ const EVExterior = ({ selectedPart, onPartClick }) => {
         radius={0.02}
         onClick={() => handlePartClick('headlights')}
       >
-        <meshStandardMaterial 
-          color="#ffffff" 
-          emissive={selectedPart === 'headlights' ? '#60a5fa' : '#3b82f6'} 
+        <meshStandardMaterial
+          color="#ffffff"
+          emissive={selectedPart === 'headlights' ? '#60a5fa' : '#3b82f6'}
           emissiveIntensity={selectedPart === 'headlights' ? 0.8 : 0.6}
           metalness={0.1}
           roughness={0.1}
@@ -32,9 +32,9 @@ const EVExterior = ({ selectedPart, onPartClick }) => {
         radius={0.02}
         onClick={() => handlePartClick('headlights')}
       >
-        <meshStandardMaterial 
-          color="#ffffff" 
-          emissive={selectedPart === 'headlights' ? '#60a5fa' : '#3b82f6'} 
+        <meshStandardMaterial
+          color="#ffffff"
+          emissive={selectedPart === 'headlights' ? '#60a5fa' : '#3b82f6'}
           emissiveIntensity={selectedPart === 'headlights' ? 0.8 : 0.6}
           metalness={0.1}
           roughness={0.1}
@@ -48,9 +48,9 @@ const EVExterior = ({ selectedPart, onPartClick }) => {
         radius={0.02}
         onClick={() => handlePartClick('taillights')}
       >
-        <meshStandardMaterial 
-          color="#dc2626" 
-          emissive={selectedPart === 'taillights' ? '#ef4444' : '#dc2626'} 
+        <meshStandardMaterial
+          color="#dc2626"
+          emissive={selectedPart === 'taillights' ? '#ef4444' : '#dc2626'}
           emissiveIntensity={selectedPart === 'taillights' ? 0.9 : 0.7}
         />
       </RoundedBox>
@@ -61,9 +61,9 @@ const EVExterior = ({ selectedPart, onPartClick }) => {
         radius={0.02}
         onClick={() => handlePartClick('taillights')}
       >
-        <meshStandardMaterial 
-          color="#dc2626" 
-          emissive={selectedPart === 'taillights' ? '#ef4444' : '#dc2626'} 
+        <meshStandardMaterial
+          color="#dc2626"
+          emissive={selectedPart === 'taillights' ? '#ef4444' : '#dc2626'}
           emissiveIntensity={selectedPart === 'taillights' ? 0.9 : 0.7}
         />
       </RoundedBox>
@@ -75,8 +75,8 @@ const EVExterior = ({ selectedPart, onPartClick }) => {
         radius={0.02}
         onClick={() => handlePartClick('charging-port')}
       >
-        <meshStandardMaterial 
-          color={selectedPart === 'charging-port' ? '#a855f7' : '#7c3aed'} 
+        <meshStandardMaterial
+          color={selectedPart === 'charging-port' ? '#a855f7' : '#7c3aed'}
           metalness={0.8}
           roughness={0.1}
           emissive={selectedPart === 'charging-port' ? '#a855f7' : '#5b21b6'}
@@ -91,8 +91,8 @@ const EVExterior = ({ selectedPart, onPartClick }) => {
         radius={0.01}
         onClick={() => handlePartClick('doors')}
       >
-        <meshStandardMaterial 
-          color={selectedPart === 'doors' ? '#f59e0b' : '#6b7280'} 
+        <meshStandardMaterial
+          color={selectedPart === 'doors' ? '#f59e0b' : '#6b7280'}
           metalness={0.8}
           roughness={0.2}
         />
@@ -104,8 +104,8 @@ const EVExterior = ({ selectedPart, onPartClick }) => {
         radius={0.01}
         onClick={() => handlePartClick('doors')}
       >
-        <meshStandardMaterial 
-          color={selectedPart === 'doors' ? '#f59e0b' : '#6b7280'} 
+        <meshStandardMaterial
+          color={selectedPart === 'doors' ? '#f59e0b' : '#6b7280'}
           metalness={0.8}
           roughness={0.2}
         />
@@ -118,8 +118,8 @@ const EVExterior = ({ selectedPart, onPartClick }) => {
         radius={0.01}
         onClick={() => handlePartClick('mirrors')}
       >
-        <meshStandardMaterial 
-          color={selectedPart === 'mirrors' ? '#10b981' : '#374151'} 
+        <meshStandardMaterial
+          color={selectedPart === 'mirrors' ? '#10b981' : '#374151'}
           metalness={0.9}
           roughness={0.1}
         />
@@ -131,14 +131,14 @@ const EVExterior = ({ selectedPart, onPartClick }) => {
         radius={0.01}
         onClick={() => handlePartClick('mirrors')}
       >
-        <meshStandardMaterial 
-          color={selectedPart === 'mirrors' ? '#10b981' : '#374151'} 
+        <meshStandardMaterial
+          color={selectedPart === 'mirrors' ? '#10b981' : '#374151'}
           metalness={0.9}
           roughness={0.1}
         />
       </RoundedBox>
     </group>
-  );
-};
+  )
+}
 
-export default EVExterior;
+export default EVExterior

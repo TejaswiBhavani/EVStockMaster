@@ -1,61 +1,59 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { 
-  Zap, 
-  BarChart3, 
-  Brain, 
-  Shield, 
-  Truck, 
+import React, { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
+import {
+  Zap,
+  BarChart3,
+  Brain,
+  Shield,
+  Truck,
   Users,
   ArrowRight,
   Play,
-  CheckCircle
-} from 'lucide-react';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../../config/firebase';
-import AuthModal from '../Auth/AuthModal';
+  CheckCircle,
+} from 'lucide-react'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth } from '../../config/firebase'
+import AuthModal from '../Auth/AuthModal'
 
 const Homepage = ({ onEnterApp }) => {
-  const [user] = useAuthState(auth);
-  const [authModal, setAuthModal] = useState({ isOpen: false, mode: 'login' });
-  const [stats, setStats] = useState({ users: 0, parts: 0, savings: 0 });
+  const [user] = useAuthState(auth)
+  const [authModal, setAuthModal] = useState({ isOpen: false, mode: 'login' })
+  const [stats, setStats] = useState({ users: 0, parts: 0, savings: 0 })
 
   useEffect(() => {
     // Animate stats on load
     const timer = setTimeout(() => {
-      setStats({ users: 2500, parts: 15000, savings: 35 });
-    }, 500);
-    return () => clearTimeout(timer);
-  }, []);
+      setStats({ users: 2500, parts: 15000, savings: 35 })
+    }, 500)
+    return () => clearTimeout(timer)
+  }, [])
 
   const features = [
     {
       icon: Brain,
       title: 'AI-Powered Analytics',
       description: 'Smart insights and predictive analytics for optimal inventory management',
-      color: 'from-purple-500 to-pink-500'
+      color: 'from-purple-500 to-pink-500',
     },
     {
       icon: BarChart3,
       title: 'Real-time Dashboard',
       description: 'Monitor inventory levels, track performance, and get instant alerts',
-      color: 'from-blue-500 to-cyan-500'
+      color: 'from-blue-500 to-cyan-500',
     },
     {
       icon: Truck,
       title: 'Supply Chain Optimization',
       description: 'Streamline your supply chain with intelligent demand forecasting',
-      color: 'from-green-500 to-emerald-500'
+      color: 'from-green-500 to-emerald-500',
     },
     {
       icon: Shield,
       title: 'Enterprise Security',
       description: 'Bank-level security with Firebase authentication and data protection',
-      color: 'from-red-500 to-orange-500'
-    }
-  ];
-
-
+      color: 'from-red-500 to-orange-500',
+    },
+  ]
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-dark-900 via-dark-800 to-dark-700">
@@ -65,19 +63,49 @@ const Homepage = ({ onEnterApp }) => {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-gradient-to-r from-electric-400 to-electric-500 rounded-xl flex items-center justify-center shadow-lg">
-                <svg width="24" height="24" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 100 100"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
                   <defs>
                     <linearGradient id="navLogoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                       <stop offset="0%" stopColor="#ffffff" />
                       <stop offset="100%" stopColor="#f0f9ff" />
                     </linearGradient>
                   </defs>
-                  <circle cx="50" cy="50" r="45" fill="url(#navLogoGradient)" fillOpacity="0.1" stroke="url(#navLogoGradient)" strokeWidth="2"/>
-                  <path d="M30 35 L50 20 L70 35 L65 40 L50 30 L35 40 Z" fill="url(#navLogoGradient)"/>
-                  <path d="M25 45 L50 25 L75 45 L70 50 L50 35 L30 50 Z" fill="url(#navLogoGradient)" fillOpacity="0.8"/>
-                  <path d="M20 55 L50 30 L80 55 L75 60 L50 40 L25 60 Z" fill="url(#navLogoGradient)" fillOpacity="0.6"/>
-                  <circle cx="50" cy="65" r="8" fill="url(#navLogoGradient)"/>
-                  <path d="M42 65 L50 55 L58 65" stroke="url(#navLogoGradient)" strokeWidth="2" fill="none"/>
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="45"
+                    fill="url(#navLogoGradient)"
+                    fillOpacity="0.1"
+                    stroke="url(#navLogoGradient)"
+                    strokeWidth="2"
+                  />
+                  <path
+                    d="M30 35 L50 20 L70 35 L65 40 L50 30 L35 40 Z"
+                    fill="url(#navLogoGradient)"
+                  />
+                  <path
+                    d="M25 45 L50 25 L75 45 L70 50 L50 35 L30 50 Z"
+                    fill="url(#navLogoGradient)"
+                    fillOpacity="0.8"
+                  />
+                  <path
+                    d="M20 55 L50 30 L80 55 L75 60 L50 40 L25 60 Z"
+                    fill="url(#navLogoGradient)"
+                    fillOpacity="0.6"
+                  />
+                  <circle cx="50" cy="65" r="8" fill="url(#navLogoGradient)" />
+                  <path
+                    d="M42 65 L50 55 L58 65"
+                    stroke="url(#navLogoGradient)"
+                    strokeWidth="2"
+                    fill="none"
+                  />
                 </svg>
               </div>
               <div>
@@ -91,7 +119,9 @@ const Homepage = ({ onEnterApp }) => {
             <div className="flex items-center space-x-4">
               {user ? (
                 <div className="flex items-center space-x-3">
-                  <span className="text-sm text-gray-300">Welcome, {user.displayName || user.email}</span>
+                  <span className="text-sm text-gray-300">
+                    Welcome, {user.displayName || user.email}
+                  </span>
                   <button
                     onClick={onEnterApp}
                     className="px-4 py-2 bg-gradient-to-r from-electric-400 to-electric-500 text-dark-900 rounded-lg hover:from-electric-500 hover:to-electric-600 transition-all duration-200 font-medium"
@@ -131,18 +161,19 @@ const Homepage = ({ onEnterApp }) => {
             >
               Smart Inventory for
               <span className="bg-gradient-to-r from-electric-400 to-electric-500 bg-clip-text text-transparent">
-                {' '}EV Manufacturing
+                {' '}
+                EV Manufacturing
               </span>
             </motion.h1>
-            
+
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
               className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto"
             >
-              Revolutionize your electric vehicle manufacturing with AI-powered inventory management, 
-              real-time analytics, and intelligent demand forecasting.
+              Revolutionize your electric vehicle manufacturing with AI-powered inventory
+              management, real-time analytics, and intelligent demand forecasting.
             </motion.p>
 
             <motion.div
@@ -200,9 +231,7 @@ const Homepage = ({ onEnterApp }) => {
               <div className="text-gray-400">Parts Managed</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-green-400 mb-2">
-                {stats.savings}%
-              </div>
+              <div className="text-4xl font-bold text-green-400 mb-2">{stats.savings}%</div>
               <div className="text-gray-400">Cost Reduction</div>
             </div>
           </motion.div>
@@ -217,13 +246,14 @@ const Homepage = ({ onEnterApp }) => {
               Powerful Features for Modern Manufacturing
             </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Everything you need to optimize your EV manufacturing inventory in one intelligent platform
+              Everything you need to optimize your EV manufacturing inventory in one intelligent
+              platform
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {features.map((feature, index) => {
-              const Icon = feature.icon;
+              const Icon = feature.icon
               return (
                 <motion.div
                   key={index}
@@ -232,23 +262,19 @@ const Homepage = ({ onEnterApp }) => {
                   transition={{ delay: index * 0.1 }}
                   className="p-8 rounded-2xl bg-dark-700/50 border border-electric-400/20 hover:bg-dark-700/70 hover:border-electric-400/30 transition-all duration-300"
                 >
-                  <div className={`w-12 h-12 bg-gradient-to-r ${feature.color} rounded-xl flex items-center justify-center mb-6`}>
+                  <div
+                    className={`w-12 h-12 bg-gradient-to-r ${feature.color} rounded-xl flex items-center justify-center mb-6`}
+                  >
                     <Icon className="w-6 h-6 text-white" />
                   </div>
-                  <h3 className="text-xl font-semibold text-white mb-3">
-                    {feature.title}
-                  </h3>
-                  <p className="text-gray-300">
-                    {feature.description}
-                  </p>
+                  <h3 className="text-xl font-semibold text-white mb-3">{feature.title}</h3>
+                  <p className="text-gray-300">{feature.description}</p>
                 </motion.div>
-              );
+              )
             })}
           </div>
         </div>
       </section>
-
-
 
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-electric-400 to-electric-500">
@@ -257,9 +283,10 @@ const Homepage = ({ onEnterApp }) => {
             Ready to Transform Your Inventory Management?
           </h2>
           <p className="text-xl text-dark-800 mb-8">
-            Join thousands of manufacturers who trust InvenAI for their inventory optimization needs.
+            Join thousands of manufacturers who trust InvenAI for their inventory optimization
+            needs.
           </p>
-          
+
           {!user && (
             <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
               <button
@@ -299,59 +326,139 @@ const Homepage = ({ onEnterApp }) => {
             <div>
               <div className="flex items-center space-x-3 mb-4">
                 <div className="w-8 h-8 bg-gradient-to-r from-electric-400 to-electric-500 rounded-lg flex items-center justify-center">
-                  <svg width="16" height="16" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 100 100"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
                     <defs>
                       <linearGradient id="footerLogoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stopColor="#ffffff" />
                         <stop offset="100%" stopColor="#f0f9ff" />
                       </linearGradient>
                     </defs>
-                    <circle cx="50" cy="50" r="45" fill="url(#footerLogoGradient)" fillOpacity="0.1" stroke="url(#footerLogoGradient)" strokeWidth="2"/>
-                    <path d="M30 35 L50 20 L70 35 L65 40 L50 30 L35 40 Z" fill="url(#footerLogoGradient)"/>
-                    <path d="M25 45 L50 25 L75 45 L70 50 L50 35 L30 50 Z" fill="url(#footerLogoGradient)" fillOpacity="0.8"/>
-                    <path d="M20 55 L50 30 L80 55 L75 60 L50 40 L25 60 Z" fill="url(#footerLogoGradient)" fillOpacity="0.6"/>
-                    <circle cx="50" cy="65" r="8" fill="url(#footerLogoGradient)"/>
-                    <path d="M42 65 L50 55 L58 65" stroke="url(#footerLogoGradient)" strokeWidth="2" fill="none"/>
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="45"
+                      fill="url(#footerLogoGradient)"
+                      fillOpacity="0.1"
+                      stroke="url(#footerLogoGradient)"
+                      strokeWidth="2"
+                    />
+                    <path
+                      d="M30 35 L50 20 L70 35 L65 40 L50 30 L35 40 Z"
+                      fill="url(#footerLogoGradient)"
+                    />
+                    <path
+                      d="M25 45 L50 25 L75 45 L70 50 L50 35 L30 50 Z"
+                      fill="url(#footerLogoGradient)"
+                      fillOpacity="0.8"
+                    />
+                    <path
+                      d="M20 55 L50 30 L80 55 L75 60 L50 40 L25 60 Z"
+                      fill="url(#footerLogoGradient)"
+                      fillOpacity="0.6"
+                    />
+                    <circle cx="50" cy="65" r="8" fill="url(#footerLogoGradient)" />
+                    <path
+                      d="M42 65 L50 55 L58 65"
+                      stroke="url(#footerLogoGradient)"
+                      strokeWidth="2"
+                      fill="none"
+                    />
                   </svg>
                 </div>
-                <span className="text-xl font-bold bg-gradient-to-r from-electric-400 to-electric-500 bg-clip-text text-transparent">InvenAI</span>
+                <span className="text-xl font-bold bg-gradient-to-r from-electric-400 to-electric-500 bg-clip-text text-transparent">
+                  InvenAI
+                </span>
               </div>
               <p className="text-gray-400">
                 Smart inventory management for the future of EV manufacturing.
               </p>
             </div>
-            
+
             <div>
               <h3 className="font-semibold mb-4">Product</h3>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-electric-400 transition-colors">Features</a></li>
-                <li><a href="#" className="hover:text-electric-400 transition-colors">Pricing</a></li>
-                <li><a href="#" className="hover:text-electric-400 transition-colors">API</a></li>
-                <li><a href="#" className="hover:text-electric-400 transition-colors">Integrations</a></li>
+                <li>
+                  <a href="#" className="hover:text-electric-400 transition-colors">
+                    Features
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-electric-400 transition-colors">
+                    Pricing
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-electric-400 transition-colors">
+                    API
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-electric-400 transition-colors">
+                    Integrations
+                  </a>
+                </li>
               </ul>
             </div>
-            
+
             <div>
               <h3 className="font-semibold mb-4">Company</h3>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-electric-400 transition-colors">About</a></li>
-                <li><a href="#" className="hover:text-electric-400 transition-colors">Blog</a></li>
-                <li><a href="#" className="hover:text-electric-400 transition-colors">Careers</a></li>
-                <li><a href="#" className="hover:text-electric-400 transition-colors">Contact</a></li>
+                <li>
+                  <a href="#" className="hover:text-electric-400 transition-colors">
+                    About
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-electric-400 transition-colors">
+                    Blog
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-electric-400 transition-colors">
+                    Careers
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-electric-400 transition-colors">
+                    Contact
+                  </a>
+                </li>
               </ul>
             </div>
-            
+
             <div>
               <h3 className="font-semibold mb-4">Support</h3>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-electric-400 transition-colors">Help Center</a></li>
-                <li><a href="#" className="hover:text-electric-400 transition-colors">Documentation</a></li>
-                <li><a href="#" className="hover:text-electric-400 transition-colors">Status</a></li>
-                <li><a href="#" className="hover:text-electric-400 transition-colors">Security</a></li>
+                <li>
+                  <a href="#" className="hover:text-electric-400 transition-colors">
+                    Help Center
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-electric-400 transition-colors">
+                    Documentation
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-electric-400 transition-colors">
+                    Status
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-electric-400 transition-colors">
+                    Security
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
-          
+
           <div className="border-t border-electric-400/20 mt-8 pt-8 text-center text-gray-400">
             <p>&copy; 2025 InvenAI. All rights reserved.</p>
           </div>
@@ -366,7 +473,7 @@ const Homepage = ({ onEnterApp }) => {
         setMode={(mode) => setAuthModal({ ...authModal, mode })}
       />
     </div>
-  );
-};
+  )
+}
 
-export default Homepage;
+export default Homepage

@@ -21,6 +21,7 @@ This guide will walk you through setting up Firebase for the EVStockMaster appli
 ## Step 2: Enable Required Services
 
 ### Authentication Setup
+
 1. In Firebase Console, go to **Authentication** → **Get started**
 2. Go to **Sign-in method** tab
 3. Enable **Google** sign-in provider:
@@ -39,12 +40,14 @@ This guide will walk you through setting up Firebase for the EVStockMaster appli
    ```
 
 ### Firestore Database Setup
+
 1. Go to **Firestore Database** → **Create database**
 2. Select **Start in production mode** (recommended)
 3. Choose your database location (closest to your users)
 4. Click "Done"
 
 ### Storage Setup (Optional)
+
 1. Go to **Storage** → **Get started**
 2. Review security rules and click "Next"
 3. Choose storage location and click "Done"
@@ -61,19 +64,20 @@ This guide will walk you through setting up Firebase for the EVStockMaster appli
 
 ```javascript
 const firebaseConfig = {
-  apiKey: "your-api-key",
-  authDomain: "your-project.firebaseapp.com",
-  projectId: "your-project-id",
-  storageBucket: "your-project.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:your-app-id",
-  measurementId: "G-YOUR-MEASUREMENT-ID"
-};
+  apiKey: 'your-api-key',
+  authDomain: 'your-project.firebaseapp.com',
+  projectId: 'your-project-id',
+  storageBucket: 'your-project.appspot.com',
+  messagingSenderId: '123456789',
+  appId: '1:123456789:web:your-app-id',
+  measurementId: 'G-YOUR-MEASUREMENT-ID',
+}
 ```
 
 ## Step 4: Configure Environment Variables
 
 1. **Copy environment template**:
+
    ```bash
    cp .env.example .env
    ```
@@ -101,18 +105,20 @@ const firebaseConfig = {
      storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
      messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
      appId: import.meta.env.VITE_FIREBASE_APP_ID,
-     measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
-   };
+     measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
+   }
    ```
 
 ## Step 6: Configure Firebase CLI
 
 1. **Login to Firebase**:
+
    ```bash
    firebase login
    ```
 
 2. **Initialize Firebase in your project**:
+
    ```bash
    firebase init
    ```
@@ -136,6 +142,7 @@ const firebaseConfig = {
 ## Step 7: Set Up Firestore Security Rules
 
 Update `firestore.rules`:
+
 ```javascript
 rules_version = '2';
 service cloud.firestore {
@@ -144,14 +151,14 @@ service cloud.firestore {
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
-    
+
     // Inventory data - authenticated users can read, admins can write
     match /inventory/{document=**} {
       allow read: if request.auth != null;
-      allow write: if request.auth != null && 
+      allow write: if request.auth != null &&
         resource.data.createdBy == request.auth.uid;
     }
-    
+
     // Public read access for certain collections
     match /parts/{document=**} {
       allow read: if true;
@@ -170,6 +177,7 @@ firebase deploy --only firestore:rules
 ## Step 9: Test Firebase Connection
 
 1. **Start development server**:
+
    ```bash
    npm run dev
    ```
@@ -182,11 +190,13 @@ firebase deploy --only firestore:rules
 ## Step 10: Deploy to Firebase Hosting (Optional)
 
 1. **Build the project**:
+
    ```bash
    npm run build
    ```
 
 2. **Deploy to Firebase**:
+
    ```bash
    firebase deploy
    ```
@@ -198,24 +208,30 @@ firebase deploy --only firestore:rules
 ## Troubleshooting Common Issues
 
 ### Domain Authorization Error
+
 **Error**: `Firebase: Error (auth/unauthorized-domain)`
 
 **Solution**:
+
 1. Go to Firebase Console → Authentication → Settings → Authorized domains
 2. Add your current domain (e.g., `localhost`, `yourapp.vercel.app`)
 
 ### Configuration Not Found
+
 **Error**: `Firebase: No Firebase App '[DEFAULT]' has been created`
 
 **Solution**:
+
 1. Verify `.env` file has correct Firebase configuration
 2. Restart development server
 3. Check that environment variables start with `VITE_`
 
 ### Build Errors
+
 **Error**: Build fails with Firebase import errors
 
 **Solution**:
+
 1. Clear node_modules and reinstall:
    ```bash
    rm -rf node_modules package-lock.json
@@ -242,6 +258,7 @@ firebase deploy --only firestore:rules
 ## Domain Authorization Issues (Legacy)
 
 If you're experiencing `Firebase: Error (auth/unauthorized-domain)`, refer to the enhanced error handling in the application which will provide:
+
 - Clear indication when domain authorization is the issue
 - Current domain information for debugging
 - Direct link to Firebase Console

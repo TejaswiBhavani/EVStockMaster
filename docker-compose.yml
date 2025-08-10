@@ -1,8 +1,24 @@
 version: '3.8'
 
 services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.streamlit
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./data:/app/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/streamlit/_stcore/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    networks:
+      - evstockmaster-network
+
   frontend:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
     ports:
@@ -10,41 +26,11 @@ services:
     environment:
       - NODE_ENV=production
     depends_on:
-      - backend
-    networks:
-      - evstockmaster-network
-
-  backend:
-    build:
-      context: .
-      dockerfile: Dockerfile.streamlit
-    ports:
-      - "8501:8501"
-    environment:
-      - STREAMLIT_SERVER_PORT=8501
-      - STREAMLIT_SERVER_ADDRESS=0.0.0.0
-    volumes:
-      - ./data:/app/data
-    networks:
-      - evstockmaster-network
-
-  # Optional: Add a reverse proxy
-  nginx:
-    image: nginx:alpine
-    ports:
-      - "8080:80"
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-    depends_on:
-      - frontend
-      - backend
+      backend:
+        condition: service_healthy
     networks:
       - evstockmaster-network
 
 networks:
   evstockmaster-network:
     driver: bridge
-
-volumes:
-  data-volume:
-    driver: local
