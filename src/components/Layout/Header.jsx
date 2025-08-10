@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { motion } from 'framer-motion'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth } from '../../config/firebase'
@@ -78,7 +79,9 @@ const Header = ({ onMenuClick, activeTab, isMobile, onNavigate }) => {
     <motion.header
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      className="glass-card border-b border-white/20 dark:border-dark-700/30 backdrop-blur-xl px-4 sm:px-6 py-4 flex items-center justify-between shadow-lg relative overflow-hidden z-header"
+      className={`glass-card border-b border-white/20 dark:border-dark-700/30 backdrop-blur-xl px-4 sm:px-6 py-4 flex items-center justify-between shadow-lg relative z-header ${
+        notificationCenterOpen ? 'overflow-visible' : 'overflow-hidden'
+      }`}
     >
       {/* Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-r from-primary-500/5 via-secondary-500/5 to-electric-500/5 dark:from-primary-400/10 dark:via-secondary-400/10 dark:to-electric-400/10"></div>
@@ -238,12 +241,15 @@ const Header = ({ onMenuClick, activeTab, isMobile, onNavigate }) => {
         </div>
       </div>
 
-      {/* Notification Center */}
-      <NotificationCenter
-        isOpen={notificationCenterOpen}
-        onClose={() => setNotificationCenterOpen(false)}
-        onNavigate={onNavigate}
-      />
+      {/* Notification Center - Rendered via Portal */}
+      {createPortal(
+        <NotificationCenter
+          isOpen={notificationCenterOpen}
+          onClose={() => setNotificationCenterOpen(false)}
+          onNavigate={onNavigate}
+        />,
+        document.body
+      )}
     </motion.header>
   )
 }
