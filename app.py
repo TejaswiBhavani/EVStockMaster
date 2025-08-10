@@ -646,7 +646,23 @@ def ai_chat_popup():
                     # Add user message
                     st.session_state.chat_history.append({"role": "user", "content": user_input})
                     
-                    # Enhanced AI response system for EV inventory management
+                    # Try real LLM first (if configured), then fall back to rule-based responses
+                    try:
+                        from utils.gemini_client import ask_gemini
+                    except Exception:
+                        ask_gemini = None
+
+                    llm_text = None
+                    if ask_gemini:
+                        llm_text = ask_gemini(user_input)
+                    
+                    if llm_text:
+                        response = llm_text
+                        st.session_state.chat_history.append({"role": "assistant", "content": response})
+                        st.rerun()
+                        return
+
+                    # Enhanced AI response system for EV inventory management (fallback)
                     user_query = user_input.lower()
                     
                     if "forecast" in user_query or "predict" in user_query or "demand" in user_query:

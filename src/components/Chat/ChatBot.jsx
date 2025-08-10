@@ -40,13 +40,6 @@ const ChatBot = () => {
     setIsTyping(true)
 
     try {
-      const apiKey = process.env.REACT_APP_GEMINI_API_KEY
-
-      // Check if we have a valid API key
-      if (!apiKey || apiKey === 'demo-key' || apiKey === 'your-gemini-api-key-here') {
-        throw new Error('API key not configured')
-      }
-
       // Enhanced prompt for better EV inventory management responses
       const enhancedPrompt = `You are InvenAI, an advanced AI assistant specialized in Electric Vehicle (EV) manufacturing inventory management and supply chain optimization. You have expertise in:
 
@@ -71,45 +64,27 @@ Please provide detailed, actionable insights for this query: "${inputMessage}"
 
 Format your response to be practical and specific to EV manufacturing operations.`
 
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            contents: [
-              {
-                parts: [
-                  {
-                    text: enhancedPrompt,
-                  },
-                ],
-              },
-            ],
-            generationConfig: {
-              temperature: 0.7,
-              maxOutputTokens: 1000,
-              topP: 0.8,
-              topK: 40,
-            },
-          }),
-        },
-      )
+      const base = process.env.REACT_APP_API_BASE_URL?.replace(/\/$/, '') || ''
+      const resp = await fetch(`${base}/api/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          input: enhancedPrompt,
+          system: 'You are InvenAI, an EV inventory assistant.'
+        }),
+      })
+      if (!resp.ok) throw new Error('Proxy request failed')
+      const { text } = await resp.json()
 
-      if (response.ok) {
-        const data = await response.json()
-        const botResponse = {
+      setMessages((prev) => [
+        ...prev,
+        {
           id: Date.now() + 1,
-          text: data.candidates[0].content.parts[0].text,
+          text: text || fallbackResponses.default,
           sender: 'bot',
           timestamp: new Date(),
-        }
-        setMessages((prev) => [...prev, botResponse])
-      } else {
-        throw new Error(`API Error: ${response.status} - ${response.statusText}`)
-      }
+        },
+      ])
     } catch (error) {
       console.warn('Gemini API unavailable:', error.message)
 

@@ -71,8 +71,20 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 
-# Environments
+# Env files (keep examples)
 .env
+.env.*
+!.env.example
+
+# Streamlit secrets (keep example)
+.streamlit/secrets.toml
+!.streamlit/secrets.toml.example
+
+# Node server
+server/node_modules/
+server/.env
+
+# Python environments
 .venv
 env/
 venv/
@@ -80,8 +92,8 @@ ENV/
 env.bak/
 venv.bak/
 
-# Streamlit
-.streamlit/
+# Streamlit cache/config (keep secrets.toml rules above)
+.streamlit/config.toml
 
 # Data files (optional - remove if you want to track generated data)
 /data/
