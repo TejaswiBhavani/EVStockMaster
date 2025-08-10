@@ -1,46 +1,49 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../../config/firebase';
-import { Sun, Moon, Coffee, Zap } from 'lucide-react';
+import React from 'react'
+import { motion } from 'framer-motion'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth } from '../../config/firebase'
+import { Sun, Moon, Coffee, Zap } from 'lucide-react'
 
 const PersonalizedWelcome = () => {
-  const [user] = useAuthState(auth);
-  
+  const [user] = useAuthState(auth)
+
   // Helper function to get user's first name with fallback
   const getUserFirstName = () => {
-    if (!user) return 'Guest';
-    
+    if (!user) return 'Guest'
+
     // First try displayName (set during signup)
     if (user.displayName) {
-      const firstName = user.displayName.split(' ')[0];
-      return firstName;
+      const firstName = user.displayName.split(' ')[0]
+      return firstName
     }
-    
+
     // If no displayName, try to extract from email
     if (user.email) {
-      const emailName = user.email.split('@')[0];
+      const emailName = user.email.split('@')[0]
       // Handle dots/underscores and capitalize
-      const firstName = emailName.split(/[._]/)[0];
-      return firstName.charAt(0).toUpperCase() + firstName.slice(1);
+      const firstName = emailName.split(/[._]/)[0]
+      return firstName.charAt(0).toUpperCase() + firstName.slice(1)
     }
-    
+
     // Final fallback
-    return 'User';
-  };
+    return 'User'
+  }
 
   // Get time-based greeting
   const getTimeBasedGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return { text: 'Good morning', icon: Sun, color: 'from-yellow-400 to-orange-500' };
-    if (hour < 17) return { text: 'Good afternoon', icon: Coffee, color: 'from-blue-400 to-blue-600' };
-    if (hour < 21) return { text: 'Good evening', icon: Zap, color: 'from-purple-400 to-purple-600' };
-    return { text: 'Good evening', icon: Moon, color: 'from-indigo-400 to-purple-600' };
-  };
+    const hour = new Date().getHours()
+    if (hour < 12)
+      return { text: 'Good morning', icon: Sun, color: 'from-yellow-400 to-orange-500' }
+    if (hour < 17)
+      return { text: 'Good afternoon', icon: Coffee, color: 'from-blue-400 to-blue-600' }
+    if (hour < 21)
+      return { text: 'Good evening', icon: Zap, color: 'from-purple-400 to-purple-600' }
+    return { text: 'Good evening', icon: Moon, color: 'from-indigo-400 to-purple-600' }
+  }
 
-  const firstName = getUserFirstName();
-  const greeting = getTimeBasedGreeting();
-  const GreetingIcon = greeting.icon;
+  const firstName = getUserFirstName()
+  const greeting = getTimeBasedGreeting()
+  const GreetingIcon = greeting.icon
 
   return (
     <motion.div
@@ -52,12 +55,12 @@ const PersonalizedWelcome = () => {
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          transition={{ delay: 0.2, type: "spring" }}
+          transition={{ delay: 0.2, type: 'spring' }}
           className={`w-16 h-16 rounded-full bg-gradient-to-r ${greeting.color} flex items-center justify-center shadow-lg`}
         >
           <GreetingIcon className="w-8 h-8 text-white" />
         </motion.div>
-        
+
         <div className="flex-1">
           <motion.h2
             initial={{ opacity: 0, x: 20 }}
@@ -89,7 +92,7 @@ const PersonalizedWelcome = () => {
         </motion.div>
       </div>
     </motion.div>
-  );
-};
+  )
+}
 
-export default PersonalizedWelcome;
+export default PersonalizedWelcome

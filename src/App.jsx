@@ -1,32 +1,32 @@
-import React, { useState } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Box, Package, Brain } from 'lucide-react';
-import { auth } from './config/firebase';
-import { ThemeProvider } from './hooks/useTheme';
-import Homepage from './components/Homepage/Homepage';
-import ChatBot from './components/Chat/ChatBot';
-import Sidebar from './components/Layout/Sidebar';
-import Header from './components/Layout/Header';
-import EVModel from './components/3D/EVModel';
-import StatsCards from './components/Dashboard/StatsCards';
-import PersonalizedWelcome from './components/Dashboard/PersonalizedWelcome';
-import ProductionSchedule from './components/Dashboard/ProductionSchedule';
-import InventoryTable from './components/Inventory/InventoryTable';
-import AISummary from './components/InfoPanel/AISummary';
-import InfoPanel from './components/InfoPanel/InfoPanel';
-import SettingsPage from './components/Settings/SettingsPage';
-import useResponsive from './hooks/useResponsive';
+import React, { useState } from 'react'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Box, Package, Brain } from 'lucide-react'
+import { auth } from './config/firebase'
+import { ThemeProvider } from './hooks/useTheme'
+import Homepage from './components/Homepage/Homepage'
+import ChatBot from './components/Chat/ChatBot'
+import Sidebar from './components/Layout/Sidebar'
+import Header from './components/Layout/Header'
+import EVModel from './components/3D/EVModel'
+import StatsCards from './components/Dashboard/StatsCards'
+import PersonalizedWelcome from './components/Dashboard/PersonalizedWelcome'
+import ProductionSchedule from './components/Dashboard/ProductionSchedule'
+import InventoryTable from './components/Inventory/InventoryTable'
+import AISummary from './components/InfoPanel/AISummary'
+import InfoPanel from './components/InfoPanel/InfoPanel'
+import SettingsPage from './components/Settings/SettingsPage'
+import useResponsive from './hooks/useResponsive'
 
 function App() {
-  const [user, loading] = useAuthState(auth);
-  const [showApp, setShowApp] = useState(false);
-  const [demoMode, setDemoMode] = useState(false);
-  const [activeTab, setActiveTab] = useState('dashboard');
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [selectedPart, setSelectedPart] = useState(null);
-  const [infoPanelOpen, setInfoPanelOpen] = useState(false);
-  const { isMobile } = useResponsive();
+  const [user, loading] = useAuthState(auth)
+  const [showApp, setShowApp] = useState(false)
+  const [demoMode, setDemoMode] = useState(false)
+  const [activeTab, setActiveTab] = useState('dashboard')
+  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [selectedPart, setSelectedPart] = useState(null)
+  const [infoPanelOpen, setInfoPanelOpen] = useState(false)
+  const { isMobile } = useResponsive()
 
   // Show loading while checking auth state (only if not in demo mode)
   if (loading && !demoMode) {
@@ -39,50 +39,50 @@ function App() {
           </div>
         </div>
       </ThemeProvider>
-    );
+    )
   }
 
   // Show homepage if user is not authenticated or hasn't entered the app (and not in demo mode)
   if ((!user && !demoMode) || !showApp) {
     return (
       <ThemeProvider>
-        <Homepage 
+        <Homepage
           onEnterApp={() => {
-            setShowApp(true);
-            setDemoMode(true);
-          }} 
+            setShowApp(true)
+            setDemoMode(true)
+          }}
         />
         <ChatBot />
       </ThemeProvider>
-    );
+    )
   }
 
   // Handle part selection from 3D model or inventory table
   const handlePartSelect = (partId) => {
-    setSelectedPart(partId);
-    setInfoPanelOpen(true);
-  };
+    setSelectedPart(partId)
+    setInfoPanelOpen(true)
+  }
 
   // Handle sidebar toggle
   const handleSidebarToggle = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
+    setSidebarOpen(!sidebarOpen)
+  }
 
   // Handle navigation from notifications
   const handleNotificationNavigate = (tab, itemId = null) => {
-    setActiveTab(tab);
+    setActiveTab(tab)
     // Could also handle itemId for deep linking in the future
     if (itemId) {
-      console.log('Navigate to item:', itemId);
+      console.log('Navigate to item:', itemId)
       // Future: implement deep linking to specific items
     }
-  };
+  }
 
   // Handle info panel close
   const handleInfoPanelClose = () => {
-    setInfoPanelOpen(false);
-    setSelectedPart(null);
-  };
+    setInfoPanelOpen(false)
+    setSelectedPart(null)
+  }
 
   // Render main content based on active tab
   const renderMainContent = () => {
@@ -114,12 +114,14 @@ function App() {
                         <Box className="w-6 h-6 text-white" />
                       </div>
                       <div>
-                        <div className="font-bold text-gray-900 group-hover:text-primary-700">View 3D Model</div>
+                        <div className="font-bold text-gray-900 group-hover:text-primary-700">
+                          View 3D Model
+                        </div>
                         <div className="text-sm text-gray-500">Interactive EV visualization</div>
                       </div>
                     </div>
                   </motion.button>
-                  
+
                   <motion.button
                     whileHover={{ scale: 1.03, x: 5 }}
                     whileTap={{ scale: 0.97 }}
@@ -131,12 +133,14 @@ function App() {
                         <Package className="w-6 h-6 text-white" />
                       </div>
                       <div>
-                        <div className="font-bold text-gray-900 group-hover:text-electric-700">Manage Inventory</div>
+                        <div className="font-bold text-gray-900 group-hover:text-electric-700">
+                          Manage Inventory
+                        </div>
                         <div className="text-sm text-gray-500">Stock levels & orders</div>
                       </div>
                     </div>
                   </motion.button>
-                  
+
                   <motion.button
                     whileHover={{ scale: 1.03, x: 5 }}
                     whileTap={{ scale: 0.97 }}
@@ -148,7 +152,9 @@ function App() {
                         <Brain className="w-6 h-6 text-white" />
                       </div>
                       <div>
-                        <div className="font-bold text-gray-900 group-hover:text-accent-700">AI Insights</div>
+                        <div className="font-bold text-gray-900 group-hover:text-accent-700">
+                          AI Insights
+                        </div>
                         <div className="text-sm text-gray-500">Smart recommendations</div>
                       </div>
                     </div>
@@ -157,7 +163,7 @@ function App() {
               </div>
             </div>
           </motion.div>
-        );
+        )
 
       case '3d-model':
         return (
@@ -167,23 +173,17 @@ function App() {
             className="h-full"
           >
             <div className="modern-card border-0 h-full min-h-[700px] overflow-hidden">
-              <EVModel 
-                onPartSelect={handlePartSelect} 
-                selectedPart={selectedPart}
-              />
+              <EVModel onPartSelect={handlePartSelect} selectedPart={selectedPart} />
             </div>
           </motion.div>
-        );
+        )
 
       case 'inventory':
         return (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <InventoryTable onPartSelect={handlePartSelect} />
           </motion.div>
-        );
+        )
 
       case 'ai-summary':
         return (
@@ -196,22 +196,19 @@ function App() {
               <AISummary />
             </div>
           </motion.div>
-        );
+        )
 
       case 'settings':
         return (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <SettingsPage />
           </motion.div>
-        );
+        )
 
       default:
-        return null;
+        return null
     }
-  };
+  }
 
   return (
     <ThemeProvider>
@@ -219,7 +216,10 @@ function App() {
         {/* Animated Background Elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-background">
           <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-primary-200/30 to-secondary-200/30 dark:from-primary-400/20 dark:to-secondary-400/20 rounded-full blur-3xl animate-pulse-slow"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-electric-200/30 to-neon-200/30 dark:from-electric-400/20 dark:to-neon-400/20 rounded-full blur-3xl animate-pulse-slow" style={{animationDelay: '1s'}}></div>
+          <div
+            className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-electric-200/30 to-neon-200/30 dark:from-electric-400/20 dark:to-neon-400/20 rounded-full blur-3xl animate-pulse-slow"
+            style={{ animationDelay: '1s' }}
+          ></div>
         </div>
 
         {/* Sidebar */}
@@ -232,9 +232,11 @@ function App() {
         />
 
         {/* Main Content Area */}
-        <div className={`flex-1 flex flex-col transition-all duration-300 relative z-content ${
-          sidebarOpen && !isMobile ? 'ml-72' : 'ml-0'
-        }`}>
+        <div
+          className={`flex-1 flex flex-col transition-all duration-300 relative z-content ${
+            sidebarOpen && !isMobile ? 'ml-72' : 'ml-0'
+          }`}
+        >
           {/* Header */}
           <Header
             onMenuClick={handleSidebarToggle}
@@ -245,12 +247,12 @@ function App() {
 
           {/* Main Content */}
           <main className="flex-1 p-4 sm:p-6 overflow-auto">
-            <div className={`transition-all duration-300 ${
-              infoPanelOpen && !isMobile ? 'mr-96' : 'mr-0'
-            }`}>
-              <AnimatePresence mode="wait">
-                {renderMainContent()}
-              </AnimatePresence>
+            <div
+              className={`transition-all duration-300 ${
+                infoPanelOpen && !isMobile ? 'mr-96' : 'mr-0'
+              }`}
+            >
+              <AnimatePresence mode="wait">{renderMainContent()}</AnimatePresence>
             </div>
           </main>
         </div>
@@ -262,12 +264,12 @@ function App() {
           selectedPart={selectedPart}
           isMobile={isMobile}
         />
-        
+
         {/* ChatBot */}
         <ChatBot />
       </div>
     </ThemeProvider>
-  );
+  )
 }
 
-export default App;
+export default App

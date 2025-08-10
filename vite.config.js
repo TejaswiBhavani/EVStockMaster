@@ -13,7 +13,7 @@ export default defineConfig({
   },
   server: {
     port: 5173,
-    open: true
+    open: true,
   },
   build: {
     rollupOptions: {
@@ -22,11 +22,11 @@ export default defineConfig({
           'react-vendor': ['react', 'react-dom'],
           'three-vendor': ['three', '@react-three/fiber', '@react-three/drei'],
           'animation-vendor': ['framer-motion'],
-          'ui-vendor': ['lucide-react']
-        }
-      }
+          'ui-vendor': ['lucide-react'],
+        },
+      },
     },
     chunkSizeWarningLimit: 1000,
-    sourcemap: true
-  }
+    sourcemap: true,
+  },
 })

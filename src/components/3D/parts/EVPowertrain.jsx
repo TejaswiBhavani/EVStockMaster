@@ -1,12 +1,12 @@
-import React from 'react';
-import { RoundedBox, Cylinder } from '@react-three/drei';
+import React from 'react'
+import { RoundedBox, Cylinder } from '@react-three/drei'
 
 const EVPowertrain = ({ selectedPart, onPartClick }) => {
   const handlePartClick = (partId) => {
     if (onPartClick) {
-      onPartClick(partId);
+      onPartClick(partId)
     }
-  };
+  }
 
   return (
     <group name="ev-powertrain">
@@ -18,8 +18,8 @@ const EVPowertrain = ({ selectedPart, onPartClick }) => {
         smoothness={6}
         onClick={() => handlePartClick('battery')}
       >
-        <meshStandardMaterial 
-          color={selectedPart === 'battery' ? '#ff9f43' : '#00f2fe'} 
+        <meshStandardMaterial
+          color={selectedPart === 'battery' ? '#ff9f43' : '#00f2fe'}
           metalness={0.7}
           roughness={0.1}
           emissive={selectedPart === 'battery' ? '#ff9f43' : '#004d5c'}
@@ -33,8 +33,8 @@ const EVPowertrain = ({ selectedPart, onPartClick }) => {
         args={[0.25, 0.25, 0.4, 12]}
         onClick={() => handlePartClick('motor')}
       >
-        <meshStandardMaterial 
-          color={selectedPart === 'motor' ? '#26de81' : '#2dd4bf'} 
+        <meshStandardMaterial
+          color={selectedPart === 'motor' ? '#26de81' : '#2dd4bf'}
           metalness={0.8}
           roughness={0.2}
         />
@@ -45,8 +45,8 @@ const EVPowertrain = ({ selectedPart, onPartClick }) => {
         args={[0.25, 0.25, 0.4, 12]}
         onClick={() => handlePartClick('motor')}
       >
-        <meshStandardMaterial 
-          color={selectedPart === 'motor' ? '#26de81' : '#2dd4bf'} 
+        <meshStandardMaterial
+          color={selectedPart === 'motor' ? '#26de81' : '#2dd4bf'}
           metalness={0.8}
           roughness={0.2}
         />
@@ -59,8 +59,8 @@ const EVPowertrain = ({ selectedPart, onPartClick }) => {
         radius={0.02}
         onClick={() => handlePartClick('control-unit')}
       >
-        <meshStandardMaterial 
-          color={selectedPart === 'control-unit' ? '#e74c3c' : '#34495e'} 
+        <meshStandardMaterial
+          color={selectedPart === 'control-unit' ? '#e74c3c' : '#34495e'}
           metalness={0.8}
           roughness={0.2}
           emissive={selectedPart === 'control-unit' ? '#e74c3c' : '#2c3e50'}
@@ -75,8 +75,8 @@ const EVPowertrain = ({ selectedPart, onPartClick }) => {
         radius={0.02}
         onClick={() => handlePartClick('cooling-system')}
       >
-        <meshStandardMaterial 
-          color={selectedPart === 'cooling-system' ? '#3498db' : '#2980b9'} 
+        <meshStandardMaterial
+          color={selectedPart === 'cooling-system' ? '#3498db' : '#2980b9'}
           metalness={0.6}
           roughness={0.3}
           emissive={selectedPart === 'cooling-system' ? '#3498db' : '#1f4e79'}
@@ -84,7 +84,7 @@ const EVPowertrain = ({ selectedPart, onPartClick }) => {
         />
       </RoundedBox>
     </group>
-  );
-};
+  )
+}
 
-export default EVPowertrain;
+export default EVPowertrain

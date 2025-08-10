@@ -1,14 +1,7 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { 
-  Package, 
-  AlertTriangle, 
-  TrendingUp, 
-  DollarSign,
-  Activity,
-  Clock
-} from 'lucide-react';
-import { dashboardStats } from '../../data/mockData';
+import React from 'react'
+import { motion } from 'framer-motion'
+import { Package, AlertTriangle, TrendingUp, DollarSign, Activity, Clock } from 'lucide-react'
+import { dashboardStats } from '../../data/mockData'
 
 const StatsCards = () => {
   const stats = [
@@ -20,7 +13,7 @@ const StatsCards = () => {
       changeType: 'positive',
       icon: Package,
       color: 'blue',
-      description: 'Active inventory items'
+      description: 'Active inventory items',
     },
     {
       id: 2,
@@ -30,7 +23,7 @@ const StatsCards = () => {
       changeType: 'negative',
       icon: AlertTriangle,
       color: 'yellow',
-      description: 'Items below threshold'
+      description: 'Items below threshold',
     },
     {
       id: 3,
@@ -40,7 +33,7 @@ const StatsCards = () => {
       changeType: 'critical',
       icon: TrendingUp,
       color: 'red',
-      description: 'Immediate attention needed'
+      description: 'Immediate attention needed',
     },
     {
       id: 4,
@@ -50,7 +43,7 @@ const StatsCards = () => {
       changeType: 'positive',
       icon: DollarSign,
       color: 'green',
-      description: 'Total stock value'
+      description: 'Total stock value',
     },
     {
       id: 5,
@@ -60,22 +53,22 @@ const StatsCards = () => {
       changeType: 'positive',
       icon: Activity,
       color: 'purple',
-      description: 'Operational efficiency'
+      description: 'Operational efficiency',
     },
     {
       id: 6,
       title: 'Last Updated',
-      value: new Date().toLocaleTimeString('en-US', { 
-        hour: '2-digit', 
-        minute: '2-digit' 
+      value: new Date().toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
       }),
       change: 'Live',
       changeType: 'neutral',
       icon: Clock,
       color: 'gray',
-      description: 'Real-time sync'
-    }
-  ];
+      description: 'Real-time sync',
+    },
+  ]
 
   const getColorClasses = (color) => {
     const colors = {
@@ -84,28 +77,28 @@ const StatsCards = () => {
       red: 'from-red-500 to-red-600 text-red-600 bg-red-50',
       green: 'from-green-500 to-green-600 text-green-600 bg-green-50',
       purple: 'from-purple-500 to-purple-600 text-purple-600 bg-purple-50',
-      gray: 'from-gray-500 to-gray-600 text-gray-600 bg-gray-50'
-    };
-    return colors[color] || colors.blue;
-  };
+      gray: 'from-gray-500 to-gray-600 text-gray-600 bg-gray-50',
+    }
+    return colors[color] || colors.blue
+  }
 
   const getChangeColor = (changeType) => {
     const colors = {
       positive: 'text-green-600 bg-green-100',
       negative: 'text-red-600 bg-red-100',
       critical: 'text-red-700 bg-red-200 animate-pulse',
-      neutral: 'text-gray-600 bg-gray-100'
-    };
-    return colors[changeType] || colors.neutral;
-  };
+      neutral: 'text-gray-600 bg-gray-100',
+    }
+    return colors[changeType] || colors.neutral
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {stats.map((stat, index) => {
-        const Icon = stat.icon;
-        const colorClasses = getColorClasses(stat.color);
-        const changeColorClasses = getChangeColor(stat.changeType);
-        
+        const Icon = stat.icon
+        const colorClasses = getColorClasses(stat.color)
+        const changeColorClasses = getChangeColor(stat.changeType)
+
         return (
           <motion.div
             key={stat.id}
@@ -116,14 +109,16 @@ const StatsCards = () => {
             className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-lg transition-all duration-300"
           >
             <div className="flex items-center justify-between mb-4">
-              <div className={`w-12 h-12 rounded-lg bg-gradient-to-r ${colorClasses.split(' ')[0]} ${colorClasses.split(' ')[1]} flex items-center justify-center shadow-lg`}>
+              <div
+                className={`w-12 h-12 rounded-lg bg-gradient-to-r ${colorClasses.split(' ')[0]} ${colorClasses.split(' ')[1]} flex items-center justify-center shadow-lg`}
+              >
                 <Icon className="w-6 h-6 text-white" />
               </div>
               <div className={`px-2 py-1 rounded-full text-xs font-medium ${changeColorClasses}`}>
                 {stat.change}
               </div>
             </div>
-            
+
             <div className="space-y-2">
               <h3 className="text-2xl font-bold text-gray-900">{stat.value}</h3>
               <p className="text-sm font-medium text-gray-700">{stat.title}</p>
@@ -144,10 +139,10 @@ const StatsCards = () => {
               </div>
             )}
           </motion.div>
-        );
+        )
       })}
     </div>
-  );
-};
+  )
+}
 
-export default StatsCards;
+export default StatsCards

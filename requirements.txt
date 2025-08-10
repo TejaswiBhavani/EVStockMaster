@@ -1,5 +1,6 @@
-streamlit>=1.47.1
-pandas>=2.3.1
-numpy>=2.3.2
-plotly>=6.2.0
-scipy>=1.16.0
+# Pinned, realistic ranges to avoid solver failures in slim images
+streamlit>=1.30,<2
+pandas>=2.0,<3
+numpy>=1.26,<3
+plotly>=5,<6
+scipy>=1.11,<2

@@ -1,12 +1,12 @@
-import React from 'react';
-import { RoundedBox, Cylinder } from '@react-three/drei';
+import React from 'react'
+import { RoundedBox, Cylinder } from '@react-three/drei'
 
 const EVChassis = ({ selectedPart, onPartClick }) => {
   const handlePartClick = (partId) => {
     if (onPartClick) {
-      onPartClick(partId);
+      onPartClick(partId)
     }
-  };
+  }
 
   return (
     <group name="ev-chassis">
@@ -18,8 +18,8 @@ const EVChassis = ({ selectedPart, onPartClick }) => {
         smoothness={8}
         onClick={() => handlePartClick('body')}
       >
-        <meshStandardMaterial 
-          color={selectedPart === 'body' ? '#ff6b6b' : '#4facfe'} 
+        <meshStandardMaterial
+          color={selectedPart === 'body' ? '#ff6b6b' : '#4facfe'}
           metalness={0.6}
           roughness={0.2}
         />
@@ -33,8 +33,8 @@ const EVChassis = ({ selectedPart, onPartClick }) => {
         smoothness={6}
         onClick={() => handlePartClick('body')}
       >
-        <meshStandardMaterial 
-          color={selectedPart === 'body' ? '#ff6b6b' : '#4facfe'} 
+        <meshStandardMaterial
+          color={selectedPart === 'body' ? '#ff6b6b' : '#4facfe'}
           metalness={0.6}
           roughness={0.2}
         />
@@ -48,40 +48,36 @@ const EVChassis = ({ selectedPart, onPartClick }) => {
         smoothness={6}
         onClick={() => handlePartClick('body')}
       >
-        <meshStandardMaterial 
-          color={selectedPart === 'body' ? '#ff6b6b' : '#4facfe'} 
+        <meshStandardMaterial
+          color={selectedPart === 'body' ? '#ff6b6b' : '#4facfe'}
           metalness={0.6}
           roughness={0.2}
         />
       </RoundedBox>
 
       {/* Wheels - More realistic with rims */}
-      {[[-1.0, -0.65, 0.7], [1.0, -0.65, 0.7], [-1.0, -0.65, -0.7], [1.0, -0.65, -0.7]].map((position, index) => (
+      {[
+        [-1.0, -0.65, 0.7],
+        [1.0, -0.65, 0.7],
+        [-1.0, -0.65, -0.7],
+        [1.0, -0.65, -0.7],
+      ].map((position, index) => (
         <group key={`wheel-${index}`} position={position}>
           {/* Tire */}
-          <Cylinder
-            args={[0.35, 0.35, 0.25, 16]}
-            rotation={[Math.PI / 2, 0, 0]}
-          >
+          <Cylinder args={[0.35, 0.35, 0.25, 16]} rotation={[Math.PI / 2, 0, 0]}>
             <meshStandardMaterial color="#2c3e50" metalness={0.3} roughness={0.7} />
           </Cylinder>
-          
+
           {/* Rim */}
-          <Cylinder
-            args={[0.25, 0.25, 0.27, 12]}
-            rotation={[Math.PI / 2, 0, 0]}
-          >
+          <Cylinder args={[0.25, 0.25, 0.27, 12]} rotation={[Math.PI / 2, 0, 0]}>
             <meshStandardMaterial color="#9ca3af" metalness={0.8} roughness={0.2} />
           </Cylinder>
-          
+
           {/* Center cap */}
-          <Cylinder
-            args={[0.08, 0.08, 0.28, 8]}
-            rotation={[Math.PI / 2, 0, 0]}
-          >
-            <meshStandardMaterial 
-              color="#00f2fe" 
-              metalness={0.9} 
+          <Cylinder args={[0.08, 0.08, 0.28, 8]} rotation={[Math.PI / 2, 0, 0]}>
+            <meshStandardMaterial
+              color="#00f2fe"
+              metalness={0.9}
               emissive="#004d5c"
               emissiveIntensity={0.2}
             />
@@ -90,30 +86,22 @@ const EVChassis = ({ selectedPart, onPartClick }) => {
       ))}
 
       {/* Side Windows */}
-      <RoundedBox
-        position={[0.2, 0.45, 0.72]}
-        args={[1.2, 0.3, 0.02]}
-        radius={0.03}
-      >
-        <meshStandardMaterial 
-          color="#60a5fa" 
-          transparent={true} 
-          opacity={0.4} 
-          metalness={0.1} 
+      <RoundedBox position={[0.2, 0.45, 0.72]} args={[1.2, 0.3, 0.02]} radius={0.03}>
+        <meshStandardMaterial
+          color="#60a5fa"
+          transparent={true}
+          opacity={0.4}
+          metalness={0.1}
           roughness={0.05}
         />
       </RoundedBox>
 
-      <RoundedBox
-        position={[0.2, 0.45, -0.72]}
-        args={[1.2, 0.3, 0.02]}
-        radius={0.03}
-      >
-        <meshStandardMaterial 
-          color="#60a5fa" 
-          transparent={true} 
-          opacity={0.4} 
-          metalness={0.1} 
+      <RoundedBox position={[0.2, 0.45, -0.72]} args={[1.2, 0.3, 0.02]} radius={0.03}>
+        <meshStandardMaterial
+          color="#60a5fa"
+          transparent={true}
+          opacity={0.4}
+          metalness={0.1}
           roughness={0.05}
         />
       </RoundedBox>
@@ -125,16 +113,16 @@ const EVChassis = ({ selectedPart, onPartClick }) => {
         radius={0.05}
         rotation={[0, 0, -0.1]}
       >
-        <meshStandardMaterial 
-          color="#60a5fa" 
-          transparent={true} 
-          opacity={0.3} 
-          metalness={0.1} 
+        <meshStandardMaterial
+          color="#60a5fa"
+          transparent={true}
+          opacity={0.3}
+          metalness={0.1}
           roughness={0.05}
         />
       </RoundedBox>
     </group>
-  );
-};
+  )
+}
 
-export default EVChassis;
+export default EVChassis

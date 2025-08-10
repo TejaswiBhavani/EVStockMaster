@@ -1,51 +1,63 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chat Test</title>
     <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 min-h-screen p-8">
+  </head>
+  <body class="bg-gray-100 min-h-screen p-8">
     <h1 class="text-3xl font-bold text-center mb-8">Chat Widget Test</h1>
-    <p class="text-center text-gray-600 mb-8">Look for the blue chat widget in the bottom-right corner</p>
-    
+    <p class="text-center text-gray-600 mb-8">
+      Look for the blue chat widget in the bottom-right corner
+    </p>
+
     <!-- Very visible chat widget for testing -->
-    <div class="fixed bottom-4 right-4 w-80 h-96 bg-white rounded-lg shadow-2xl border-4 border-blue-500 flex flex-col" style="z-index: 10000;">
-        <!-- Header -->
-        <div class="bg-blue-600 text-white px-4 py-3 rounded-t-lg flex justify-between items-center">
-            <h3 class="font-bold text-white">🤖 NexAI Assistant</h3>
-            <button class="text-white hover:text-red-300 text-2xl font-bold">✕</button>
+    <div
+      class="fixed bottom-4 right-4 w-80 h-96 bg-white rounded-lg shadow-2xl border-4 border-blue-500 flex flex-col"
+      style="z-index: 10000"
+    >
+      <!-- Header -->
+      <div class="bg-blue-600 text-white px-4 py-3 rounded-t-lg flex justify-between items-center">
+        <h3 class="font-bold text-white">🤖 NexAI Assistant</h3>
+        <button class="text-white hover:text-red-300 text-2xl font-bold">✕</button>
+      </div>
+
+      <!-- Messages -->
+      <div class="flex-1 overflow-y-auto p-4 bg-gray-50">
+        <div class="bg-blue-100 rounded-lg p-3 mb-3">
+          <div class="font-semibold text-blue-800">NexAI Assistant</div>
+          <div class="text-gray-700 text-sm">
+            Hello! I'm your AI assistant. I should be clearly visible in the bottom-right corner.
+          </div>
         </div>
-        
-        <!-- Messages -->
-        <div class="flex-1 overflow-y-auto p-4 bg-gray-50">
-            <div class="bg-blue-100 rounded-lg p-3 mb-3">
-                <div class="font-semibold text-blue-800">NexAI Assistant</div>
-                <div class="text-gray-700 text-sm">Hello! I'm your AI assistant. I should be clearly visible in the bottom-right corner.</div>
-            </div>
-            
-            <!-- Suggestion buttons -->
-            <div class="flex flex-wrap gap-2">
-                <button class="bg-blue-500 text-white px-3 py-1 rounded-full text-xs hover:bg-blue-600">
-                    Emergency Resources
-                </button>
-                <button class="bg-blue-500 text-white px-3 py-1 rounded-full text-xs hover:bg-blue-600">
-                    Get Help
-                </button>
-            </div>
+
+        <!-- Suggestion buttons -->
+        <div class="flex flex-wrap gap-2">
+          <button class="bg-blue-500 text-white px-3 py-1 rounded-full text-xs hover:bg-blue-600">
+            Emergency Resources
+          </button>
+          <button class="bg-blue-500 text-white px-3 py-1 rounded-full text-xs hover:bg-blue-600">
+            Get Help
+          </button>
         </div>
-        
-        <!-- Input -->
-        <div class="border-t border-gray-200 p-3 bg-white rounded-b-lg">
-            <div class="flex gap-2">
-                <input type="text" placeholder="Type your message..." 
-                       class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm">
-                <button class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700">
-                    Send
-                </button>
-            </div>
+      </div>
+
+      <!-- Input -->
+      <div class="border-t border-gray-200 p-3 bg-white rounded-b-lg">
+        <div class="flex gap-2">
+          <input
+            type="text"
+            placeholder="Type your message..."
+            class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm"
+          />
+          <button
+            class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700"
+          >
+            Send
+          </button>
         </div>
+      </div>
     </div>
-</body>
+  </body>
 </html>

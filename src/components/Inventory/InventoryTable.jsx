@@ -1,78 +1,79 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { 
-  Search, 
-  Filter, 
-  Download, 
-  Eye, 
+import React, { useState } from 'react'
+import { motion } from 'framer-motion'
+import {
+  Search,
+  Filter,
+  Download,
+  Eye,
   AlertTriangle,
   CheckCircle,
   XCircle,
-  Package
-} from 'lucide-react';
-import { evParts } from '../../data/mockData';
+  Package,
+} from 'lucide-react'
+import { evParts } from '../../data/mockData'
 
 const InventoryTable = ({ onPartSelect }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState('name');
-  const [sortOrder, setSortOrder] = useState('asc');
+  const [searchTerm, setSearchTerm] = useState('')
+  const [sortBy, setSortBy] = useState('name')
+  const [sortOrder, setSortOrder] = useState('asc')
 
   const getStockStatus = (part) => {
-    if (part.currentStock <= part.minimumStock * 0.5) return 'critical';
-    if (part.currentStock <= part.minimumStock) return 'warning';
+    if (part.currentStock <= part.minimumStock * 0.5) return 'critical'
+    if (part.currentStock <= part.minimumStock) return 'warning'
     // Since mockData doesn't have maxStock, use a reasonable calculation
-    const estimatedMaxStock = part.minimumStock * 3;
-    if (part.currentStock >= estimatedMaxStock * 0.8) return 'high';
-    return 'normal';
-  };
+    const estimatedMaxStock = part.minimumStock * 3
+    if (part.currentStock >= estimatedMaxStock * 0.8) return 'high'
+    return 'normal'
+  }
 
   const getStockColor = (status) => {
     const colors = {
-      'critical': 'text-red-700 bg-red-100',
-      'warning': 'text-yellow-700 bg-yellow-100',
-      'high': 'text-blue-700 bg-blue-100',
-      'normal': 'text-green-700 bg-green-100'
-    };
-    return colors[status] || 'text-gray-700 bg-gray-100';
-  };
+      critical: 'text-red-700 bg-red-100',
+      warning: 'text-yellow-700 bg-yellow-100',
+      high: 'text-blue-700 bg-blue-100',
+      normal: 'text-green-700 bg-green-100',
+    }
+    return colors[status] || 'text-gray-700 bg-gray-100'
+  }
 
   const filteredParts = evParts
-    .filter(part => 
-      part.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      part.supplier.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      part.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      part.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      part.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      part.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      // Search in specifications
-      Object.values(part.specifications || {}).some(spec => 
-        spec.toString().toLowerCase().includes(searchTerm.toLowerCase())
-      )
+    .filter(
+      (part) =>
+        part.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        part.supplier.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        part.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        part.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        part.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        part.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        // Search in specifications
+        Object.values(part.specifications || {}).some((spec) =>
+          spec.toString().toLowerCase().includes(searchTerm.toLowerCase()),
+        ),
     )
     .sort((a, b) => {
-      let aValue = a[sortBy];
-      let bValue = b[sortBy];
-      
+      let aValue = a[sortBy]
+      let bValue = b[sortBy]
+
       if (typeof aValue === 'string') {
-        aValue = aValue.toLowerCase();
-        bValue = bValue.toLowerCase();
+        aValue = aValue.toLowerCase()
+        bValue = bValue.toLowerCase()
       }
-      
+
       if (sortOrder === 'asc') {
-        return aValue > bValue ? 1 : -1;
+        return aValue > bValue ? 1 : -1
       } else {
-        return aValue < bValue ? 1 : -1;
+        return aValue < bValue ? 1 : -1
       }
-    });
+    })
 
   const handleSort = (field) => {
     if (sortBy === field) {
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
     } else {
-      setSortBy(field);
-      setSortOrder('asc');
+      setSortBy(field)
+      setSortOrder('asc')
     }
-  };
+  }
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200">
@@ -81,9 +82,11 @@ const InventoryTable = ({ onPartSelect }) => {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
           <div>
             <h2 className="text-xl font-semibold text-gray-900">Inventory Management</h2>
-            <p className="text-sm text-gray-500 mt-1">Monitor and manage EV component stock levels</p>
+            <p className="text-sm text-gray-500 mt-1">
+              Monitor and manage EV component stock levels
+            </p>
           </div>
-          
+
           <div className="flex items-center space-x-3">
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -93,7 +96,7 @@ const InventoryTable = ({ onPartSelect }) => {
               <Filter className="w-4 h-4" />
               <span className="text-sm">Filter</span>
             </motion.button>
-            
+
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -118,9 +121,7 @@ const InventoryTable = ({ onPartSelect }) => {
             />
             {searchTerm && (
               <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                <span className="text-xs text-gray-500">
-                  {filteredParts.length} found
-                </span>
+                <span className="text-xs text-gray-500">{filteredParts.length} found</span>
               </div>
             )}
           </div>
@@ -139,9 +140,7 @@ const InventoryTable = ({ onPartSelect }) => {
                 >
                   <span>Part</span>
                   {sortBy === 'name' && (
-                    <span className="text-primary-500">
-                      {sortOrder === 'asc' ? '↑' : '↓'}
-                    </span>
+                    <span className="text-primary-500">{sortOrder === 'asc' ? '↑' : '↓'}</span>
                   )}
                 </button>
               </th>
@@ -152,9 +151,7 @@ const InventoryTable = ({ onPartSelect }) => {
                 >
                   <span>Stock</span>
                   {sortBy === 'currentStock' && (
-                    <span className="text-primary-500">
-                      {sortOrder === 'asc' ? '↑' : '↓'}
-                    </span>
+                    <span className="text-primary-500">{sortOrder === 'asc' ? '↑' : '↓'}</span>
                   )}
                 </button>
               </th>
@@ -168,9 +165,7 @@ const InventoryTable = ({ onPartSelect }) => {
                 >
                   <span>Supplier</span>
                   {sortBy === 'supplier' && (
-                    <span className="text-primary-500">
-                      {sortOrder === 'asc' ? '↑' : '↓'}
-                    </span>
+                    <span className="text-primary-500">{sortOrder === 'asc' ? '↑' : '↓'}</span>
                   )}
                 </button>
               </th>
@@ -181,9 +176,7 @@ const InventoryTable = ({ onPartSelect }) => {
                 >
                   <span>Price</span>
                   {sortBy === 'price' && (
-                    <span className="text-primary-500">
-                      {sortOrder === 'asc' ? '↑' : '↓'}
-                    </span>
+                    <span className="text-primary-500">{sortOrder === 'asc' ? '↑' : '↓'}</span>
                   )}
                 </button>
               </th>
@@ -194,9 +187,9 @@ const InventoryTable = ({ onPartSelect }) => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {filteredParts.map((part, index) => {
-              const stockStatus = getStockStatus(part);
-              const stockColor = getStockColor(stockStatus);
-              
+              const stockStatus = getStockStatus(part)
+              const stockColor = getStockColor(stockStatus)
+
               return (
                 <motion.tr
                   key={part.id}
@@ -216,7 +209,7 @@ const InventoryTable = ({ onPartSelect }) => {
                       </div>
                     </div>
                   </td>
-                  
+
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center space-x-2">
                       <span className="text-sm font-medium text-gray-900">{part.currentStock}</span>
@@ -228,24 +221,28 @@ const InventoryTable = ({ onPartSelect }) => {
                       Min: {part.minimumStock} | Status: {part.status}
                     </div>
                   </td>
-                  
+
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStockColor(stockStatus)}`}>
+                    <div
+                      className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStockColor(stockStatus)}`}
+                    >
                       <CheckCircle className="w-3 h-3 mr-1" />
                       {part.status}
                     </div>
                   </td>
-                  
+
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">{part.supplier}</div>
                     <div className="text-sm text-gray-500">Last updated: {part.lastUpdated}</div>
                   </td>
-                  
+
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">₹{part.price.toLocaleString()}</div>
+                    <div className="text-sm font-medium text-gray-900">
+                      ₹{part.price.toLocaleString()}
+                    </div>
                     <div className="text-sm text-gray-500">per unit</div>
                   </td>
-                  
+
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <motion.button
                       whileHover={{ scale: 1.05 }}
@@ -258,7 +255,7 @@ const InventoryTable = ({ onPartSelect }) => {
                     </motion.button>
                   </td>
                 </motion.tr>
-              );
+              )
             })}
           </tbody>
         </table>
@@ -276,7 +273,7 @@ const InventoryTable = ({ onPartSelect }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default InventoryTable;
+export default InventoryTable

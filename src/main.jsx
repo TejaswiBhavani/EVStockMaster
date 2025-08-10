@@ -6,8 +6,12 @@ import App from './App.jsx'
 // Initialize Firebase (imported in App component)
 import './config/firebase.js'
 
+import ErrorBoundary from './components/common/ErrorBoundary.jsx'
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
   </StrictMode>,
 )
