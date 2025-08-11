@@ -6,49 +6,53 @@ import '@testing-library/jest-dom'
 // Mock the individual part components
 vi.mock('../components/3D/parts/EVChassis', () => ({
   default: ({ selectedPart, onPartClick }) => (
-    <div
+    <button
+      type="button"
       data-testid="ev-chassis"
       data-selected={selectedPart}
       onClick={() => onPartClick?.('body')}
     >
       EV Chassis Component
-    </div>
+    </button>
   ),
 }))
 
 vi.mock('../components/3D/parts/EVPowertrain', () => ({
   default: ({ selectedPart, onPartClick }) => (
-    <div
+    <button
+      type="button"
       data-testid="ev-powertrain"
       data-selected={selectedPart}
       onClick={() => onPartClick?.('battery')}
     >
       EV Powertrain Component
-    </div>
+    </button>
   ),
 }))
 
 vi.mock('../components/3D/parts/EVExterior', () => ({
   default: ({ selectedPart, onPartClick }) => (
-    <div
+    <button
+      type="button"
       data-testid="ev-exterior"
       data-selected={selectedPart}
       onClick={() => onPartClick?.('charging-port')}
     >
       EV Exterior Component
-    </div>
+    </button>
   ),
 }))
 
 vi.mock('../components/3D/parts/EVInterior', () => ({
   default: ({ selectedPart, onPartClick }) => (
-    <div
+    <button
+      type="button"
       data-testid="ev-interior"
       data-selected={selectedPart}
       onClick={() => onPartClick?.('dashboard')}
     >
       EV Interior Component
-    </div>
+    </button>
   ),
 }))
 
