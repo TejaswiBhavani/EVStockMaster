@@ -6,7 +6,6 @@ import {
   DollarSign,
   Calendar,
   Truck,
-  AlertTriangle,
   CheckCircle,
   TrendingUp,
   Info,
@@ -25,26 +24,6 @@ const PartDetails = ({ partId }) => {
         </div>
       </div>
     )
-  }
-
-  const getHealthIcon = (health) => {
-    const icons = {
-      excellent: CheckCircle,
-      good: CheckCircle,
-      warning: AlertTriangle,
-      critical: AlertTriangle,
-    }
-    return icons[health] || CheckCircle
-  }
-
-  const getHealthColor = (health) => {
-    const colors = {
-      excellent: 'text-green-600 bg-green-100',
-      good: 'text-blue-600 bg-blue-100',
-      warning: 'text-yellow-600 bg-yellow-100',
-      critical: 'text-red-600 bg-red-100',
-    }
-    return colors[health] || 'text-gray-600 bg-gray-100'
   }
 
   const getStockStatus = () => {

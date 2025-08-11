@@ -1,7 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Package, AlertTriangle, TrendingUp, DollarSign, Activity, Clock } from 'lucide-react'
-import { dashboardStats } from '../../data/mockData'
 
 const StatsCards = () => {
   const stats = [

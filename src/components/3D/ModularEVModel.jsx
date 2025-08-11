@@ -12,7 +12,7 @@ const ModularEVModel = ({ onPartClick, selectedPart }) => {
   const [isCharging, setIsCharging] = useState(false)
   const [engineRunning, setEngineRunning] = useState(true)
 
-  useFrame((state) => {
+  useFrame(() => {
     if (groupRef.current) {
       groupRef.current.rotation.y += 0.003 // Subtle continuous rotation
     }
