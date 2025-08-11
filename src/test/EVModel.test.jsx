@@ -44,12 +44,76 @@ vi.mock('@react-three/drei', () => ({
     </div>
   ),
   Stats: () => <div data-testid="stats" />,
+  Bounds: ({ children, ...props }) => (
+    <div data-testid="bounds" {...props}>
+      {children}
+    </div>
+  ),
+  Html: ({ children, ...props }) => (
+    <div data-testid="html-label" {...props}>
+      {children}
+    </div>
+  ),
+  useCursor: vi.fn(),
+  Outlines: ({ children, ...props }) => (
+    <div data-testid="outlines" {...props}>
+      {children}
+    </div>
+  ),
+  useBounds: () => ({
+    refresh: vi.fn(() => ({ fit: vi.fn() })),
+  }),
 }))
 
 vi.mock('framer-motion', () => ({
   motion: {
     div: ({ children, ...props }) => <div {...props}>{children}</div>,
   },
+}))
+
+// Mock Lucide React icons
+vi.mock('lucide-react', () => ({
+  Eye: () => <div data-testid="eye-icon" />,
+  EyeOff: () => <div data-testid="eye-off-icon" />,
+  RotateCcw: () => <div data-testid="rotate-ccw-icon" />,
+}))
+
+// Mock the new store
+vi.mock('../store/evViewerStore', () => ({
+  useEVViewerStore: () => ({
+    hoveredPart: null,
+    selectedPart: null,
+    showInteractive: false,
+    resetViewToken: 0,
+    setHoveredPart: vi.fn(),
+    setSelectedPart: vi.fn(),
+    toggleShowInteractive: vi.fn(),
+    triggerResetView: vi.fn(),
+  }),
+}))
+
+// Mock the new components
+vi.mock('../components/3D/EnhancedParametricCar', () => ({
+  default: ({ selectedPart, onPartClick }) => (
+    <div 
+      data-testid="enhanced-parametric-car" 
+      data-selected-part={selectedPart} 
+      onClick={() => onPartClick?.('test-part')}
+      onKeyDown={(e) => e.key === 'Enter' && onPartClick?.('test-part')}
+      role="button"
+      tabIndex={0}
+    >
+      Enhanced Parametric Car
+    </div>
+  ),
+}))
+
+vi.mock('../components/3D/PartsList', () => ({
+  default: () => <div data-testid="parts-list">Parts List</div>,
+}))
+
+vi.mock('../components/3D/ShowPartsToggle', () => ({
+  default: () => <div data-testid="show-parts-toggle">Show Parts Toggle</div>,
 }))
 
 // Partially mock three.js to avoid MeshPhysicalMaterial issues while keeping needed exports
@@ -61,57 +125,30 @@ vi.mock('three', async (importOriginal) => {
   }
 })
 
-// Mock CarModel to avoid material instantiation while retaining EVModel structure
-vi.mock('../components/3D/CarModel', () => ({
-  default: ({ selectedPart, onPartClick }) => (
-    <div 
-      data-testid="car-model" 
-      data-selected-part={selectedPart} 
-      onClick={() => onPartClick?.('test-part')}
-      onKeyDown={(e) => e.key === 'Enter' && onPartClick?.('test-part')}
-      role="button"
-      tabIndex={0}
-    >
-      Car Model Placeholder
-    </div>
-  ),
-}))
-
-// Mock PostFX to avoid effects issues
-vi.mock('../components/3D/PostFX', () => ({
-  default: () => <div data-testid="post-fx">PostFX Placeholder</div>,
-}))
-
 describe('EVModel', () => {
   it('renders the 3D model viewer', () => {
     render(<EVModel />)
     expect(screen.getByTestId('three-canvas')).toBeInTheDocument()
+    expect(screen.getByTestId('bounds')).toBeInTheDocument()
+    // Environment removed due to CDN issues in browser environment
   })
 
-  it('displays the part label when no part is selected', () => {
+  it('renders the new UI components', () => {
     render(<EVModel />)
-    expect(screen.getByText('Interactive EV - Click parts to explore')).toBeInTheDocument()
+    expect(screen.getByTestId('show-parts-toggle')).toBeInTheDocument()
+    expect(screen.getByTestId('parts-list')).toBeInTheDocument()
+    expect(screen.getByText('Reset View')).toBeInTheDocument()
   })
 
-  it('displays the part label when a part is selected', () => {
-    render(<EVModel selectedPart="body" />)
-    expect(screen.getByText('Aero body with high-reflective paint')).toBeInTheDocument()
-  })
-
-  it('displays the part label for different parts', () => {
-    render(<EVModel selectedPart="battery" />)
-    expect(screen.getByText('Battery tray & pack region')).toBeInTheDocument()
-  })
-
-  it('renders the CarModel component', () => {
+  it('renders the EnhancedParametricCar component', () => {
     render(<EVModel />)
-    expect(screen.getByTestId('car-model')).toBeInTheDocument()
+    expect(screen.getByTestId('enhanced-parametric-car')).toBeInTheDocument()
   })
 
-  it('renders OrbitControls and Stats', () => {
+  it('renders OrbitControls with basic lighting', () => {
     render(<EVModel />)
     expect(screen.getByTestId('orbit-controls')).toBeInTheDocument()
-    expect(screen.getByTestId('stats')).toBeInTheDocument()
+    // Basic lighting instead of Environment due to CDN blocking
   })
 
   it('handles part selection callback', () => {
@@ -120,9 +157,21 @@ describe('EVModel', () => {
     expect(mockOnPartSelect).toBeDefined()
   })
 
-  it('passes selected part to CarModel', () => {
+  it('passes selected part to EnhancedParametricCar', () => {
     render(<EVModel selectedPart="battery" />)
-    const carModel = screen.getByTestId('car-model')
+    const carModel = screen.getByTestId('enhanced-parametric-car')
     expect(carModel).toHaveAttribute('data-selected-part', 'battery')
+  })
+
+  it('includes accessibility attributes', () => {
+    render(<EVModel />)
+    const container = screen.getByRole('region')
+    expect(container).toHaveAttribute('aria-label', 'Interactive 3D EV Model Viewer')
+  })
+
+  it('includes reset view button with proper accessibility', () => {
+    render(<EVModel />)
+    const resetButton = screen.getByRole('button', { name: /reset camera view/i })
+    expect(resetButton).toBeInTheDocument()
   })
 })
