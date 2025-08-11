@@ -12,13 +12,13 @@ import {
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: 'AIzaSyDyKrsnbDE_lLABmWQu1L3SDCqbD5aKrTc',
-  authDomain: 'invenai-28fa7.firebaseapp.com',
-  projectId: 'invenai-28fa7',
-  storageBucket: 'invenai-28fa7.firebasestorage.app',
-  messagingSenderId: '862076243205',
-  appId: '1:862076243205:web:05c30799e33b8cf0217b6c',
-  measurementId: 'G-N08YRPPY19',
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 }
 
 // Initialize Firebase
@@ -28,6 +28,8 @@ const app = initializeApp(firebaseConfig)
 export const analytics = getAnalytics(app)
 export const auth = getAuth(app)
 export const googleProvider = new GoogleAuthProvider()
+// Force account picker for Google sign-in to reduce confusion
+googleProvider.setCustomParameters({ prompt: 'select_account' })
 export const db = getFirestore(app)
 export const storage = getStorage(app)
 
@@ -35,13 +37,13 @@ export const storage = getStorage(app)
 export const domainUtils = {
   getCurrentDomainInfo,
   isDomainLikelyUnauthorized,
-  getFirebaseConsoleAuthURL: () => getFirebaseConsoleAuthURL(firebaseConfig.projectId),
+  getFirebaseConsoleAuthURL: () => getFirebaseConsoleAuthURL(firebaseConfig.projectId || import.meta.env.VITE_FIREBASE_PROJECT_ID),
   getRequiredDomainsMessage: () => {
     const { origin } = getCurrentDomainInfo()
     return `
 To fix authentication issues, add these domains to Firebase Console:
 
-1. Go to: ${getFirebaseConsoleAuthURL(firebaseConfig.projectId)}
+1. Go to: ${getFirebaseConsoleAuthURL(firebaseConfig.projectId || import.meta.env.VITE_FIREBASE_PROJECT_ID)}
 2. Add your current domain: ${origin}
 3. Also add common domains like: localhost, 127.0.0.1, vercel.app, etc.
 

@@ -86,10 +86,10 @@ export default function AnalyticsPage() {
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="modern-card p-4 border-l-4 border-blue-500"
+          className="modern-card p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800"
         >
-          <h3 className="font-semibold text-blue-800 mb-2">Live Updates</h3>
-          <div className="text-sm text-gray-600">
+          <h3 className="font-medium text-blue-800 dark:text-blue-300 mb-2 text-sm">Live Updates</h3>
+          <div className="text-sm text-gray-600 dark:text-gray-400">
             Latest: {messages[messages.length - 1]?.type} at {new Date(messages[messages.length - 1]?.ts * 1000).toLocaleTimeString()}
           </div>
         </motion.div>

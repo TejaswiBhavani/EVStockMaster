@@ -5,6 +5,7 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signInWithPopup,
+  signInWithRedirect,
   updateProfile,
 } from 'firebase/auth'
 import { auth, googleProvider, domainUtils } from '../../config/firebase'
@@ -105,11 +106,27 @@ const AuthModal = ({ isOpen, onClose, mode, setMode }) => {
     setShowDomainHelp(false)
 
     try {
+      // Try popup first
       await signInWithPopup(auth, googleProvider)
       onClose()
     } catch (error) {
       console.error('Google authentication error:', error)
       console.log('Current domain info:', domainUtils.getCurrentDomainInfo())
+
+      // If popup was blocked, try redirect
+      if (error.code === 'auth/popup-blocked') {
+        try {
+          await signInWithRedirect(auth, googleProvider)
+          // Note: signInWithRedirect doesn't return immediately,
+          // the page will redirect and come back
+          return
+        } catch (redirectError) {
+          console.error('Redirect authentication error:', redirectError)
+          setError('Both popup and redirect sign-in failed. Please check your browser settings.')
+          setLoading(false)
+          return
+        }
+      }
 
       // Provide user-friendly error messages
       let errorMessage = error.message
@@ -123,8 +140,6 @@ const AuthModal = ({ isOpen, onClose, mode, setMode }) => {
       } else if (error.code === 'auth/unauthorized-domain') {
         errorMessage = 'This domain is not authorized for authentication.'
         shouldShowDomainHelp = true
-      } else if (error.code === 'auth/popup-blocked') {
-        errorMessage = 'Please allow popups and try again.'
       } else if (error.code === 'auth/network-request-failed') {
         errorMessage = 'Network connection issue. Please check your internet and try again.'
       } else {
@@ -137,7 +152,6 @@ const AuthModal = ({ isOpen, onClose, mode, setMode }) => {
 
       setError(errorMessage)
       setShowDomainHelp(shouldShowDomainHelp)
-    } finally {
       setLoading(false)
     }
   }
@@ -177,7 +191,7 @@ const AuthModal = ({ isOpen, onClose, mode, setMode }) => {
           <button
             onClick={handleGoogleAuth}
             disabled={loading}
-            className="w-full flex items-center justify-center space-x-3 py-3 px-4 border border-electric-400/30 bg-dark-800 hover:bg-dark-700 rounded-lg transition-colors mb-4 text-white hover:border-electric-400/50"
+            className="w-full flex items-center justify-center space-x-3 py-3 px-4 border border-electric-400/30 bg-dark-800 hover:bg-dark-700 rounded-lg transition-colors mb-2 text-white hover:border-electric-400/50"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path
@@ -199,6 +213,10 @@ const AuthModal = ({ isOpen, onClose, mode, setMode }) => {
             </svg>
             <span>Continue with Google</span>
           </button>
+          
+          <p className="text-center text-xs text-gray-400 mb-4">
+            No form required — a Google window will open.
+          </p>
 
           <div className="relative mb-4">
             <div className="absolute inset-0 flex items-center">
