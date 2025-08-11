@@ -64,7 +64,14 @@ vi.mock('three', async (importOriginal) => {
 // Mock CarModel to avoid material instantiation while retaining EVModel structure
 vi.mock('../components/3D/CarModel', () => ({
   default: ({ selectedPart, onPartClick }) => (
-    <div data-testid="car-model" data-selected-part={selectedPart} onClick={() => onPartClick?.('test-part')}>
+    <div 
+      data-testid="car-model" 
+      data-selected-part={selectedPart} 
+      onClick={() => onPartClick?.('test-part')}
+      onKeyDown={(e) => e.key === 'Enter' && onPartClick?.('test-part')}
+      role="button"
+      tabIndex={0}
+    >
       Car Model Placeholder
     </div>
   ),
