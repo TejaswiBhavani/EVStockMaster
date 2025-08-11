@@ -6,7 +6,7 @@ import '@testing-library/jest-dom'
 // Mock @react-three/fiber and @react-three/drei
 vi.mock('@react-three/fiber', () => ({
   Canvas: ({ children }) => <div data-testid="three-canvas">{children}</div>,
-  useFrame: () => {},
+  useFrame: vi.fn(),
 }))
 
 vi.mock('@react-three/drei', () => ({
@@ -52,30 +52,34 @@ vi.mock('framer-motion', () => ({
   },
 }))
 
-vi.mock('three', () => ({
-  MeshStandardMaterial: class {
-    constructor(props) {
-      Object.assign(this, props)
-    }
-  },
-  BufferGeometry: class {
-    constructor() {
-      this.attributes = {}
-    }
-    setAttribute(name, attribute) {
-      this.attributes[name] = attribute
-    }
-  },
-  BufferAttribute: class {
-    constructor(array, itemSize) {
-      this.array = array
-      this.itemSize = itemSize
-      this.needsUpdate = false
-    }
-  },
-  Float32Array: Float32Array,
-  AdditiveBlending: 'AdditiveBlending',
-  ACESFilmicToneMapping: 'ACESFilmicToneMapping',
+// Partially mock three.js to avoid MeshPhysicalMaterial issues while keeping needed exports
+vi.mock('three', async (importOriginal) => {
+  const actual = await importOriginal()
+  return {
+    ...actual,
+    // Keep all actual three.js exports to ensure MeshPhysicalMaterial exists
+  }
+})
+
+// Mock CarModel to avoid material instantiation while retaining EVModel structure
+vi.mock('../components/3D/CarModel', () => ({
+  default: ({ selectedPart, onPartClick }) => (
+    <div 
+      data-testid="car-model" 
+      data-selected-part={selectedPart} 
+      onClick={() => onPartClick?.('test-part')}
+      onKeyDown={(e) => e.key === 'Enter' && onPartClick?.('test-part')}
+      role="button"
+      tabIndex={0}
+    >
+      Car Model Placeholder
+    </div>
+  ),
+}))
+
+// Mock PostFX to avoid effects issues
+vi.mock('../components/3D/PostFX', () => ({
+  default: () => <div data-testid="post-fx">PostFX Placeholder</div>,
 }))
 
 describe('EVModel', () => {
@@ -84,54 +88,41 @@ describe('EVModel', () => {
     expect(screen.getByTestId('three-canvas')).toBeInTheDocument()
   })
 
-  it('displays interactive 3D model title', () => {
+  it('displays the part label when no part is selected', () => {
     render(<EVModel />)
-    expect(screen.getByText('Interactive 3D Model')).toBeInTheDocument()
+    expect(screen.getByText('Interactive EV - Click parts to explore')).toBeInTheDocument()
   })
 
-  it('shows model status information', () => {
-    render(<EVModel />)
-    expect(screen.getByText('Model Status')).toBeInTheDocument()
-    expect(screen.getByText('Live Rendering')).toBeInTheDocument()
-    expect(screen.getByText('WebGL Accelerated')).toBeInTheDocument()
-  })
-
-  it('displays control instructions', () => {
-    render(<EVModel />)
-    expect(screen.getByText('Drag to rotate')).toBeInTheDocument()
-    expect(screen.getByText('Scroll to zoom')).toBeInTheDocument()
-    expect(screen.getByText('Click parts for details')).toBeInTheDocument()
-  })
-
-  it('shows part selection legend', () => {
-    render(<EVModel />)
-    expect(screen.getByText('Body & Chassis')).toBeInTheDocument()
-    expect(screen.getByText('Battery Pack')).toBeInTheDocument()
-    expect(screen.getByText('Electric Motors')).toBeInTheDocument()
-    expect(screen.getByText('Charging Port')).toBeInTheDocument()
-    expect(screen.getByText('Control Systems')).toBeInTheDocument()
-  })
-
-  it('displays part information when a part is selected', () => {
+  it('displays the part label when a part is selected', () => {
     render(<EVModel selectedPart="body" />)
-    // The selected part info should be displayed in the UI (may appear in multiple places)
-    const bodyDescriptions = screen.getAllByText(
-      'Advanced Carbon Fiber Body - Lightweight & Aerodynamic',
-    )
-    expect(bodyDescriptions.length).toBeGreaterThan(0)
+    expect(screen.getByText('Aero body with high-reflective paint')).toBeInTheDocument()
   })
 
-  it('shows performance indicator', () => {
+  it('displays the part label for different parts', () => {
+    render(<EVModel selectedPart="battery" />)
+    expect(screen.getByText('Battery tray & pack region')).toBeInTheDocument()
+  })
+
+  it('renders the CarModel component', () => {
     render(<EVModel />)
-    expect(screen.getByText('60 FPS • WebGL 2.0')).toBeInTheDocument()
+    expect(screen.getByTestId('car-model')).toBeInTheDocument()
+  })
+
+  it('renders OrbitControls and Stats', () => {
+    render(<EVModel />)
+    expect(screen.getByTestId('orbit-controls')).toBeInTheDocument()
+    expect(screen.getByTestId('stats')).toBeInTheDocument()
   })
 
   it('handles part selection callback', () => {
     const mockOnPartSelect = vi.fn()
     render(<EVModel onPartSelect={mockOnPartSelect} />)
-
-    // The actual part selection would happen through 3D interactions
-    // This test validates the prop is passed correctly
     expect(mockOnPartSelect).toBeDefined()
+  })
+
+  it('passes selected part to CarModel', () => {
+    render(<EVModel selectedPart="battery" />)
+    const carModel = screen.getByTestId('car-model')
+    expect(carModel).toHaveAttribute('data-selected-part', 'battery')
   })
 })
