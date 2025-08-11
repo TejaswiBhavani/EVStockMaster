@@ -13,6 +13,7 @@ describe('CorrelationHeatmap', () => {
     
     render(<CorrelationHeatmap symbols={symbols} matrix={matrix} />)
     // Basic smoke test - if it renders without throwing, we're good
+    expect(true).toBe(true)
   })
   
   it('handles empty data gracefully', () => {

@@ -49,7 +49,7 @@ const sampleMatrix = [
 export default function AnalyticsPage() {
   const [selectedBasket, setSelectedBasket] = useState('ChinaEV')
   const [correlationData, setCorrelationData] = useState({ symbols: sampleSymbols, matrix: sampleMatrix })
-  const { messages, error } = useSSE('/api/alerts/stream')
+  const { messages } = useSSE('/api/alerts/stream')
 
   const fetchCorrelations = async (symbols) => {
     try {
