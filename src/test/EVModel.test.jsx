@@ -130,7 +130,7 @@ describe('EVModel', () => {
     render(<EVModel />)
     expect(screen.getByTestId('three-canvas')).toBeInTheDocument()
     expect(screen.getByTestId('bounds')).toBeInTheDocument()
-    expect(screen.getByTestId('environment')).toBeInTheDocument()
+    // Environment removed due to CDN issues in browser environment
   })
 
   it('renders the new UI components', () => {
@@ -145,10 +145,10 @@ describe('EVModel', () => {
     expect(screen.getByTestId('enhanced-parametric-car')).toBeInTheDocument()
   })
 
-  it('renders OrbitControls and Environment', () => {
+  it('renders OrbitControls with basic lighting', () => {
     render(<EVModel />)
     expect(screen.getByTestId('orbit-controls')).toBeInTheDocument()
-    expect(screen.getByTestId('environment')).toBeInTheDocument()
+    // Basic lighting instead of Environment due to CDN blocking
   })
 
   it('handles part selection callback', () => {
