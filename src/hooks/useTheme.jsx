@@ -13,10 +13,15 @@ export const useTheme = () => {
 
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(() => {
-    // Check localStorage first, then system preference
-    const saved = localStorage.getItem('theme')
-    if (saved && ['light', 'dark', 'system'].includes(saved)) {
-      return saved
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        const saved = window.localStorage.getItem('theme')
+        if (saved && ['light', 'dark', 'system'].includes(saved)) {
+          return saved
+        }
+      }
+    } catch {
+      // ignore storage access errors and fall back
     }
     return 'system'
   })
@@ -24,44 +29,58 @@ export const ThemeProvider = ({ children }) => {
   const [resolvedTheme, setResolvedTheme] = useState('light')
 
   useEffect(() => {
+    const supportsMatchMedia =
+      typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+
     const updateResolvedTheme = () => {
       let newResolvedTheme = theme
 
       if (theme === 'system') {
-        newResolvedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
-          ? 'dark'
-          : 'light'
+        const prefersDark =
+          supportsMatchMedia &&
+          window.matchMedia('(prefers-color-scheme: dark)').matches
+        newResolvedTheme = prefersDark ? 'dark' : 'light'
       }
 
       setResolvedTheme(newResolvedTheme)
 
-      // Apply theme to document
-      const root = window.document.documentElement
-      root.classList.remove('light', 'dark')
-      root.classList.add(newResolvedTheme)
-
-      // Also set data attribute for additional styling flexibility
-      root.setAttribute('data-theme', newResolvedTheme)
+      // Apply theme to document if available
+      if (typeof document !== 'undefined') {
+        const root = document.documentElement
+        root.classList.remove('light', 'dark')
+        root.classList.add(newResolvedTheme)
+        root.setAttribute('data-theme', newResolvedTheme)
+      }
     }
 
     updateResolvedTheme()
 
-    // Listen for system theme changes
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    const handleChange = () => {
-      if (theme === 'system') {
-        updateResolvedTheme()
+    if (supportsMatchMedia) {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+      const handleChange = () => {
+        if (theme === 'system') {
+          updateResolvedTheme()
+        }
       }
+
+      mediaQuery.addEventListener?.('change', handleChange)
+      return () => mediaQuery.removeEventListener?.('change', handleChange)
     }
 
-    mediaQuery.addEventListener('change', handleChange)
-    return () => mediaQuery.removeEventListener('change', handleChange)
+    // No cleanup when matchMedia isn't supported
+    return undefined
   }, [theme])
 
   const changeTheme = (newTheme) => {
     if (['light', 'dark', 'system'].includes(newTheme)) {
       setTheme(newTheme)
-      localStorage.setItem('theme', newTheme)
+      try {
+        if (typeof window !== 'undefined' && window.localStorage) {
+          window.localStorage.setItem('theme', newTheme)
+        }
+      } catch {
+        // ignore storage access errors
+      }
     }
   }
 
