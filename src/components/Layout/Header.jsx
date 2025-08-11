@@ -21,7 +21,7 @@ const Header = ({ onMenuClick, activeTab, isMobile, onNavigate }) => {
   const [user] = useAuthState(auth)
   const [notificationCenterOpen, setNotificationCenterOpen] = useState(false)
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false)
-  const [unreadCount, setUnreadCount] = useState(3) // This would come from your notification state management
+  const [unreadCount] = useState(3) // This would come from your notification state management
 
   // Close dropdown when clicking outside
   useEffect(() => {

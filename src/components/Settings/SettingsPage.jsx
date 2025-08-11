@@ -23,7 +23,7 @@ import {
 
 const SettingsPage = () => {
   const [user] = useAuthState(auth)
-  const { theme, changeTheme, isDark } = useTheme()
+  const { theme, changeTheme } = useTheme()
   const [settings, setSettings] = useState({
     // Application Preferences
     notifications: {
@@ -116,10 +116,11 @@ const SettingsPage = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label htmlFor="displayName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Display Name
             </label>
             <input
+              id="displayName"
               type="text"
               className="input-modern w-full dark:bg-dark-700 dark:border-dark-600 dark:text-white"
               placeholder="Enter your display name"
@@ -128,12 +129,13 @@ const SettingsPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label htmlFor="emailAddress" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Email Address
             </label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
+                id="emailAddress"
                 type="email"
                 className="input-modern w-full pl-10 dark:bg-dark-700 dark:border-dark-600 dark:text-white"
                 value={user?.email || 'Not signed in'}
@@ -143,9 +145,7 @@ const SettingsPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Password
-            </label>
+            <span className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Password</span>
             <button className="btn-secondary flex items-center space-x-2">
               <Shield className="w-4 h-4" />
               <span>Change Password</span>
@@ -153,9 +153,7 @@ const SettingsPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Profile Picture
-            </label>
+            <span className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Profile Picture</span>
             <div className="flex items-center space-x-4">
               <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-xl flex items-center justify-center">
                 <User className="w-6 h-6 text-white" />
@@ -192,93 +190,96 @@ const SettingsPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Theme Selection */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-              Theme Selection
-            </label>
-            <div className="space-y-3">
-              {['light', 'dark', 'system'].map((themeOption) => {
-                const IconComponent = getThemeIcon(themeOption)
-                return (
-                  <motion.label
-                    key={themeOption}
-                    className="flex items-center space-x-3 cursor-pointer p-3 rounded-xl border border-gray-200 dark:border-dark-600 hover:bg-gray-50 dark:hover:bg-dark-700 transition-colors"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <input
-                      type="radio"
-                      name="theme"
-                      value={themeOption}
-                      checked={theme === themeOption}
-                      onChange={(e) => changeTheme(e.target.value)}
-                      className="w-4 h-4 text-primary-600"
-                    />
-                    <IconComponent className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-                    <div>
-                      <span className="text-sm text-gray-700 dark:text-gray-300 font-medium capitalize">
-                        {themeOption} Mode
-                      </span>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        {themeOption === 'system'
-                          ? 'Follow system preference'
-                          : themeOption === 'light'
-                            ? 'Light appearance'
-                            : 'Dark appearance'}
-                      </p>
-                    </div>
-                    {theme === themeOption && (
-                      <motion.div
-                        layoutId="themeCheck"
-                        className="ml-auto w-2 h-2 bg-primary-500 rounded-full"
-                        initial={false}
+            <fieldset>
+              <legend className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                Theme Selection
+              </legend>
+              <div className="space-y-3">
+                {['light', 'dark', 'system'].map((themeOption) => {
+                  const IconComponent = getThemeIcon(themeOption)
+                  return (
+                    <motion.label
+                      key={themeOption}
+                      className="flex items-center space-x-3 cursor-pointer p-3 rounded-xl border border-gray-200 dark:border-dark-600 hover:bg-gray-50 dark:hover:bg-dark-700 transition-colors"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <input
+                        type="radio"
+                        name="theme"
+                        value={themeOption}
+                        checked={theme === themeOption}
+                        onChange={(e) => changeTheme(e.target.value)}
+                        className="w-4 h-4 text-primary-600"
                       />
-                    )}
-                  </motion.label>
-                )
-              })}
-            </div>
+                      <IconComponent className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                      <div>
+                        <span className="text-sm text-gray-700 dark:text-gray-300 font-medium capitalize">
+                          {themeOption} Mode
+                        </span>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          {themeOption === 'system'
+                            ? 'Follow system preference'
+                            : themeOption === 'light'
+                              ? 'Light appearance'
+                              : 'Dark appearance'}
+                        </p>
+                      </div>
+                      {theme === themeOption && (
+                        <motion.div
+                          layoutId="themeCheck"
+                          className="ml-auto w-2 h-2 bg-primary-500 rounded-full"
+                          initial={false}
+                        />
+                      )}
+                    </motion.label>
+                  )
+                })}
+              </div>
+            </fieldset>
           </div>
 
           {/* Notifications */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
-              <Bell className="w-4 h-4 mr-2" />
-              Notification Preferences
-            </label>
-            <div className="space-y-3">
-              {Object.entries({
-                lowStock: 'Low Stock Alerts',
-                aiInsights: 'AI Insight Updates',
-                productionUpdates: 'Production Schedule Changes',
-                systemAnnouncements: 'System Announcements',
-              }).map(([key, label]) => (
-                <label
-                  key={key}
-                  className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-dark-700"
-                >
-                  <span className="text-sm text-gray-700 dark:text-gray-300">{label}</span>
-                  <input
-                    type="checkbox"
-                    checked={settings.notifications[key]}
-                    onChange={(e) => handleSettingChange('notifications', key, e.target.checked)}
-                    className="w-4 h-4 text-primary-600 rounded"
-                  />
-                </label>
-              ))}
-            </div>
+            <fieldset>
+              <legend className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
+                <Bell className="w-4 h-4 mr-2" />
+                Notification Preferences
+              </legend>
+              <div className="space-y-3">
+                {Object.entries({
+                  lowStock: 'Low Stock Alerts',
+                  aiInsights: 'AI Insight Updates',
+                  productionUpdates: 'Production Schedule Changes',
+                  systemAnnouncements: 'System Announcements',
+                }).map(([key, label]) => (
+                  <label
+                    key={key}
+                    className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-dark-700"
+                  >
+                    <span className="text-sm text-gray-700 dark:text-gray-300">{label}</span>
+                    <input
+                      type="checkbox"
+                      checked={settings.notifications[key]}
+                      onChange={(e) => handleSettingChange('notifications', key, e.target.checked)}
+                      className="w-4 h-4 text-primary-600 rounded"
+                    />
+                  </label>
+                ))}
+              </div>
+            </fieldset>
           </div>
 
           {/* Data Refresh Interval */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
+            <label htmlFor="dataRefreshInterval" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
               <Clock className="w-4 h-4 mr-2" />
               Data Refresh Interval
             </label>
             <select
+              id="dataRefreshInterval"
               value={settings.dataRefreshInterval}
-              onChange={(e) =>
-                handleSettingChange(null, 'dataRefreshInterval', parseInt(e.target.value))
-              }
+              onChange={(e) => handleSettingChange(null, 'dataRefreshInterval', parseInt(e.target.value))}
               className="input-modern w-full dark:bg-dark-700 dark:border-dark-600 dark:text-white"
             >
               <option value={5}>Every 5 minutes</option>
@@ -290,27 +291,27 @@ const SettingsPage = () => {
 
           {/* Units of Measurement */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
-              <Ruler className="w-4 h-4 mr-2" />
-              Units of Measurement
-            </label>
-            <div className="space-y-2">
-              {['metric', 'imperial'].map((unit) => (
-                <label key={unit} className="flex items-center space-x-3 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="units"
-                    value={unit}
-                    checked={settings.units === unit}
-                    onChange={(e) => handleSettingChange(null, 'units', e.target.value)}
-                    className="w-4 h-4 text-primary-600"
-                  />
-                  <span className="text-sm text-gray-700 dark:text-gray-300 capitalize">
-                    {unit}
-                  </span>
-                </label>
-              ))}
-            </div>
+            <fieldset>
+              <legend className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
+                <Ruler className="w-4 h-4 mr-2" />
+                Units of Measurement
+              </legend>
+              <div className="space-y-2">
+                {['metric', 'imperial'].map((unit) => (
+                  <label key={unit} className="flex items-center space-x-3 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="units"
+                      value={unit}
+                      checked={settings.units === unit}
+                      onChange={(e) => handleSettingChange(null, 'units', e.target.value)}
+                      className="w-4 h-4 text-primary-600"
+                    />
+                    <span className="text-sm text-gray-700 dark:text-gray-300 capitalize">{unit}</span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
           </div>
         </div>
       </motion.div>
@@ -330,8 +331,9 @@ const SettingsPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Default View */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">Default View</label>
+            <label htmlFor="defaultView" className="block text-sm font-medium text-gray-700 mb-3">Default View</label>
             <select
+              id="defaultView"
               value={settings.defaultView}
               onChange={(e) => handleSettingChange(null, 'defaultView', e.target.value)}
               className="input-modern w-full"
@@ -345,27 +347,27 @@ const SettingsPage = () => {
 
           {/* Animation Speed */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">
+            <label htmlFor="animationSpeed" className="block text-sm font-medium text-gray-700 mb-3">
               Animation Speed: {settings.animationSpeed}x
             </label>
             <input
+              id="animationSpeed"
               type="range"
               min="0.5"
               max="2"
               step="0.1"
               value={settings.animationSpeed}
-              onChange={(e) =>
-                handleSettingChange(null, 'animationSpeed', parseFloat(e.target.value))
-              }
+              onChange={(e) => handleSettingChange(null, 'animationSpeed', parseFloat(e.target.value))}
               className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
             />
           </div>
 
           {/* Highlight Color */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">Highlight Color</label>
+            <label htmlFor="highlightColor" className="block text-sm font-medium text-gray-700 mb-3">Highlight Color</label>
             <div className="flex items-center space-x-3">
               <input
+                id="highlightColor"
                 type="color"
                 value={settings.highlightColor}
                 onChange={(e) => handleSettingChange(null, 'highlightColor', e.target.value)}
@@ -392,32 +394,35 @@ const SettingsPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* AI Response Verbosity */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">
-              AI Response Verbosity
-            </label>
-            <div className="space-y-2">
-              {['concise', 'standard', 'detailed'].map((verbosity) => (
-                <label key={verbosity} className="flex items-center space-x-3 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="aiVerbosity"
-                    value={verbosity}
-                    checked={settings.aiVerbosity === verbosity}
-                    onChange={(e) => handleSettingChange(null, 'aiVerbosity', e.target.value)}
-                    className="w-4 h-4 text-primary-600"
-                  />
-                  <span className="text-sm text-gray-700 capitalize">{verbosity}</span>
-                </label>
-              ))}
-            </div>
+            <fieldset>
+              <legend className="block text-sm font-medium text-gray-700 mb-3">
+                AI Response Verbosity
+              </legend>
+              <div className="space-y-2">
+                {['concise', 'standard', 'detailed'].map((verbosity) => (
+                  <label key={verbosity} className="flex items-center space-x-3 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="aiVerbosity"
+                      value={verbosity}
+                      checked={settings.aiVerbosity === verbosity}
+                      onChange={(e) => handleSettingChange(null, 'aiVerbosity', e.target.value)}
+                      className="w-4 h-4 text-primary-600"
+                    />
+                    <span className="text-sm text-gray-700 capitalize">{verbosity}</span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
           </div>
 
           {/* AI Confidence Threshold */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">
+            <label htmlFor="aiConfidenceThreshold" className="block text-sm font-medium text-gray-700 mb-3">
               AI Confidence Threshold: {Math.round(settings.aiConfidenceThreshold * 100)}%
             </label>
             <input
+              id="aiConfidenceThreshold"
               type="range"
               min="0.3"
               max="0.9"
@@ -443,10 +448,7 @@ const SettingsPage = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
       >
-        <button
-          onClick={handleSaveSettings}
-          className="btn-primary flex items-center space-x-2 px-8 py-3"
-        >
+        <button onClick={handleSaveSettings} className="btn-primary flex items-center space-x-2 px-8 py-3">
           <Save className="w-5 h-5" />
           <span>Save Settings</span>
         </button>

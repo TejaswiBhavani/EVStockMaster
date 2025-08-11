@@ -384,24 +384,24 @@ const Homepage = ({ onEnterApp }) => {
               <h3 className="font-semibold mb-4">Product</h3>
               <ul className="space-y-2 text-gray-400">
                 <li>
-                  <a href="#" className="hover:text-electric-400 transition-colors">
+                  <button type="button" className="hover:text-electric-400 transition-colors text-left">
                     Features
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-electric-400 transition-colors">
+                  <button type="button" className="hover:text-electric-400 transition-colors text-left">
                     Pricing
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-electric-400 transition-colors">
+                  <button type="button" className="hover:text-electric-400 transition-colors text-left">
                     API
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-electric-400 transition-colors">
+                  <button type="button" className="hover:text-electric-400 transition-colors text-left">
                     Integrations
-                  </a>
+                  </button>
                 </li>
               </ul>
             </div>
@@ -410,24 +410,24 @@ const Homepage = ({ onEnterApp }) => {
               <h3 className="font-semibold mb-4">Company</h3>
               <ul className="space-y-2 text-gray-400">
                 <li>
-                  <a href="#" className="hover:text-electric-400 transition-colors">
+                  <button type="button" className="hover:text-electric-400 transition-colors text-left">
                     About
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-electric-400 transition-colors">
+                  <button type="button" className="hover:text-electric-400 transition-colors text-left">
                     Blog
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-electric-400 transition-colors">
+                  <button type="button" className="hover:text-electric-400 transition-colors text-left">
                     Careers
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-electric-400 transition-colors">
+                  <button type="button" className="hover:text-electric-400 transition-colors text-left">
                     Contact
-                  </a>
+                  </button>
                 </li>
               </ul>
             </div>
@@ -436,24 +436,24 @@ const Homepage = ({ onEnterApp }) => {
               <h3 className="font-semibold mb-4">Support</h3>
               <ul className="space-y-2 text-gray-400">
                 <li>
-                  <a href="#" className="hover:text-electric-400 transition-colors">
+                  <button type="button" className="hover:text-electric-400 transition-colors text-left">
                     Help Center
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-electric-400 transition-colors">
+                  <button type="button" className="hover:text-electric-400 transition-colors text-left">
                     Documentation
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-electric-400 transition-colors">
+                  <button type="button" className="hover:text-electric-400 transition-colors text-left">
                     Status
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-electric-400 transition-colors">
+                  <button type="button" className="hover:text-electric-400 transition-colors text-left">
                     Security
-                  </a>
+                  </button>
                 </li>
               </ul>
             </div>

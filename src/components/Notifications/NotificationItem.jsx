@@ -71,7 +71,7 @@ const NotificationItem = ({ notification, onMarkAsRead, onDelete, onNavigate }) 
     }
   }
 
-  const getActionButton = (category, type) => {
+  const getActionButton = (category) => {
     switch (category) {
       case 'inventory':
         return {
@@ -96,7 +96,7 @@ const NotificationItem = ({ notification, onMarkAsRead, onDelete, onNavigate }) 
     }
   }
 
-  const actionButton = getActionButton(notification.category, notification.type)
+  const actionButton = getActionButton(notification.category)
 
   const Icon = getIcon(notification.type, notification.category)
   const styles = getTypeStyles(notification.type)
