@@ -95,6 +95,11 @@ export default function EnhancedParametricCar({ selectedPart, onPartClick, onPoi
       metalness: 0.6,
       roughness: 0.4,
     }),
+    motor: new THREE.MeshStandardMaterial({
+      color: '#1f2937',
+      metalness: 0.8,
+      roughness: 0.3,
+    }),
     chargingPort: new THREE.MeshStandardMaterial({
       color: '#7c3aed',
       metalness: 0.9,
@@ -411,6 +416,30 @@ export default function EnhancedParametricCar({ selectedPart, onPartClick, onPoi
           <primitive object={materials.chrome} attach="material" />
         </Cylinder>
         <Cylinder args={[0.02, 0.02, 2.2, 8]} position={[-0.3, -0.62, 0]} rotation={[0, 0, Math.PI/2]}>
+          <primitive object={materials.chrome} attach="material" />
+        </Cylinder>
+      </InteractivePart>
+
+      {/* Electric motor */}
+      <InteractivePart partId="motor">
+        <Cylinder 
+          args={[0.25, 0.25, 0.4, 16]} 
+          rotation={[0, 0, Math.PI/2]} 
+          position={[-0.8, -0.4, 0]}
+        >
+          <primitive object={materials.motor} attach="material" />
+        </Cylinder>
+        
+        {/* Motor housing details */}
+        <Box args={[0.3, 0.15, 0.15]} position={[-0.8, -0.4, 0.2]}>
+          <primitive object={materials.plastic} attach="material" />
+        </Box>
+        <Box args={[0.3, 0.15, 0.15]} position={[-0.8, -0.4, -0.2]}>
+          <primitive object={materials.plastic} attach="material" />
+        </Box>
+        
+        {/* Drive shaft */}
+        <Cylinder args={[0.03, 0.03, 0.6, 8]} rotation={[0, 0, Math.PI/2]} position={[-0.8, -0.5, 0]}>
           <primitive object={materials.chrome} attach="material" />
         </Cylinder>
       </InteractivePart>
