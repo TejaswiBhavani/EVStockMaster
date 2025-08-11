@@ -2,8 +2,15 @@ import React from 'react'
 import { Cylinder, Torus } from '@react-three/drei'
 
 export default function Wheel({ position = [0, 0, 0], selected = false, onClick }) {
+  const handlePointerDown = (event) => {
+    event.stopPropagation()
+    if (onClick) {
+      onClick()
+    }
+  }
+
   return (
-    <group position={position} onClick={onClick}>
+    <group position={position} onPointerDown={handlePointerDown}>
       <Torus args={[0.33, 0.08, 16, 64]} rotation={[Math.PI / 2, 0, 0]}>
         <meshPhysicalMaterial color="#1f2937" roughness={0.9} metalness={0.1} />
       </Torus>

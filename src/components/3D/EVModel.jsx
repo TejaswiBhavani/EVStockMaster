@@ -34,7 +34,7 @@ const EVModel = ({ onPartSelect, selectedPart }) => {
         <hemisphereLight intensity={0.5} />
         <spotLight position={[6, 8, 5]} angle={0.35} penumbra={0.6} intensity={1.5} castShadow />
         <directionalLight position={[-6, 6, -5]} intensity={0.8} />
-        <group position={[0, -0.6, 0]} rotation={[0, 0.25, 0]}>
+        <group position={[0, -0.6, 0]} rotation={[0, 0.25, 0]} onPointerMissed={() => handlePartClick(null)}>
           <CarModel selectedPart={selectedPart} onPartClick={handlePartClick} />
         </group>
         <OrbitControls enablePan={false} minDistance={4} maxDistance={14} />
