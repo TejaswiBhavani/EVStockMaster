@@ -14,9 +14,13 @@
 
 ### ✨ Key Features
 
-- **🎯 Interactive 3D EV Model Viewer** - Click on parts to view detailed information
+- **🎯 Interactive 3D EV Model Viewer** - Click on parts to view detailed information with realistic car design
 - **📊 Real-time Dashboard** - Live inventory metrics and production schedules
+- **📈 EV Ecosystem Analytics** - Supply chain visualization, correlation analysis, and thematic baskets
+- **📅 Policy & Regulatory Calendar** - Track EV regulations and policy changes globally
+- **🔄 Real-time Alerts** - Server-Sent Events for live updates and notifications
 - **🤖 AI-Powered Analytics** - Smart insights and recommendations
+- **📱 Progressive Web App (PWA)** - Installable with offline capabilities
 - **📱 Responsive Design** - Optimized for desktop, tablet, and mobile
 - **⚡ Real-time Updates** - Live data synchronization
 - **🔍 Advanced Search & Filtering** - Find parts and data quickly
@@ -29,16 +33,20 @@
 - **Vite** - Fast build tool and development server
 - **Tailwind CSS** - Utility-first CSS framework
 - **Framer Motion** - Smooth animations and transitions
+- **D3.js** - Data visualization library for charts and graphs
 
 ### 3D Visualization
 
 - **Three.js** - 3D graphics library
 - **@react-three/fiber** - React renderer for Three.js
 - **@react-three/drei** - Useful helpers for React Three Fiber
+- **@react-three/postprocessing** - Post-processing effects (Bloom, SSAO)
 
-### Backend & Database
+### Backend & API
 
+- **FastAPI** - High-performance Python API framework
 - **Firebase** - Authentication, Firestore database, hosting
+- **Server-Sent Events (SSE)** - Real-time data streaming
 - **Firebase Analytics** - User behavior tracking
 
 ### UI/UX
@@ -114,7 +122,14 @@ npm run dev
 # App will be available at http://localhost:5173
 ```
 
-**Backend (Streamlit) - Terminal 2:**
+**FastAPI Backend - Terminal 2:**
+
+```bash
+npm run api
+# API will be available at http://localhost:8000
+```
+
+**Backend (Streamlit) - Terminal 3:**
 
 ```bash
 npm run streamlit
@@ -125,9 +140,10 @@ npm run streamlit
 ### Development Workflow
 
 ```bash
-# Start both applications simultaneously
-npm run dev    # Terminal 1 - React frontend
-npm run streamlit   # Terminal 2 - Streamlit backend
+# Start all applications
+npm run dev         # Terminal 1 - React frontend
+npm run api         # Terminal 2 - FastAPI backend  
+npm run streamlit   # Terminal 3 - Streamlit analytics
 
 # Run tests
 npm test                 # Unit tests
@@ -155,64 +171,95 @@ EVStockMaster/
 │   │   ├── InfoPanel/      # Information panels and details
 │   │   ├── Chat/          # AI chatbot components
 │   │   ├── Auth/          # Authentication modals
-│   │   └── Settings/      # User settings and preferences
+│   │   ├── Settings/      # User settings and preferences
+│   │   ├── charts/        # D3.js visualization components
+│   │   └── supplychain/   # Supply chain analysis components
+│   ├── pages/             # Main page components
+│   │   ├── AnalyticsPage.jsx  # EV ecosystem analytics
+│   │   └── PolicyCalendar.jsx # Regulatory calendar
+│   ├── hooks/             # Custom React hooks
+│   │   ├── useTheme.jsx   # Theme management
+│   │   ├── useResponsive.js # Responsive design utilities
+│   │   └── useSSE.js      # Server-Sent Events hook
+│   ├── utils/             # Utility functions
+│   │   └── thematicBaskets.js # Investment basket definitions
 │   ├── config/            # Configuration files
 │   │   ├── firebase.js    # Firebase initialization
 │   │   └── domains.js     # Domain management utilities
 │   ├── data/              # Mock data and constants
-│   ├── hooks/             # Custom React hooks
-│   │   ├── useTheme.jsx   # Theme management
-│   │   └── useResponsive.js # Responsive design utilities
 │   ├── main.jsx           # React app entry point
 │   ├── App.jsx            # Main application component
 │   └── index.css          # Global styles and Tailwind
+├── server/                # Backend services
+│   └── api/              # FastAPI server
+│       └── main.py       # API endpoints and SSE streams
 ├── modules/               # Python backend modules
 │   ├── data_generator.py  # Synthetic data generation
 │   ├── forecasting.py     # Demand forecasting algorithms
 │   ├── insight_engine.py  # AI insights and recommendations
 │   └── analytics.py       # Statistical analysis functions
-├── app.py                 # Streamlit backend application
-├── requirements.txt       # Python dependencies
-├── package.json           # Node.js dependencies and scripts
-├── vite.config.js         # Vite build configuration
-├── tailwind.config.js     # Tailwind CSS configuration
-├── eslint.config.js       # ESLint configuration
-├── firebase.json          # Firebase hosting configuration
-├── vercel.json           # Vercel deployment configuration
-└── README.md             # Project documentation
+├── docs/                  # Documentation
+│   └── ARCHITECTURE.md    # System architecture overview
+├── .github/workflows/     # CI/CD pipelines
+│   └── ci.yml            # GitHub Actions workflow
+├── public/               # Static assets
+│   ├── manifest.webmanifest # PWA manifest
+│   ├── favicon.svg       # App icon
+│   └── images/           # Static images
 ```
 
 ## 🎨 Features Deep Dive
 
-### 1. Interactive 3D Model Viewer
+### 1. Enhanced 3D Model Viewer
 
-- **Clickable EV Parts**: Battery, Motor, Chassis, Wheels, Dashboard, Seats
+- **Clickable EV Parts**: Battery, wheels, headlights, taillights, charging port, body
+- **Realistic Car Design**: Improved geometry with metallic paint, glass, and detailed wheels
+- **Post-processing Effects**: Bloom, SSAO, and ACES tone mapping for photorealistic rendering
 - **Smooth Animations**: Hover effects and selection highlighting
 - **Orbital Controls**: Rotate, zoom, and pan the 3D model
 - **Real-time Updates**: Part status reflected in 3D visualization
 
-### 2. Smart Dashboard
+### 2. EV Ecosystem Analytics
+
+- **Supply Chain Visualization**: Interactive Sankey diagram showing material flows
+- **Correlation Analysis**: Stock correlation heatmaps for EV companies
+- **Thematic Investment Baskets**: Pre-configured EV sector groupings (Charging, Batteries, China EV, US OEMs)
+- **Real-time Data Integration**: Live correlation calculations via FastAPI
+
+### 3. Policy & Regulatory Calendar
+
+- **Global Policy Tracking**: US, EU, and China regulatory timeline
+- **Impact Assessment**: Policy implications for different EV sectors
+- **Date-based Organization**: Chronological view of upcoming regulations
+
+### 4. Real-time Features
+
+- **Server-Sent Events (SSE)**: Live alert streaming from FastAPI backend
+- **Live Updates**: Heartbeat monitoring and real-time notifications
+- **Connection Status**: Visual indicators for real-time connection health
+
+### 5. Smart Dashboard
 
 - **Key Metrics**: Total parts, low stock alerts, inventory value
 - **Production Schedule**: Upcoming manufacturing plans
 - **Quick Actions**: Navigate to different sections
 - **Real-time Data**: Live updates every 15 minutes
 
-### 3. AI-Powered Analytics
+### 6. AI-Powered Analytics
 
 - **Confidence Scoring**: 94% analysis accuracy
 - **Smart Recommendations**: Automated inventory suggestions
 - **Trend Analysis**: 30-day performance tracking
 - **Predictive Insights**: Future demand forecasting
 
-### 4. Advanced Inventory Management
+### 7. Advanced Inventory Management
 
 - **Sortable Tables**: Sort by name, stock, cost, supplier
 - **Health Indicators**: Excellent, Good, Warning, Critical
 - **Search & Filter**: Find parts quickly
 - **Supplier Management**: Track supplier information
 
-### 5. Responsive Info Panel
+### 8. Responsive Info Panel
 
 - **Part Details**: Specifications, location, cost
 - **AI Summary**: Intelligent analysis and recommendations

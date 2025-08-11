@@ -1,12 +1,14 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { LayoutDashboard, Box, Package, Brain, Settings, Zap, X } from 'lucide-react'
+import { LayoutDashboard, Box, Package, Brain, Settings, BarChart3, Calendar, X } from 'lucide-react'
 
 const Sidebar = ({ isOpen, onClose, activeTab, setActiveTab, isMobile }) => {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: '3d-model', label: '3D Model', icon: Box },
     { id: 'inventory', label: 'Inventory', icon: Package },
+    { id: 'analytics', label: 'Analytics', icon: BarChart3 },
+    { id: 'policy', label: 'Policy Calendar', icon: Calendar },
     { id: 'ai-summary', label: 'AI Summary', icon: Brain },
     { id: 'settings', label: 'Settings', icon: Settings },
   ]
