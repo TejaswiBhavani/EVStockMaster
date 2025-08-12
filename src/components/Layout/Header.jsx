@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth } from '../../config/firebase'
 import {
@@ -13,15 +13,32 @@ import {
   Battery,
   Settings,
   LogOut,
+  Package,
+  AlertTriangle,
+  X,
 } from 'lucide-react'
 import NotificationCenter from '../Notifications/NotificationCenter'
 import Logo from './Logo'
+import useSearchStore from '../../store/searchStore'
 
 const Header = ({ onMenuClick, activeTab, isMobile, onNavigate }) => {
   const [user] = useAuthState(auth)
   const [notificationCenterOpen, setNotificationCenterOpen] = useState(false)
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false)
+  const [searchDropdownOpen, setSearchDropdownOpen] = useState(false)
   const [unreadCount] = useState(3) // This would come from your notification state management
+  const searchInputRef = useRef(null)
+
+  // Search store integration
+  const {
+    searchQuery,
+    searchResults,
+    isSearching,
+    totalResults,
+    setSearchQuery,
+    selectPartFromSearch,
+    clearSearch
+  } = useSearchStore()
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -29,11 +46,56 @@ const Header = ({ onMenuClick, activeTab, isMobile, onNavigate }) => {
       if (profileDropdownOpen && !event.target.closest('.profile-dropdown-container')) {
         setProfileDropdownOpen(false)
       }
+      if (searchDropdownOpen && !event.target.closest('.search-dropdown-container')) {
+        setSearchDropdownOpen(false)
+      }
     }
 
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [profileDropdownOpen])
+  }, [profileDropdownOpen, searchDropdownOpen])
+
+  // Handle keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if ((event.metaKey || event.ctrlKey) && event.key === 'k') {
+        event.preventDefault()
+        searchInputRef.current?.focus()
+        setSearchDropdownOpen(true)
+      }
+      if (event.key === 'Escape') {
+        setSearchDropdownOpen(false)
+        searchInputRef.current?.blur()
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [])
+
+  // Handle search input change
+  const handleSearchChange = (event) => {
+    const query = event.target.value
+    setSearchQuery(query)
+    setSearchDropdownOpen(query.length > 0 || searchResults.length > 0)
+  }
+
+  // Handle search result selection
+  const handleSearchResultSelect = (partId) => {
+    selectPartFromSearch(partId)
+    setSearchDropdownOpen(false)
+    // Navigate to 3D model if not already there
+    if (activeTab !== '3d-model') {
+      onNavigate('3d-model')
+    }
+  }
+
+  // Clear search
+  const handleClearSearch = () => {
+    clearSearch()
+    setSearchDropdownOpen(false)
+    searchInputRef.current?.focus()
+  }
 
   const getPageTitle = (tab) => {
     const titles = {
@@ -124,20 +186,116 @@ const Header = ({ onMenuClick, activeTab, isMobile, onNavigate }) => {
       </div>
 
       {/* Center Section - Enhanced Search */}
-      <div className="hidden md:flex flex-1 max-w-lg mx-4 sm:mx-8 relative z-10">
+      <div className="hidden md:flex flex-1 max-w-lg mx-4 sm:mx-8 relative z-10 search-dropdown-container">
         <div className="relative w-full group">
           <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500 group-focus-within:text-primary-500 transition-colors" />
           <input
+            ref={searchInputRef}
             type="text"
-            placeholder="Search parts, inventory, or insights..."
-            className="input-modern w-full pl-12 pr-4 py-3 text-sm placeholder-gray-400 dark:placeholder-gray-500 shadow-lg group-focus-within:shadow-xl"
+            value={searchQuery}
+            onChange={handleSearchChange}
+            onFocus={() => setSearchDropdownOpen(searchQuery.length > 0 || searchResults.length > 0)}
+            placeholder="Search TATA EV parts, inventory, or insights..."
+            className="input-modern w-full pl-12 pr-16 py-3 text-sm placeholder-gray-400 dark:placeholder-gray-500 shadow-lg group-focus-within:shadow-xl"
           />
-          <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+          <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
+            {searchQuery && (
+              <button
+                onClick={handleClearSearch}
+                className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+              >
+                <X className="w-4 h-4 text-gray-400" />
+              </button>
+            )}
             <kbd className="px-2 py-1 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-dark-700 border border-gray-200 dark:border-dark-600 rounded">
               ⌘K
             </kbd>
           </div>
         </div>
+
+        {/* Search Dropdown */}
+        <AnimatePresence>
+          {searchDropdownOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 10, scale: 0.95 }}
+              className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-dark-800 rounded-xl shadow-2xl border border-gray-200 dark:border-dark-700 py-2 z-dropdown max-h-96 overflow-y-auto"
+            >
+              {isSearching ? (
+                <div className="px-4 py-3 text-center">
+                  <div className="w-6 h-6 border-2 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-2"></div>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">Searching parts...</p>
+                </div>
+              ) : searchResults.length > 0 ? (
+                <>
+                  <div className="px-4 py-2 border-b border-gray-100 dark:border-dark-700">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+                      {totalResults} part{totalResults !== 1 ? 's' : ''} found
+                      {searchQuery && ` for "${searchQuery}"`}
+                    </p>
+                  </div>
+                  {searchResults.map((part) => (
+                    <button
+                      key={part.id}
+                      onClick={() => handleSearchResultSelect(part.id)}
+                      className="w-full text-left px-4 py-3 hover:bg-gray-50 dark:hover:bg-dark-700 transition-colors group"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                          part.urgentAlert 
+                            ? 'bg-red-100 dark:bg-red-900/30' 
+                            : 'bg-primary-100 dark:bg-primary-900/30'
+                        }`}>
+                          {part.urgentAlert ? (
+                            <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400" />
+                          ) : (
+                            <Package className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center space-x-2">
+                            <h4 className="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 truncate">
+                              {part.name}
+                            </h4>
+                            {part.urgentAlert && (
+                              <span className="px-2 py-1 text-xs font-bold text-red-600 bg-red-100 dark:bg-red-900/30 dark:text-red-400 rounded-full">
+                                URGENT
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex items-center space-x-4 mt-1">
+                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                              ID: {part.id}
+                            </p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                              Stock: {part.currentStock}
+                            </p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                              {part.category}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </>
+              ) : searchQuery ? (
+                <div className="px-4 py-3 text-center">
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    No parts found for "{searchQuery}"
+                  </p>
+                </div>
+              ) : (
+                <div className="px-4 py-3 text-center">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Start typing to search TATA EV parts...
+                  </p>
+                </div>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Right Section */}

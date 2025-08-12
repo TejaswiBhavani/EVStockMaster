@@ -70,13 +70,13 @@ function App() {
     setSidebarOpen(!sidebarOpen)
   }
 
-  // Handle navigation from notifications
+  // Handle navigation from notifications or search
   const handleNotificationNavigate = (tab, itemId = null) => {
     setActiveTab(tab)
-    // Could also handle itemId for deep linking in the future
     if (itemId) {
       console.log('Navigate to item:', itemId)
       // Future: implement deep linking to specific items
+      handlePartSelect(itemId)
     }
   }
 
